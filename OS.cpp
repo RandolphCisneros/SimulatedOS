@@ -1,19 +1,30 @@
-#include "OS.h"
+#include <iostream>
 
-//initialize powerOff to false
-OS::OS() {
-	powerOff = false;
+void siodisk(int jobnum);
+
+void soidrum(int jobnum, int jobsize, int coreaddress, int direction);
+
+void ontrace();
+void offtrace();
+
+//initializes static variables; only called at start of simulation
+void startup(){
+	std::cout << "Starting up" << endl;
 }
 
-OS::~OS(){}
-
-//simple message while it is running. More methods will come in here; this constantly loops and "listens" for interrupts
-void OS::run(){
-	std::cout << "OS is running" << endl;
+void Crint(int &a, int p[]){
+	std::cout << "In Crint" << endl;
 }
 
-//This sets poweroff to true. I don't know if I want this outside of run or inside.
-void OS::shutdown(){
-	std:: cout << "OS is shutting down" << endl;
-	powerOff = true;
+void Dskint(int &a, int p[]){
+	std::cout << "In dskint" << endl;
 }
+
+void Tro(int &a, int p[]){
+	std::cout << "in tro" << endl;
+}
+
+void Svc(int &a, int p[]){
+	std::cout << "in svc" << endl;
+}
+
