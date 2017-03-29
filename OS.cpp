@@ -2,7 +2,7 @@
 
 void siodisk(int jobnum);
 
-void soidrum(int jobnum, int jobsize, int coreaddress, int direction);
+void siodrum(int jobnum, int jobsize, int coreaddress, int direction);
 
 void ontrace();
 void offtrace();
