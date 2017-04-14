@@ -3,16 +3,12 @@
 //I implement Comparable again because I don't know if I'm gonna prioritize some jobs or not;
 //we can make it rather efficient by using priorities and job size.
 public class Job  implements Comparable <Job> {
-	//p[1]
-	private int jobNumber;
-	//p[2]
-	private int jobPriority;
-	//p[3]
-	private int jobSize;
-	//p[4]
-	private int maxCpuTime;
-	//p[5]
-	private int currentTime;
+
+	private int jobNumber;		//p[1]
+	private int jobPriority;	//p[2]
+	private int jobSize;		//p[3]
+	private int maxCpuTime;		//p[4]
+	private int currentTime;	//p[5]
 	
 	Job(int jN, int jP, int jS, int mCT, int cT){
 		jobNumber = jN;
