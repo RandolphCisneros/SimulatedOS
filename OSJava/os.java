@@ -1,15 +1,12 @@
+import java.util.*;
 
 public class os {
-	
 
 
-	
-	
 	public static void startup(){
 		System.out.println("In startup");
-		static Stack<Job> processorStack = new Stack<Job>();	//may create a jobqueue class
-		static JTable jobTable = new JTable(Job, jobNumber);		//may arrange this differently
-		static Queue<Job> readyQueue = new ArrayList<Job>();
+		Stack<Job> processorStack = new Stack<Job>();	//may create a jobqueue class
+		Queue<Job> readyQueue = new LinkedList<Job>();
 	}
 
 	public static void Crint(int[]a, int[]p){
