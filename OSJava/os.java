@@ -12,7 +12,7 @@ public class os {
 		LinkedList<SizeAddressPair> addressTable = new LinkedList<SizeAddressPair>();
 		
 		//This block allocates the new free space in memory and puts it on the address table.
-		SizeAddressPair initialFreeSpace = new SizeAddressPair(1, MAX_FREE_SPACE);
+		SizeAddressPair initialFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, 1);
 		addressTable.push(initialFreeSpace);
 	}
 
