@@ -7,6 +7,8 @@ public class os {
 		System.out.println("In startup");
 		Stack<Job> processorStack = new Stack<Job>();	//may create a jobqueue class
 		Queue<Job> readyQueue = new LinkedList<Job>();
+		LinkedList<Job> jobTable = new LinkedList<Job>();
+		LinkedList<SizeAddressPair> addressTable = new LinkedList<SizeAddressPair>();
 	}
 
 	public static void Crint(int[]a, int[]p){
