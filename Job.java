@@ -9,13 +9,16 @@ public class Job  implements Comparable <Job> {
 	private int jobSize;		//p[3]
 	private int maxCpuTime;		//p[4]
 	private int currentTime;	//p[5]
+	private int address;		//This will be found and assigned in Crint, but decided by the free space on the
+					//addressTable
 	
-	Job(int jN, int jP, int jS, int mCT, int cT){
+	Job(int jN, int jP, int jS, int mCT, int cT, int add){
 		jobNumber = jN;
 		jobPriority = jP;
 		jobSize = jS;
 		maxCpuTime = mCT;
 		currentTime = cT;
+		address = add;
 	}
 
 	//accessors and mutators
@@ -23,13 +26,15 @@ public class Job  implements Comparable <Job> {
 	public int getJobPriority(){ return jobPriority;}
 	public int getJobSize(){ return jobSize;}
 	public int getMaxCpuTime(){ return maxCpuTime;}
-	public int currentTime(){ return currentTime;}
+	public int getCurrentTime(){ return currentTime;}
+	public int getAddress(){ return address;}
 	
 	public void setJobNumber(int jN){jobNumber = jN;}
 	public void setJobPriority(int jP){jobPriority = jP;}
 	public void setJobSize(int jS){jobSize = jS;}
 	public void setMaxCpuTime(int mCT){maxCpuTime = mCT;}
 	public void setCurrentTime(int cT){currentTime = cT;}
+	public void setAddress(int add){address = add;}
 	
 	public int compareTo(Job j){
 	//Put more code here
