@@ -18,6 +18,13 @@ public class os {
 
 	public static void Crint(int[]a, int[]p){
 		System.out.println ("In Crint");
+		assignedAddress = addressTable.findFreeSpace(p[3]);//p[3] is the job Size. Based on this we can find space on the table and then add this,
+						//but we're using worst fit anyway.
+		Job newestJob = new Job(p[1],p[2],p[3],p[4],p[5],assignedAddress);	//takes data and assigns newest job
+		jobTable.push(newestJob);				//pushes onto jobTable
+		addressTable.assignJob(newestJob);//!!!!!This needs to be created, therefore we have to
+						//create a data structure for the addressTable
+		
 	}
 
 	public static void Dskint (int[]a, int[]p){
