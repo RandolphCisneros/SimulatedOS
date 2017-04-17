@@ -9,7 +9,7 @@ public class os {
 		Stack<Job> processorStack = new Stack<Job>();	//may create a jobqueue class
 		Queue<Job> readyQueue = new LinkedList<Job>();
 		LinkedList<Job> jobTable = new LinkedList<Job>();
-		LinkedList<SizeAddressPair> addressTable = new LinkedList<SizeAddressPair>();
+		LinkedList<SizeAddressPair> addressTable = new LinkedList<SizeAddressPair>(); //Maybe have to make this its own class
 		
 		//This block allocates the new free space in memory and puts it on the address table.
 		SizeAddressPair initialFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, 1);
