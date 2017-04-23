@@ -5,7 +5,7 @@ class SizeAddressTable {
   
   //constructor initializes largest free space and adds it to the table.
   //I used a default constructor here since it will only be used once in the OS
-  SizeAddressTable(){
+  public SizeAddressTable(){
     largestRemainingFreeSpace.setPair(0,100);
     freeSpaceList.push(largestRemainingFreeSpace);
   }
