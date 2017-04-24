@@ -13,6 +13,8 @@ public class Job  implements Comparable <Job> {
 	private int maxCpuTime;
 	//p[5]
 	private int currentTime;
+	//adding my own address variable
+	private int address;
 	
 	Job(int jN, int jP, int jS, int mCT, int cT){
 		jobNumber = jN;
@@ -20,6 +22,7 @@ public class Job  implements Comparable <Job> {
 		jobSize = jS;
 		maxCpuTime = mCT;
 		currentTime = cT;
+		address = null;					//we don't assign an address in the constructor, the table will do that for us
 	}
 
 	//accessors and mutators
@@ -29,11 +32,14 @@ public class Job  implements Comparable <Job> {
 	public int getMaxCpuTime(){ return maxCpuTime;}
 	public int currentTime(){ return currentTime;}
 	
+	public int getJobAddress(){return address;}
+	
 	public void setJobNumber(int jN){jobNumber = jN;}
 	public void setJobPriority(int jP){jobPriority = jP;}
 	public void setJobSize(int jS){jobSize = jS;}
 	public void setMaxCpuTime(int mCT){maxCpuTime = mCT;}
 	public void setCurrentTime(int cT){currentTime = cT;}
+	public void setJobAddress(int a){address = a;}
 	
 	public int compareTo(Job j){
 	//Put more code here
