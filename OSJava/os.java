@@ -9,7 +9,7 @@ public class os {
 	Stack<Job> processorStack = new Stack<Job>();					//To be used for interrupts that want to go back
 	LinkedList<Job> jobTable = new LinkedList<Job>();
 	Queue<Job> readyQueue = new LinkedList<Job>();
-	Queue<Job> waitingQueue = new Linked List<Job>();				//a waiting queue for if we don't have enough space or something like that
+	Queue<Job> waitingQueue = new LinkedList<Job>();				//a waiting queue for if we don't have enough space or something like that
 	Queue<Job> iOQueue = new LinkedList<Job>();						//this is the I/O queue.
 
 	static Job jobToRun = new Job();												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
