@@ -66,6 +66,8 @@ class SizeAddressTable {
 		SizeAddressPair newFreeSpace = new SizeAddressPair(completedJobSize, completedJobAddress);
 		freeSpaceList.add(newFreeSpace);
 		findNewLargestRemainingFreeSpace();		//finds the new largest remaining free space after
+  
+	}
   }
   
   //After a job has been assigned, this function will be used to find and assign the new largest remaining free space
