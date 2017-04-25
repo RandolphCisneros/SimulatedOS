@@ -18,7 +18,7 @@ class SizeAddressTable {
               return largestREmainingFreeSpace.getAddress();
           }
     catch (largestRemainingFreeSpace.getSize() < jobSize){
-        System.out.println("Not enough memory for job")					
+        System.out.println("Not enough memory for job";)					
     }
   }
   
