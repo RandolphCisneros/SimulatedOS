@@ -13,6 +13,7 @@ class SizeAddressTable {
   
   //this method finds free space for the requesting job. I'm using WORST FIT algorithm so it relies on the largest
   //remaining free space. It returns an error if there is no memory for the job size.
+    /*			commenting out because I didn't use this in the OS code
   public int findFreeSpace(int JobSize){
       try { if(largestRemainingFreeSpace.getSize() > jobSize)
               return largestREmainingFreeSpace.getAddress();
@@ -20,20 +21,26 @@ class SizeAddressTable {
     catch (IndexOutOfBoundsException e){
         System.out.println("Not enough memory for job " +e.getMessage();)					
     }
-  }
+  }*/
   
-  //I need somewhere to put the job data, mainly so I know when free space pops up in
-  //later on and I can assign more free spaces to the free space list.
-  public void assignJob(Job newJob){
-	if (newJob.getAddress() == 0){
-		newJob.setJobAddress(largestRemainingFreeSpace.getAddress());
-		jobsAddressed.add(newJob);
-		largestRemainingFreeSpace.setSize(largestRemaingFreeSpace.getSize() - newJob.getJobSize());
-		largestRemainingFreeSpace.setAddress(largestRemainingFreeSpace.getAddress() + newJob.getJobSize());
-		findNewLargestRemainingFreeSpace();
+ //This keeps track of the addresses of assigned jobs. If the jobs are removed then we know which address will get free space.
+  public boolean assignJob(Job newJob){
+	if (newJob.getAddress() == 0 && largestRemainingFreeSpace > newJob.getSize()){				//1. Check that we have free space and it's not already assigned
+		newJob.setJobAddress(largestRemainingFreeSpace.getAddress());									//2a. If there is, we set the address to the largest remaining free space
+		jobsAddressed.add(newJob);																							//3. We add it to our list of jobs with addresses
+		largestRemainingFreeSpace.setSize(largestRemaingFreeSpace.getSize() - newJob.getJobSize());		//4. We subtract the size of the job from the "largest remaining free space"
+		largestRemainingFreeSpace.setAddress(largestRemainingFreeSpace.getAddress() + newJob.getJobSize());	//5. We changed the address of the "largest remaining free space" to the previous address + the size of the added job
+		findNewLargestRemainingFreeSpace();																			//6. We find the real largest remaining freespace
+		return true;																													//7. Return true for O.S. to allocate it to the correct queue
 	}
-	else
-		System.out.println("Job already assigned");			//change to try catch
+	else if (newJob.getAddress() == 0 && largestRemainingFreeSpace < newJob.getSize()){			//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
+		System.out.println("Not enough space for job");
+		return false;
+	}
+	else{
+		System.out.println("Job already assigned");																		//2c. This shouldn't happen, but if it's already assigned then it will return false.
+		return false;
+	}	
   }
   
   //this function will be used when a job is terminated; it will removed from the list and the free space will be re-allocated
@@ -61,12 +68,11 @@ class SizeAddressTable {
 		findNewLargestRemainingFreeSpace();		//finds the new largest remaining free space after
   }
   
-  //After a job has been assigned, this function will be used to find the new largest remaining free space
-  //and set it
+  //After a job has been assigned, this function will be used to find and assign the new largest remaining free space
   public void findNewLargestRemainingFreeSpace(){
-	for (int i = 0; i < freeSpaceList.size(); i++){
-		SizeAddressPair current = freeSpaceList.get(i);
-		if (current.getSize() > largestRemainingFreeSpace.getSize())
+	for (int i = 0; i < freeSpaceList.size(); i++){								//1. Iterate through freeSpaceList
+		SizeAddressPair current = freeSpaceList.get(i);					//2. Create pointer to object
+		if (current.getSize() > largestRemainingFreeSpace.getSize())	//3. Compare sizes. If current is largest, re-assign largest remaining free space
 			largestRemainingFreeSpace = current;
 		}
 	}
