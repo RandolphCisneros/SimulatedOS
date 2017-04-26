@@ -22,7 +22,7 @@ public class Job  implements Comparable <Job> {
 		jobSize = jS;
 		maxCpuTime = mCT;
 		currentTime = cT;
-		address = null;					//we don't assign an address in the constructor, the table will do that for us
+		address = -1;					//we don't assign an address in the constructor, the table will do that for us
 	}
 
 	//accessors and mutators
