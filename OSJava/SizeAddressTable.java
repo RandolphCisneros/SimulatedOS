@@ -2,7 +2,7 @@ import java.util.*;
 
 class SizeAddressTable {
 
-  private SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100. This tracks the largest remaining free space
+  private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100. This tracks the largest remaining free space
   LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//data structure which tracks remaining free spaces
   LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//Going to use this to track the job addresses
   
