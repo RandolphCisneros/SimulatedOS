@@ -35,7 +35,7 @@ class SizeAddressTable {
 		findNewLargestRemainingFreeSpace();																			//6. We find the real largest remaining freespace
 		return true;																													//7. Return true for O.S. to allocate it to the correct queue
 	}
-	else if (newJob.getJobAddress() < 0 && largestRemainingFreeSpace < newJob.getJobSize()){			//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
+	else if (newJob.getJobAddress() < 0 && largestRemainingFreeSpace.getSize() < newJob.getJobSize()){			//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
 		System.out.println("Not enough space for job");
 		return false;
 	}
