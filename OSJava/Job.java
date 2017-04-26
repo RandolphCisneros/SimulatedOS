@@ -41,7 +41,8 @@ public class Job  implements Comparable <Job> {
 	public void setCurrentTime(int cT){currentTime = cT;}
 	public void setJobAddress(int a){address = a;}
 	
+	/*		May be used to compare jobs by size and priority
 	public int compareTo(Job j){
 	//Put more code here
-	}
+	}*/
 }
