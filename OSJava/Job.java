@@ -16,6 +16,15 @@ public class Job  /*implements Comparable <Job> */{
 	//adding my own address variable
 	private int address;
 	
+	Job(){
+		jobNumber = 0;
+		jobPriority = 0;
+		jobSize = 0;
+		maxCpuTime = 0;
+		currentTime = 0;
+		address = -1;
+	}
+	
 	Job(int jN, int jP, int jS, int mCT, int cT){
 		jobNumber = jN;
 		jobPriority = jP;
