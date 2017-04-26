@@ -2,7 +2,7 @@
 //This is the individual job structure to be used in the job table, which will be a list of jobs.
 //I implement Comparable again because I don't know if I'm gonna prioritize some jobs or not;
 //we can make it rather efficient by using priorities and job size.
-public class Job  implements Comparable <Job> {
+public class Job  /*implements Comparable <Job> */{
 	//p[1]
 	private int jobNumber;
 	//p[2]
