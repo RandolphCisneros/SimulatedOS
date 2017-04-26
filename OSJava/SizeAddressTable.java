@@ -60,6 +60,7 @@ class SizeAddressTable {
 			}
 		}
 		for(int j = 0; j < freeSpaceList.size(); j++){
+			SizeAddressPair current = freeSpaceList.get(j);
 			if ((current.getAddress() + current.getSize()) == completedJobAddress){		//check for free space before the job
 				current.setSize(current.getSize() + completedJobSize);
 				freeSpaceList.remove(completedJob);
