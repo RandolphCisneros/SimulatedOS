@@ -29,8 +29,9 @@ class SizeAddressTable {
   public boolean assignJob(Job newJob){
 	if ((newJob.getJobAddress() < 0) && (largestRemainingFreeSpace.getSize() > newJob.getJobSize())){				//1. Check that we have free space and it's not already assigned
 		newJob.setJobAddress(largestRemainingFreeSpace.getAddress());									//2a. If there is, we set the address to the largest remaining free space
-		jobsAddressed.add(newJob);																							//3. We add it to our list of jobs with addresses
-		largestRemainingFreeSpace.setSize(largestRemaingFreeSpace.getSize() - newJob.getJobSize());		//4. We subtract the size of the job from the "largest remaining free space"
+		jobsAddressed.add(newJob);										//3. We add it to our list of jobs with addresses
+		int newJobSize = largestRemainingFreeSpace.getSize() - newJob.getJobSize();
+		largestRemainingFreeSpace.setSize(newJobSize);		//4. We subtract the size of the job from the "largest remaining free space"
 		largestRemainingFreeSpace.setAddress(largestRemainingFreeSpace.getAddress() + newJob.getJobSize());	//5. We changed the address of the "largest remaining free space" to the previous address + the size of the added job
 		findNewLargestRemainingFreeSpace();																			//6. We find the real largest remaining freespace
 		return true;																													//7. Return true for O.S. to allocate it to the correct queue
