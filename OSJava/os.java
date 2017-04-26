@@ -6,11 +6,11 @@ public class os {
 	public static final int TIME_SLICE = 5;
 
 	public static SizeAddressTable addressTable = new SizeAddressTable();
-	Stack<Job> processorStack = new Stack<Job>();					//To be used for interrupts that want to go back
-	LinkedList<Job> jobTable = new LinkedList<Job>();
-	Queue<Job> readyQueue = new LinkedList<Job>();
-	Queue<Job> waitingQueue = new LinkedList<Job>();				//a waiting queue for if we don't have enough space or something like that
-	Queue<Job> iOQueue = new LinkedList<Job>();						//this is the I/O queue.
+	public static Stack<Job> processorStack = new Stack<Job>();					//To be used for interrupts that want to go back
+	public static LinkedList<Job> jobTable = new LinkedList<Job>();
+	public static Queue<Job> readyQueue = new LinkedList<Job>();
+	public static Queue<Job> waitingQueue = new LinkedList<Job>();				//a waiting queue for if we don't have enough space or something like that
+	public static Queue<Job> iOQueue = new LinkedList<Job>();						//this is the I/O queue.
 
 	static Job jobToRun = new Job();												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
 	static Job jobCompletingIO = new Job();
