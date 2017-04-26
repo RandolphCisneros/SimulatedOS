@@ -2,7 +2,7 @@ import java.util.*;
 
 class SizeAddressTable {
 
-  SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100. This tracks the largest remaining free space
+  private SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100. This tracks the largest remaining free space
   LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//data structure which tracks remaining free spaces
   LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//Going to use this to track the job addresses
   
@@ -27,7 +27,7 @@ class SizeAddressTable {
   
  //This keeps track of the addresses of assigned jobs. If the jobs are removed then we know which address will get free space.
   public boolean assignJob(Job newJob){
-	if (newJob.getAddress() < 0 && largestRemainingFreeSpace > newJob.getSize()){				//1. Check that we have free space and it's not already assigned
+	if (newJob.getJobAddress() < 0 && largestRemainingFreeSpace > newJob.getJobSize()){				//1. Check that we have free space and it's not already assigned
 		newJob.setJobAddress(largestRemainingFreeSpace.getAddress());									//2a. If there is, we set the address to the largest remaining free space
 		jobsAddressed.add(newJob);																							//3. We add it to our list of jobs with addresses
 		largestRemainingFreeSpace.setSize(largestRemaingFreeSpace.getSize() - newJob.getJobSize());		//4. We subtract the size of the job from the "largest remaining free space"
@@ -35,7 +35,7 @@ class SizeAddressTable {
 		findNewLargestRemainingFreeSpace();																			//6. We find the real largest remaining freespace
 		return true;																													//7. Return true for O.S. to allocate it to the correct queue
 	}
-	else if (newJob.getAddress() < 0 && largestRemainingFreeSpace < newJob.getSize()){			//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
+	else if (newJob.getJobAddress() < 0 && largestRemainingFreeSpace < newJob.getJobSize()){			//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
 		System.out.println("Not enough space for job");
 		return false;
 	}
