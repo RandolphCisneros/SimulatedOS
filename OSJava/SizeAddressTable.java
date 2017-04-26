@@ -1,3 +1,5 @@
+import java.util.*;
+
 class SizeAddressTable {
 
   SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100. This tracks the largest remaining free space
