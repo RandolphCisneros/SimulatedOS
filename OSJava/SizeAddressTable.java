@@ -76,8 +76,6 @@ class SizeAddressTable {
 		SizeAddressPair current = freeSpaceList.get(i);					//2. Create pointer to object
 		if (current.getSize() > largestRemainingFreeSpace.getSize())	//3. Compare sizes. If current is largest, re-assign largest remaining free space
 			largestRemainingFreeSpace = current;
-		}
 	}
-
-  }
+ }
 }
