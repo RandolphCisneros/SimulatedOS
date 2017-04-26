@@ -29,12 +29,12 @@ public class os {
 		System.out.println ("In Crint");
 		Job newestJob = new Job(p[1],p[2],p[3],p[4],p[5]);																		//1. Job arrives. We take the parameters.
 		if (addressTable.assignJob(newestJob)){																						//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
-			siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 0);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
+			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 0);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
 			readyQueue.add(newestJob);
 		}
 		else{
 			waitingQueue.add(newestJob);																								//2b. If not, then it gets put on the waitingQueue.
-			siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 1);		//3b. Don't know if I should do this with siodrum. Puts job on backing store
+			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 1);		//3b. Don't know if I should do this with siodrum. Puts job on backing store
 		}
 		jobTable.add(newestJob);																											//4 Push onto jobTable
 		dispatcher(a, p);
