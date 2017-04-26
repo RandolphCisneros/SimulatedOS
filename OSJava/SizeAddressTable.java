@@ -49,8 +49,8 @@ class SizeAddressTable {
   public void removeJob(Job completedJob){
 
 	if (jobsAddressed.contains(completedJob)){
-		int completedJobSize = completedJob.getSize();
-		int completedJobAddress = completedJob.getAddress();
+		int completedJobSize = completedJob.getJobSize();
+		int completedJobAddress = completedJob.getJobAddress();
 		for(int i = 0; i < freeSpaceList.size(); i++){
 			SizeAddressPair current = freeSpaceList.get(i);				
 			if((completedJobSize + completedJobAddress) == current.getAddress()){	//check for free space after the job
