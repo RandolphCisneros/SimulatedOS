@@ -4,7 +4,7 @@ public class os {
 
 	public static final int TIME_SLICE = 5;
 
-	private SizeAddressTable addressTable;
+	private static SizeAddressTable addressTable;
 	private static Stack<Job> processorStack;					//To be used for interrupts that want to go back
 	public static LinkedList<Job> jobTable;		//I made this global solely because it said to in the handout.
 	private static Queue<Job> readyQueue;
