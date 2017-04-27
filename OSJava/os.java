@@ -39,7 +39,7 @@ public class os {
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 0);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
 			readyQueue.add(newestJob);
 			System.out.println("Job address: " + newestJob.getJobAddress());
-			Sysetm.out.println("Job size: " + newestJob.getJobSize());
+			System.out.println("Job size: " + newestJob.getJobSize());
 		}
 		else{
 			waitingQueue.add(newestJob);																								//2b. If not, then it gets put on the waitingQueue.
