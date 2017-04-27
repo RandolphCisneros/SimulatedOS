@@ -4,22 +4,31 @@ public class os {
 
 	public static final int MAX_FREE_SPACE = 100;
 	public static final int TIME_SLICE = 5;
+	public static final int START_OF_MEMORY = 0;
 
-	private static SizeAddressTable addressTable = new SizeAddressTable();
-	Stack<Job> processorStack = new Stack<Job>();					//To be used for interrupts that want to go back
-	public static LinkedList<Job> jobTable = new LinkedList<Job>();
-	static Queue<Job> readyQueue = new LinkedList<Job>();
-	static Queue<Job> waitingQueue = new LinkedList<Job>();				//a waiting queue for if we don't have enough space or something like that
-	static Queue<Job> iOQueue = new LinkedList<Job>();						//this is the I/O queue.
+	private SizeAddressTable addressTable;
+	Stack<Job> processorStack;					//To be used for interrupts that want to go back
+	public static LinkedList<Job> jobTable;		//I made this global solely because it said to in the handout.
+	Queue<Job> readyQueue;
+	Queue<Job> waitingQueue;				//a waiting queue for if we don't have enough space or something like that
+	Queue<Job> iOQueue;						//this is the I/O queue.
 
-	static Job jobToRun = new Job();												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
-	static Job jobCompletingIO = new Job();
+	Job jobToRun;												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
+	Job jobCompletingIO;
 	
-	//This is to initialize static variables; so far I haven't really come up with many
+	//This is to initialize static variables. NOTE: I haven't set them all to static,
+	//but I guess I'll find out the consequences later.
 	public static void startup(){
 		System.out.println("In startup");
-
-
+		addressTable = new SizeAddressTable();
+		processorStack = new Stack<Job>();
+		jobTable = new LinkedList<Job>();
+		readyQueue = new LinkedList<Job>();
+		waitingQueue = new LinkedList<Job>();
+		iOQueue = new LinkedList<Job>();
+		
+		jobToRun = new Job();
+		jobCompletingIO = new Job();
 	}
 
 	//This method receives job info. It creates a "Job" instance, and then attempts to assign it an address.
