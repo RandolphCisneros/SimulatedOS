@@ -2,14 +2,14 @@ import java.util.*;
 
 class SizeAddressTable {
 
-  private static SizeAddressPair largestRemainingFreeSpace = new SizeAddressPair();    //initialize to 0,100. This tracks the largest remaining free space
+  private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100. This tracks the largest remaining free space
   LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//data structure which tracks remaining free spaces
   LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//Going to use this to track the job addresses
   
   //constructor initializes largest free space and adds it to the table.
   //I used a default constructor here since it will only be used once in the OS
   public SizeAddressTable(){
-    largestRemainingFreeSpace.setPair(0,100);
+    largestRemainingFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, START_OF_MEMORY);	//There should only be one instance of this
     freeSpaceList.add(largestRemainingFreeSpace);
   }
   
