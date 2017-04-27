@@ -2,9 +2,7 @@ import java.util.*;
 
 public class os {
 
-	public static final int MAX_FREE_SPACE = 100;
 	public static final int TIME_SLICE = 5;
-	public static final int START_OF_MEMORY = 0;
 
 	private SizeAddressTable addressTable;
 	Stack<Job> processorStack;					//To be used for interrupts that want to go back
