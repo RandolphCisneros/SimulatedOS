@@ -80,7 +80,7 @@ public class os {
 		a[0] = 2;													//2. Set a to 2 to run job
 		p[2]  = jobToRun.getJobAddress();				//3. Set p[2] to address of job to run
 		p[3] = jobToRun.getJobSize();						//4. Set p[3] to size of job to run
-		p[4] = TIME_SLICE;								//5. Set time slice. I'm doing round robin so this will stay the same.
+		p[4] = jobToRun.getMaxCpuTime();								//5. Set time slice. I'm doing round robin so this will stay the same.
 		System.out.println("jobToRun address: " + jobToRun.getJobAddress());
 		System.out.println("jobToRun Size: " + jobToRun.getJobSize());
 		readyQueue.add(jobToRun);					//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
