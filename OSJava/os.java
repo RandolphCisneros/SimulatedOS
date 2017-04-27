@@ -5,14 +5,14 @@ public class os {
 	public static final int TIME_SLICE = 5;
 
 	private SizeAddressTable addressTable;
-	Stack<Job> processorStack;					//To be used for interrupts that want to go back
+	private static Stack<Job> processorStack;					//To be used for interrupts that want to go back
 	public static LinkedList<Job> jobTable;		//I made this global solely because it said to in the handout.
-	Queue<Job> readyQueue;
-	Queue<Job> waitingQueue;				//a waiting queue for if we don't have enough space or something like that
-	Queue<Job> iOQueue;						//this is the I/O queue.
+	private static Queue<Job> readyQueue;
+	private static Queue<Job> waitingQueue;				//a waiting queue for if we don't have enough space or something like that
+	private static Queue<Job> iOQueue;						//this is the I/O queue.
 
-	Job jobToRun;												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
-	Job jobCompletingIO;
+	private static Job jobToRun;												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
+	private static Job jobCompletingIO;
 	
 	//This is to initialize static variables. NOTE: I haven't set them all to static,
 	//but I guess I'll find out the consequences later.
