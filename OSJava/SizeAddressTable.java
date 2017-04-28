@@ -2,7 +2,7 @@ import java.util.*;
 
 class SizeAddressTable {
 	
-  public static final int MAX_FREE_SPACE = 100;
+  public static final int MAX_FREE_SPACE = 99;
   public static final int START_OF_MEMORY = 0;
 
   private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100. This tracks the largest remaining free space
