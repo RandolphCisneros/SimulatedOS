@@ -34,6 +34,7 @@ public class os {
 	//Regardless it is added to our main jobTable.
 	public static void Crint(int[]a, int[]p){
 		System.out.println ("In Crint");
+		sos.ontrace();
 		Job newestJob = new Job(p[1],p[2],p[3],p[4],p[5]);																		//1. Job arrives. We take the parameters.
 		if (addressTable.assignJob(newestJob)){																						//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 0);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
