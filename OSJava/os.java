@@ -48,6 +48,8 @@ public class os {
 		}
 		jobTable.add(newestJob);																											//4 Push onto jobTable
 		dispatcher(a, p);
+		System.out.println("Job address after dispatcher: " + newestJob.getAddress());
+		System.out.println("Job address currently assigned : " + p[2]);
 		return;
 	}
 
