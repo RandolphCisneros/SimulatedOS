@@ -76,6 +76,7 @@ public class os {
 	public static void Tro (int[]a, int[]p){
 		System.out.println("In Tro");
 			//must find job to run in readyQueue and job Table, set time, check if 0. If 0, proceed with removal process.
+		dispatcher(a,p);
 	}
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
