@@ -86,7 +86,7 @@ public class os {
 	//I put dispatcher into its own function to avoid repeating code.
 	public static void dispatcher(int[]a, int[]p){
 		jobToRun = readyQueue.poll();				//1. Set job to run to job in front of ready queue.
-		a[0] = 2;													//2. Set a to 2 to run job
+		a[0] = 1;													//2. Set a to 2 to run job
 		p[2]  = jobToRun.getJobAddress();				//3. Set p[2] to address of job to run
 		p[3] = jobToRun.getJobSize();						//4. Set p[3] to size of job to run
 		p[4] = TIME_SLICE;								//5. Set time slice. I'm doing round robin so this will stay the same.
