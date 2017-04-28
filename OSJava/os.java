@@ -89,7 +89,7 @@ public class os {
 	public static void dispatcher(int[]a, int[]p){
 		
 		jobToRun = readyQueue.poll();				//1. Set job to run to job in front of ready queue.
-		if (!(emptyCoreFlag))[
+		if (!(emptyCoreFlag)){
 			a[0] = 1;						//2. Set a to 1  if emptyCoreFlag shows 1
 			if(!(readyQueue.empty())
 			   emptyCoreFlag = false;
