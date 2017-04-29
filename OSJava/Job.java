@@ -39,7 +39,7 @@ public class Job  /*implements Comparable <Job> */{
 	public int getJobPriority(){ return jobPriority;}
 	public int getJobSize(){ return jobSize;}
 	public int getMaxCpuTime(){ return maxCpuTime;}
-	public int currentTime(){ return currentTime;}
+	public int getCurrentTime(){ return currentTime;}
 	
 	public int getJobAddress(){return address;}
 	
