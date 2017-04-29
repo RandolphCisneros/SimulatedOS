@@ -90,22 +90,26 @@ public class os {
 	
 	//I put dispatcher into its own function to avoid repeating code.
 	public static void dispatcher(int[]a, int[]p){
-		
-		jobToRun = readyQueue.poll();				//1. Set job to run to job in front of ready queue.
+		//This block of code checks if the core is empty; should really be used once
 		if (emptyCoreFlag){
-			a[0] = 1;						//2. Set a to 1  if emptyCoreFlag shows 1
+			a[0] = 1;						//1a. Set a to 1  if emptyCoreFlag shows 1
 			System.out.println("Is readyQueue empty? " + readyQueue.isEmpty());
 			if(!readyQueue.isEmpty())
 			   emptyCoreFlag = false;
 		}
+		
+		if (!readyQueue.isEmpty()){
+			a[0] = 2;						//1b. Else set a[0] to 2
+			jobToRun = readyQueue.poll();				//2. Set job to run to job in front of ready queue.
+			p[2]  = jobToRun.getJobAddress();				//3. Set p[2] to address of job to run
+			p[3] = jobToRun.getJobSize();						//4. Set p[3] to size of job to run
+			p[4] = TIME_SLICE;								//5. Set time slice. I'm doing round robin so this will stay the same.
+			System.out.println("jobToRun address: " + jobToRun.getJobAddress());
+			System.out.println("jobToRun Size: " + jobToRun.getJobSize());
+			System.out.println("Empty Core Flag set to: " + emptyCoreFlag);
+			readyQueue.add(jobToRun);					//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
+		}
 		else
-			a[0] = 2;						//2b. Else set a[0] to 2
-		p[2]  = jobToRun.getJobAddress();				//3. Set p[2] to address of job to run
-		p[3] = jobToRun.getJobSize();						//4. Set p[3] to size of job to run
-		p[4] = TIME_SLICE;								//5. Set time slice. I'm doing round robin so this will stay the same.
-		System.out.println("jobToRun address: " + jobToRun.getJobAddress());
-		System.out.println("jobToRun Size: " + jobToRun.getJobSize());
-		System.out.println("Empty Core Flag set to: " + emptyCoreFlag);
-		readyQueue.add(jobToRun);					//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
+			System.out.println("ReadyQueue is empty");
 	}
 }
