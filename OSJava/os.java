@@ -91,13 +91,13 @@ public class os {
 		jobRequestingService = jobToRun;
 		if (a[0] == 5){								//can turn this whole process into a function
 			readyQueue.remove(jobRequestingService);			//may have to traverse the whole queue to get to this
-			sizeAddressTable.removeJob(jobRequestingService);		//function may not work perfectly
+			addressTable.removeJob(jobRequestingService);		//function may not work perfectly
 			sos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), 1);	//I remove from drum after, but this should still work properly
 		}
 		else if (a[0] == 6) {
 			readyQueue.remove(jobRequestingService);	//remove from readyQueue
-			ioQueue.add(jobRequestingService);
-			siodisk(jobRequestingService.getJobNumber());
+			iOQueue.add(jobRequestingService);
+			sos.siodisk(jobRequestingService.getJobNumber());
 		}
 		else {
 			//block Job? Maybe create a block flag?
