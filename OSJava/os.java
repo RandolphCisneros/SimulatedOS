@@ -102,7 +102,7 @@ public class os {
 		else {
 			//block Job? Maybe create a block flag?
 		}
-			
+		dispatcher(a,p);	
 	}
 	
 	//I put dispatcher into its own function to avoid repeating code.
