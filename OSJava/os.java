@@ -14,6 +14,7 @@ public class os {
 
 	private static Job jobToRun;												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
 	private static Job jobCompletingIO;
+	private static Job jobRequestingService;
 	
 	//This is to initialize static variables. They all had to be set to static.
 	public static void startup(){
@@ -28,6 +29,7 @@ public class os {
 		
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
+		jobRequestingService = new Job();
 	}
 
 	//This method receives job info. It creates a "Job" instance, and then attempts to assign it an address.
@@ -86,6 +88,21 @@ public class os {
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
 		System.out.println("a = " + a[0]);	//See if there's a typo in the handout.
+		jobRequestingService = jobToRun;
+		if (a[0] == 5){								//can turn this whole process into a function
+			readyQueue.remove(jobRequestingService);			//may have to traverse the whole queue to get to this
+			sizeAddressTable.removeJob(jobRequestingService);		//function may not work perfectly
+			sos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), 1);	//I remove from drum after, but this should still work properly
+		}
+		else if (a[0] == 6) {
+			readyQueue.remove(jobRequestingService);	//remove from readyQueue
+			ioQueue.add(jobRequestingService);
+			siodisk(jobRequestingService.getJobNumber());
+		}
+		else {
+			//block Job? Maybe create a block flag?
+		}
+			
 	}
 	
 	//I put dispatcher into its own function to avoid repeating code.
@@ -108,7 +125,9 @@ public class os {
 			System.out.println("Empty Core Flag set to: " + emptyCoreFlag);
 			readyQueue.add(jobToRun);					//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
 		}
-		else
+		else {
 			System.out.println("ReadyQueue is empty");
+			a[0] = 1;	//In this case, is it idle?
+		}
 	}
 }
