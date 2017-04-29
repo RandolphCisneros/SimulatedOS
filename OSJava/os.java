@@ -104,6 +104,7 @@ public class os {
 		p[4] = TIME_SLICE;								//5. Set time slice. I'm doing round robin so this will stay the same.
 		System.out.println("jobToRun address: " + jobToRun.getJobAddress());
 		System.out.println("jobToRun Size: " + jobToRun.getJobSize());
+		System.out.println("Empty Core Flag set to: " + emptyCoreFlage);
 		readyQueue.add(jobToRun);					//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
 	}
 }
