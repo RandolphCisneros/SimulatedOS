@@ -72,7 +72,7 @@ public class os {
 	public static void Drmint (int[]a, int[]p){
 		System.out.println("In Drmint");
 		jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);
-		System.out.println("Time is now: " + jobToRun.getCurrentTime());
+		System.out.println("Time is now: " + jobToRun.getMaxCpuTime());
 		dispatcher(a,p);
 	}
 	
