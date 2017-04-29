@@ -96,9 +96,8 @@ public class os {
 			System.out.println("Is readyQueue empty? " + readyQueue.isEmpty());
 			if(!readyQueue.isEmpty())
 			   emptyCoreFlag = false;
-		}
-		
-		if (!readyQueue.isEmpty()){
+		}	
+		else if (!readyQueue.isEmpty()){
 			a[0] = 2;						//1b. Else set a[0] to 2
 			jobToRun = readyQueue.poll();				//2. Set job to run to job in front of ready queue.
 			p[2]  = jobToRun.getJobAddress();				//3. Set p[2] to address of job to run
