@@ -15,8 +15,7 @@ public class os {
 	private static Job jobToRun;												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
 	private static Job jobCompletingIO;
 	
-	//This is to initialize static variables. NOTE: I haven't set them all to static,
-	//but I guess I'll find out the consequences later.
+	//This is to initialize static variables. They all had to be set to static.
 	public static void startup(){
 		System.out.println("In startup");
 		addressTable = new SizeAddressTable();
@@ -36,7 +35,7 @@ public class os {
 	//Regardless it is added to our main jobTable.
 	public static void Crint(int[]a, int[]p){
 		System.out.println ("In Crint");
-		sos.ontrace();
+		sos.ontrace();	//remove this later
 		Job newestJob = new Job(p[1],p[2],p[3],p[4],p[5]);																		//1. Job arrives. We take the parameters.
 		if (addressTable.assignJob(newestJob)){										//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
@@ -73,7 +72,7 @@ public class os {
 		System.out.println("In Drmint");
 		System.out.println("Job current time: " + jobToRun.getCurrentTime());
 		System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
-		jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);
+		jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);			//I don't know if I'm setting this correctly. Ask professor
 		System.out.println("Time is now: " + jobToRun.getMaxCpuTime());
 		dispatcher(a,p);
 	}
@@ -86,6 +85,7 @@ public class os {
 	}
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
+		System.out.println("a = " + a[0]);	//See if there's a typo in the handout.
 	}
 	
 	//I put dispatcher into its own function to avoid repeating code.
