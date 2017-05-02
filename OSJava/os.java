@@ -15,6 +15,8 @@ public class os {
 	private static Job jobToRun;												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
 	private static Job jobCompletingIO;
 	private static Job jobRequestingService;
+	private static int jobsOnCore;
+	private static int transferDirection;
 	
 	//This is to initialize static variables. They all had to be set to static.
 	public static void startup(){
@@ -41,7 +43,8 @@ public class os {
 		Job newestJob = new Job(p[1],p[2],p[3],p[4],p[5]);																		//1. Job arrives. We take the parameters.
 		if (addressTable.assignJob(newestJob)){										//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
-			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 0);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
+			transferDirection = 0;
+			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
 			readyQueue.add(newestJob);										//***!!!May have to move this line to Drmint
 			/*System.out.println("Job address: " + newestJob.getJobAddress());
 			System.out.println("Job size: " + newestJob.getJobSize());
@@ -72,9 +75,13 @@ public class os {
 
 	public static void Drmint (int[]a, int[]p){
 		System.out.println("In Drmint");
+		if (transferDirection == 0)
+			jobsOnCore += 1;
+		else if (transferDirection == 1);
+			jobsOnCore -= 1;
 		System.out.println("Job current time: " + jobToRun.getCurrentTime());
 		System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
-		jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);			//I don't know if I'm setting this correctly. Ask professor
+		//Still don't know what to do with currentTime: jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);			//I don't know if I'm setting this correctly. Ask professor
 		System.out.println("Time is now: " + jobToRun.getMaxCpuTime());
 		dispatcher(a,p);
 	}
@@ -90,6 +97,7 @@ public class os {
 		System.out.println("a = " + a[0]);	//See if there's a typo in the handout.
 		jobRequestingService = jobToRun;
 		if (a[0] == 5){								//can turn this whole process into a function
+			transferDirection = 1;
 			readyQueue.remove(jobRequestingService);			//may have to traverse the whole queue to get to this
 			addressTable.removeJob(jobRequestingService);		//function may not work perfectly
 			//commenting out for test purposessos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), 1);	//I remove from drum after, but this should still work properly
@@ -108,13 +116,13 @@ public class os {
 	//I put dispatcher into its own function to avoid repeating code.
 	public static void dispatcher(int[]a, int[]p){
 		//This block of code checks if the core is empty; should really be used once
-		if (emptyCoreFlag){
+		if (jobsOnCore == 0){
 			a[0] = 1;						//1a. Set a to 1  if emptyCoreFlag shows 1
 			System.out.println("Is readyQueue empty? " + readyQueue.isEmpty());
 			if(!readyQueue.isEmpty())
-			   emptyCoreFlag = false;
+			   emptyCoreFlag = false;	//may not need this if-statement now with the addition of transferDirection flag and jobsOnCore semaphore
 		}	
-		else if (!readyQueue.isEmpty()){
+		else if (!readyQueue.isEmpty()){		//We still check the readyQueue because a job may be blocked and doing I/O. In this case it would be on the IOQueue and ReadyQueue can possibly be empty
 			a[0] = 2;						//1b. Else set a[0] to 2
 			jobToRun = readyQueue.poll();				//2. Set job to run to job in front of ready queue.
 			p[2]  = jobToRun.getJobAddress();				//3. Set p[2] to address of job to run
@@ -125,7 +133,7 @@ public class os {
 			System.out.println("Empty Core Flag set to: " + emptyCoreFlag);
 			readyQueue.add(jobToRun);					//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
 		}
-		else {
+		else {	//I have this block in case a job is blocked
 			System.out.println("ReadyQueue is empty");
 			a[0] = 1;	//In this case, is it idle?
 			//emptyCoreFlag = true;	//This logic may be incorrect
