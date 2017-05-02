@@ -75,14 +75,17 @@ public class os {
 
 	public static void Drmint (int[]a, int[]p){
 		System.out.println("In Drmint");
-		if (transferDirection == 0)
+		if (transferDirection == 0){
 			jobsOnCore += 1;
+			System.out.println("Incremented jobsOnCore");
+		}
 		else if (transferDirection == 1);
 			jobsOnCore -= 1;
-		System.out.println("Job current time: " + jobToRun.getCurrentTime());
-		System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
+		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
+		//System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
 		//Still don't know what to do with currentTime: jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);			//I don't know if I'm setting this correctly. Ask professor
-		System.out.println("Time is now: " + jobToRun.getMaxCpuTime());
+		//System.out.println("Time is now: " + jobToRun.getMaxCpuTime());
+		System.out.println("Jobs on core: " + jobsOnCore);
 		dispatcher(a,p);
 	}
 	
