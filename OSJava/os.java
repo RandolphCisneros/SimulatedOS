@@ -42,14 +42,14 @@ public class os {
 		if (addressTable.assignJob(newestJob)){										//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 0);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
-			readyQueue.add(newestJob);
+			readyQueue.add(newestJob);										//***!!!May have to move this line to Drmint
 			/*System.out.println("Job address: " + newestJob.getJobAddress());
 			System.out.println("Job size: " + newestJob.getJobSize());
 			System.out.println("Job is addressed correctly");*/
 		}
 		else{
 			waitingQueue.add(newestJob);																								//2b. If not, then it gets put on the waitingQueue.
-			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 1);		//3b. Don't know if I should do this with siodrum. Puts job on backing store
+			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 1);		//***!!!3b. Don't know if I should do this with siodrum. Puts job on backing store. I may not have to do this if there's not room on the core
 		}
 		jobTable.add(newestJob);																											//4 Push onto jobTable
 		dispatcher(a, p);
@@ -97,7 +97,9 @@ public class os {
 		else if (a[0] == 6) {
 			sos.siodisk(jobRequestingService.getJobNumber());
 		}
-		else {
+		else {	//a[0] == 7
+			readyQueue.remove(jobRequestingService);
+			iOQueue.add(jobRequestingService);
 			//block Job? Maybe create a block flag?
 		}
 		dispatcher(a,p);	
