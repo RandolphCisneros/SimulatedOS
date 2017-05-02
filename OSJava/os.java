@@ -95,8 +95,6 @@ public class os {
 			sos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), 1);	//I remove from drum after, but this should still work properly
 		}
 		else if (a[0] == 6) {
-			readyQueue.remove(jobRequestingService);	//remove from readyQueue
-			iOQueue.add(jobRequestingService);
 			sos.siodisk(jobRequestingService.getJobNumber());
 		}
 		else {
