@@ -29,6 +29,7 @@ public class os {
 		iOQueue = new LinkedList<Job>();
 		emptyCoreFlag = true;
 		
+		jobsOnCore = 0;
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
