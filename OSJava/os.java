@@ -98,7 +98,7 @@ public class os {
 			sos.siodisk(jobRequestingService.getJobNumber());
 		}
 		else {	//a[0] == 7
-			readyQueue.remove(jobRequestingService);
+			//readyQueue.remove(jobRequestingService);
 			iOQueue.add(jobRequestingService);
 			//block Job? Maybe create a block flag?
 		}
