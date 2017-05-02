@@ -49,7 +49,7 @@ public class os {
 		}
 		else{
 			waitingQueue.add(newestJob);																								//2b. If not, then it gets put on the waitingQueue.
-			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 1);		//***!!!3b. Don't know if I should do this with siodrum. Puts job on backing store. I may not have to do this if there's not room on the core
+			//Commenting this out since it is likely to cause problems in the future: sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 1);		//***!!!3b. Don't know if I should do this with siodrum. Puts job on backing store. I may not have to do this if there's not room on the core
 		}
 		jobTable.add(newestJob);																											//4 Push onto jobTable
 		dispatcher(a, p);
