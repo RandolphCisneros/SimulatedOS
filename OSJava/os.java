@@ -92,7 +92,7 @@ public class os {
 		if (a[0] == 5){								//can turn this whole process into a function
 			readyQueue.remove(jobRequestingService);			//may have to traverse the whole queue to get to this
 			addressTable.removeJob(jobRequestingService);		//function may not work perfectly
-			sos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), 1);	//I remove from drum after, but this should still work properly
+			//commenting out for test purposessos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), 1);	//I remove from drum after, but this should still work properly
 		}
 		else if (a[0] == 6) {
 			sos.siodisk(jobRequestingService.getJobNumber());
@@ -128,6 +128,7 @@ public class os {
 		else {
 			System.out.println("ReadyQueue is empty");
 			a[0] = 1;	//In this case, is it idle?
+			emptyCoreFlag = true;	//This logic may be incorrect
 		}
 	}
 }
