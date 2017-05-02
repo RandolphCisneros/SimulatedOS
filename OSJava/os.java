@@ -98,7 +98,7 @@ public class os {
 			sos.siodisk(jobRequestingService.getJobNumber());
 		}
 		else {	//a[0] == 7
-			//readyQueue.remove(jobRequestingService);
+			readyQueue.remove(jobRequestingService);
 			iOQueue.add(jobRequestingService);
 			//block Job? Maybe create a block flag?
 		}
@@ -128,7 +128,7 @@ public class os {
 		else {
 			System.out.println("ReadyQueue is empty");
 			a[0] = 1;	//In this case, is it idle?
-			emptyCoreFlag = true;	//This logic may be incorrect
+			//emptyCoreFlag = true;	//This logic may be incorrect
 		}
 	}
 }
