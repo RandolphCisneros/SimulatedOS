@@ -164,9 +164,20 @@ public class os {
 		
 		System.out.println("TotalTime = " + totalTime);
 		System.out.println("Last Current Time = " + lastCurrentTime);
-		System.out.println("Time elapsed since last interrupt" + timeElapsed);
+		System.out.println("Time elapsed since last interrupt: " + timeElapsed);
 		
 		return timeElapsed;
+	}
+	
+	//Method to set job's current running time
+	public static void setRunningJobTime(){ 
+		if (!readyQueue.isEmpty()){
+			jobToRun.setCurrentTime(timeElapsed);
+			System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
+			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
+		}
+		else
+			return;
 	}
 		
 }
