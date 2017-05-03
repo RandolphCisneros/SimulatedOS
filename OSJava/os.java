@@ -17,6 +17,8 @@ public class os {
 	private static Job jobRequestingService;
 	private static int jobsOnCore;
 	private static int transferDirection;
+	private static int totalTime;
+	private static int timeElapsed;
 	
 	//This is to initialize static variables. They all had to be set to static.
 	public static void startup(){
@@ -30,6 +32,8 @@ public class os {
 		emptyCoreFlag = true;
 		
 		jobsOnCore = 0;
+		totalTime = 0;
+		timeElapsed = 0;
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
@@ -82,6 +86,7 @@ public class os {
 		}
 		else if (transferDirection == 1){
 			jobsOnCore -= 1;
+			System.out.println("Decremented jobsOnCore");
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
 		//System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
@@ -102,9 +107,10 @@ public class os {
 		System.out.println("a = " + a[0]);	//See if there's a typo in the handout.
 		jobRequestingService = jobToRun;
 		if (a[0] == 5){								//can turn this whole process into a function
-			transferDirection = 1;
+			//Commenting this out because we don't go to Drmint: transferDirection = 1;
 			readyQueue.remove(jobRequestingService);			//may have to traverse the whole queue to get to this
 			addressTable.removeJob(jobRequestingService);		//function may not work perfectly
+			jobsOnCore -= 1;
 			//commenting out for test purposessos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), 1);	//I remove from drum after, but this should still work properly
 		}
 		else if (a[0] == 6) {
