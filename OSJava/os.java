@@ -80,8 +80,9 @@ public class os {
 			jobsOnCore += 1;
 			System.out.println("Incremented jobsOnCore");
 		}
-		else if (transferDirection == 1);
+		else if (transferDirection == 1){
 			jobsOnCore -= 1;
+		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
 		//System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
 		//Still don't know what to do with currentTime: jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);			//I don't know if I'm setting this correctly. Ask professor
