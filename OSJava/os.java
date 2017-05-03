@@ -47,7 +47,7 @@ public class os {
 	public static void Crint(int[]a, int[]p){
 		System.out.println ("In Crint");
 		sos.ontrace();	//remove this later
-		timeElasped = getTimeElapsed(p);
+		timeElapsed = getTimeElapsed(p);
 		Job newestJob = new Job(p[1],p[2],p[3],p[4],0);			//Changed last parameter to 0. May be better to get rid of it altogether in the constructor.																	//1. Job arrives. We take the parameters.
 		if (addressTable.assignJob(newestJob)){										//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
