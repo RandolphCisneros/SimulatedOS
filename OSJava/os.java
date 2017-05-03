@@ -47,13 +47,14 @@ public class os {
 	public static void Crint(int[]a, int[]p){
 		System.out.println ("In Crint");
 		sos.ontrace();	//remove this later
-		Job newestJob = new Job(p[1],p[2],p[3],p[4],p[5]);																		//1. Job arrives. We take the parameters.
+		timeElasped = getTimeElapsed(p);
+		Job newestJob = new Job(p[1],p[2],p[3],p[4],0);			//Changed last parameter to 0. May be better to get rid of it altogether in the constructor.																	//1. Job arrives. We take the parameters.
 		if (addressTable.assignJob(newestJob)){										//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
 			transferDirection = 0;
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
 			readyQueue.add(newestJob);							//***!!!May have to move this line to Drmint
-
+			System.out.println("Job max time: " + newestJob.getMaxCpuTime());
 			/*System.out.println("Job address: " + newestJob.getJobAddress());
 			System.out.println("Job size: " + newestJob.getJobSize());
 			System.out.println("Job is addressed correctly");*/
@@ -76,6 +77,7 @@ public class os {
 	//Lastly dispatcher is called and the job in front of the readyQueue is run.
 	public static void Dskint (int[]a, int[]p){
 		System.out.println("In Dskint");
+		timeElapsed = getTimeElapsed(p);
 		jobCompletingIO = iOQueue.poll();
 		readyQueue.add(jobCompletingIO);
 		dispatcher(a,p);		
@@ -83,6 +85,7 @@ public class os {
 
 	public static void Drmint (int[]a, int[]p){
 		System.out.println("In Drmint");
+		timeElapsed = getTimeElapsed(p);
 		if (transferDirection == 0){
 			jobsOnCore += 1;
 			System.out.println("Incremented jobsOnCore");
@@ -102,12 +105,13 @@ public class os {
 	
 	public static void Tro (int[]a, int[]p){
 		System.out.println("In Tro");
+		timeElapsed = getTimeElapsed(p);
 			//must find job to run in readyQueue and job Table, set time, check if 0. If 0, proceed with removal process.
 		dispatcher(a,p);
 	}
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
-		System.out.println("a = " + a[0]);	//See if there's a typo in the handout.
+		timeElapsed = getTimeElapsed(p);
 		jobRequestingService = jobToRun;
 		if (a[0] == 5){								//can turn this whole process into a function
 			//Commenting this out because we don't go to Drmint: transferDirection = 1;
@@ -153,7 +157,7 @@ public class os {
 	}
 	
 	//Method to get elapsed time
-	public static int getElapsedTime(int []p){
+	public static int getTimeElapsed(int []p){
 		lastCurrentTime = totalTime;				//1. get the lastCurrentTime
 		totalTime = p[5];					//2. set totalTime to the overall time elapsed
 		timeElapsed = totalTime - lastCurrentTime;		//3. Your time elapsed is your totalTime minus your lastCurrentTime
