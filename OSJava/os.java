@@ -19,6 +19,7 @@ public class os {
 	private static int transferDirection;
 	private static int totalTime;
 	private static int timeElapsed;
+	private static int lastCurrentTime;
 	
 	//This is to initialize static variables. They all had to be set to static.
 	public static void startup(){
@@ -33,6 +34,7 @@ public class os {
 		
 		jobsOnCore = 0;
 		totalTime = 0;
+		lastCurrentTime = 0;
 		timeElapsed = 0;
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
@@ -50,7 +52,8 @@ public class os {
 			System.out.println("Putting job on core");
 			transferDirection = 0;
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
-			readyQueue.add(newestJob);										//***!!!May have to move this line to Drmint
+			readyQueue.add(newestJob);							//***!!!May have to move this line to Drmint
+
 			/*System.out.println("Job address: " + newestJob.getJobAddress());
 			System.out.println("Job size: " + newestJob.getJobSize());
 			System.out.println("Job is addressed correctly");*/
@@ -139,15 +142,27 @@ public class os {
 			p[2]  = jobToRun.getJobAddress();				//3. Set p[2] to address of job to run
 			p[3] = jobToRun.getJobSize();						//4. Set p[3] to size of job to run
 			p[4] = TIME_SLICE;								//5. Set time slice. I'm doing round robin so this will stay the same.
-			System.out.println("jobToRun address: " + jobToRun.getJobAddress());
-			System.out.println("jobToRun Size: " + jobToRun.getJobSize());
-			System.out.println("Empty Core Flag set to: " + emptyCoreFlag);
+			/*System.out.println("jobToRun address: " + jobToRun.getJobAddress());
+			System.out.println("jobToRun Size: " + jobToRun.getJobSize());*/
 			readyQueue.add(jobToRun);					//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
 		}
 		else {	//I have this block in case a job is blocked
 			System.out.println("ReadyQueue is empty");
 			a[0] = 1;	//In this case, is it idle?
-			//emptyCoreFlag = true;	//This logic may be incorrect
 		}
 	}
+	
+	//Method to get elapsed time
+	public static int getElapsedTime(int []p){
+		lastCurrentTime = totalTime;				//1. get the lastCurrentTime
+		totalTime = p[5];					//2. set totalTime to the overall time elapsed
+		timeElapsed = totalTime - lastCurrentTime;		//3. Your time elapsed is your totalTime minus your lastCurrentTime
+		
+		System.out.println("TotalTime = " + totalTime);
+		System.out.println("Last Current Time = " + lastCurrentTime);
+		System.out.println("Time elapsed since last interrupt" + timeElapsed);
+		
+		return timeElapsed;
+	}
+		
 }
