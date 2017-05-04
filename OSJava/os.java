@@ -58,7 +58,7 @@ public class os {
 		if (addressTable.assignJob(newestJob)){		//4a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
 			transferDirection = 0;
-			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
+			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Puts job on core (memory)
 			System.out.println("Job max time: " + newestJob.getMaxCpuTime());
 			/*System.out.println("Job address: " + newestJob.getJobAddress());
 			System.out.println("Job size: " + newestJob.getJobSize());
