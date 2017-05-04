@@ -14,11 +14,13 @@ public class os {
 	private static Job jobToRun;	
 	private static Job jobCompletingIO;
 	private static Job jobRequestingService;
+	private static Job jobTransferred;
 	private static int jobsOnCore;
 	private static int transferDirection;
 	private static int totalTime;
 	private static int timeElapsed;
 	private static int lastCurrentTime;
+	private static boolean comingFromCrint;
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
@@ -40,6 +42,7 @@ public class os {
 		
 		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
 		//as the processes enter interrupts.
+		jobTransferred = new Job();
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
@@ -68,7 +71,8 @@ public class os {
 			waitingQueue.add(newestJob);																								//2b. If not, then it gets put on the waitingQueue.
 			//Commenting this out since it is likely to cause problems in the future: sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), 1);		//***!!!3b. Don't know if I should do this with siodrum. Puts job on backing store. I may not have to do this if there's not room on the core
 		}
-		jobTable.add(newestJob);																											//4 Push onto jobTable
+		jobTable.add(newestJob);		//4 Push onto jobTable
+		comingFromCrint = true;
 		dispatcher(a, p);
 		/*System.out.println("Job address after dispatcher: " + newestJob.getJobAddress());
 		System.out.println("Job address currently assigned to dispatcher: " + p[2]);
@@ -91,15 +95,20 @@ public class os {
 
 	public static void Drmint (int[]a, int[]p){
 		System.out.println("In Drmint");
-		getTimeElapsed(p);
-		setRunningJobTime();
-		if (transferDirection == 0){
-			readyQueue.add(newestJob);				//Add job to readyQueue here.
-			jobsOnCore += 1;
+		getTimeElapsed(p);					//1. Get elapsed time
+		setRunningJobTime();					//2. Set running job time. Won't do if no jobsOnCore or readyQueue is empty.
+		
+		if (transferDirection == 0){				//3. Check transfer direction
+			if(comingFromCrint){				//This checks if it was a new job coming in.
+				readyQueue.add(newestJob);		//4a. Add job to readyQueue here.
+				comingFromCrint = false;
+			}
+			jobsOnCore += 1;				//5a. Increment jobsOnCore
 			System.out.println("Incremented jobsOnCore");
 		}
 		else if (transferDirection == 1){
-			jobsOnCore -= 1;
+			//May need to do this for a swap out. Maybe make a new job: readyQueue.remove(jobToRun);			//4b. Remove last job to run
+			jobsOnCore -= 1;				//5b. Decrement jobsOnCore
 			System.out.println("Decremented jobsOnCore");
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
@@ -121,25 +130,24 @@ public class os {
 	
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
-		timeElapsed = getTimeElapsed(p);
-		setRunningJobTime();
-		jobRequestingService = jobToRun;
-		if (a[0] == 5){								//can turn this whole process into a function
-			//Commenting this out because we don't go to Drmint: transferDirection = 1;
-			readyQueue.remove(jobRequestingService);			//may have to traverse the whole queue to get to this
-			addressTable.removeJob(jobRequestingService);		//function may not work perfectly
+		timeElapsed = getTimeElapsed(p);	//1. Set timeElapsed
+		setRunningJobTime();			//2. Set running time for job
+		
+		jobRequestingService = jobToRun;	//3. Assign jobRequestingService
+		if (a[0] == 5){						//4a. It requested termination
+			readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
+			addressTable.removeJob(jobRequestingService);	//function may not work perfectly
 			jobsOnCore -= 1;
-			//commenting out for test purposessos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), 1);	//I remove from drum after, but this should still work properly
 		}
-		else if (a[0] == 6) {
-			sos.siodisk(jobRequestingService.getJobNumber());
+		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
+			sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
 		}
-		else {	//a[0] == 7
-			readyQueue.remove(jobRequestingService);
-			iOQueue.add(jobRequestingService);
+		else {							//4c. a[0] == 7, job wants to be blocked for i/o
+			readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
+			iOQueue.add(jobRequestingService);		//6c. Add to I/OQueue.
 			//block Job? Maybe create a block flag?
 		}
-		dispatcher(a,p);	
+		dispatcher(a,p);	//Last, call dispatcher.
 	}
 	
 	/////////////////////////////////////////////////////////////
