@@ -48,6 +48,7 @@ public class os {
 		System.out.println ("In Crint");
 		sos.ontrace();	//remove this later
 		timeElapsed = getTimeElapsed(p);
+		setRunningJobTime();
 		Job newestJob = new Job(p[1],p[2],p[3],p[4],0);			//Changed last parameter to 0. May be better to get rid of it altogether in the constructor.																	//1. Job arrives. We take the parameters.
 		if (addressTable.assignJob(newestJob)){										//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
@@ -78,6 +79,7 @@ public class os {
 	public static void Dskint (int[]a, int[]p){
 		System.out.println("In Dskint");
 		timeElapsed = getTimeElapsed(p);
+		setRunningJobTime();
 		jobCompletingIO = iOQueue.poll();
 		readyQueue.add(jobCompletingIO);
 		dispatcher(a,p);		
@@ -86,6 +88,7 @@ public class os {
 	public static void Drmint (int[]a, int[]p){
 		System.out.println("In Drmint");
 		timeElapsed = getTimeElapsed(p);
+		setRunningJobTime();
 		if (transferDirection == 0){
 			jobsOnCore += 1;
 			System.out.println("Incremented jobsOnCore");
@@ -106,12 +109,15 @@ public class os {
 	public static void Tro (int[]a, int[]p){
 		System.out.println("In Tro");
 		timeElapsed = getTimeElapsed(p);
+		setRunningJobTime();
 			//must find job to run in readyQueue and job Table, set time, check if 0. If 0, proceed with removal process.
 		dispatcher(a,p);
 	}
+	
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
 		timeElapsed = getTimeElapsed(p);
+		setRunningJobTime();
 		jobRequestingService = jobToRun;
 		if (a[0] == 5){								//can turn this whole process into a function
 			//Commenting this out because we don't go to Drmint: transferDirection = 1;
@@ -130,6 +136,9 @@ public class os {
 		}
 		dispatcher(a,p);	
 	}
+	/////////////////////////////////////////////////////////////
+	//////////////////END OF INTERRUPTS///////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	
 	//I put dispatcher into its own function to avoid repeating code.
 	public static void dispatcher(int[]a, int[]p){
@@ -172,7 +181,7 @@ public class os {
 	//Method to set job's current running time
 	public static void setRunningJobTime(){ 
 		if (!readyQueue.isEmpty()){
-			jobToRun.setCurrentTime(timeElapsed);
+			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
 			System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
 		}
