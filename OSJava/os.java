@@ -59,7 +59,6 @@ public class os {
 			System.out.println("Putting job on core");
 			transferDirection = 0;
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
-			readyQueue.add(newestJob);							//***!!!May have to move this line to Drmint
 			System.out.println("Job max time: " + newestJob.getMaxCpuTime());
 			/*System.out.println("Job address: " + newestJob.getJobAddress());
 			System.out.println("Job size: " + newestJob.getJobSize());
@@ -95,6 +94,7 @@ public class os {
 		getTimeElapsed(p);
 		setRunningJobTime();
 		if (transferDirection == 0){
+			readyQueue.add(newestJob);				//Add job to readyQueue here.
 			jobsOnCore += 1;
 			System.out.println("Incremented jobsOnCore");
 		}
