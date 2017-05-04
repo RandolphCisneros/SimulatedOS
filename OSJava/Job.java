@@ -25,13 +25,13 @@ public class Job  /*implements Comparable <Job> */{
 		address = -1;
 	}
 	
-	Job(int jN, int jP, int jS, int mCT, int cT){
+	Job(int jN, int jP, int jS, int mCT){
 		jobNumber = jN;
 		jobPriority = jP;
 		jobSize = jS;
 		maxCpuTime = mCT;
-		currentTime = cT;
-		address = -1;					//we don't assign an address in the constructor, the table will do that for us
+		currentTime = 0;	//Default currentTime to 0.
+		address = -1;		//we don't assign an address in the constructor, the table will do that for us
 	}
 
 	//accessors and mutators
