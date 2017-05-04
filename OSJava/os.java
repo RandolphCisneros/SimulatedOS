@@ -5,14 +5,13 @@ public class os {
 	public static final int TIME_SLICE = 5;
 
 	private static SizeAddressTable addressTable;
-	private static Stack<Job> processorStack;					//To be used for interrupts that want to go back
-	public static LinkedList<Job> jobTable;		//I made this global solely because it said to in the handout.
+	private static Stack<Job> processorStack;		//To be used for interrupts that want to go back.
+	public static LinkedList<Job> jobTable;			//I made this global solely because it said to in the handout.
 	private static Queue<Job> readyQueue;
-	private static Queue<Job> waitingQueue;				//a waiting queue for if we don't have enough space or something like that
-	private static Queue<Job> iOQueue;						//this is the I/O queue.
-	private static boolean emptyCoreFlag;
+	private static Queue<Job> waitingQueue;			//This waiting queue is for if we don't have enough space in the core.
+	private static Queue<Job> iOQueue;			//This is the I/O queue to be used when I/O jobs want to be blocked.
 
-	private static Job jobToRun;												//this will be the first static object; I can't initialize in startup because there's nothing to initialize
+	private static Job jobToRun;	
 	private static Job jobCompletingIO;
 	private static Job jobRequestingService;
 	private static int jobsOnCore;
@@ -21,21 +20,26 @@ public class os {
 	private static int timeElapsed;
 	private static int lastCurrentTime;
 	
-	//This is to initialize static variables. They all had to be set to static.
+	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
 		System.out.println("In startup");
-		addressTable = new SizeAddressTable();
-		processorStack = new Stack<Job>();
+		
+		//Initialize Containers
+		addressTable = new SizeAddressTable();	//This is a container, even though it only takes type Job
+		processorStack = new Stack<Job>();	//Haven't found a use for this stack yet
 		jobTable = new LinkedList<Job>();
 		readyQueue = new LinkedList<Job>();
 		waitingQueue = new LinkedList<Job>();
 		iOQueue = new LinkedList<Job>();
-		emptyCoreFlag = true;
 		
+		//static variables, all initialized to 0
 		jobsOnCore = 0;
 		totalTime = 0;
 		lastCurrentTime = 0;
 		timeElapsed = 0;
+		
+		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
+		//as the processes enter interrupts.
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
@@ -47,7 +51,7 @@ public class os {
 	public static void Crint(int[]a, int[]p){
 		System.out.println ("In Crint");
 		sos.ontrace();	//remove this later
-		timeElapsed = getTimeElapsed(p);
+		getTimeElapsed(p);
 		setRunningJobTime();
 		Job newestJob = new Job(p[1],p[2],p[3],p[4],0);			//Changed last parameter to 0. May be better to get rid of it altogether in the constructor.																	//1. Job arrives. We take the parameters.
 		if (addressTable.assignJob(newestJob)){										//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
@@ -78,7 +82,7 @@ public class os {
 	//Lastly dispatcher is called and the job in front of the readyQueue is run.
 	public static void Dskint (int[]a, int[]p){
 		System.out.println("In Dskint");
-		timeElapsed = getTimeElapsed(p);
+		getTimeElapsed(p);
 		setRunningJobTime();
 		jobCompletingIO = iOQueue.poll();
 		readyQueue.add(jobCompletingIO);
@@ -87,7 +91,7 @@ public class os {
 
 	public static void Drmint (int[]a, int[]p){
 		System.out.println("In Drmint");
-		timeElapsed = getTimeElapsed(p);
+		getTimeElapsed(p);
 		setRunningJobTime();
 		if (transferDirection == 0){
 			jobsOnCore += 1;
@@ -108,7 +112,7 @@ public class os {
 	
 	public static void Tro (int[]a, int[]p){
 		System.out.println("In Tro");
-		timeElapsed = getTimeElapsed(p);
+		getTimeElapsed(p);
 		setRunningJobTime();
 			//must find job to run in readyQueue and job Table, set time, check if 0. If 0, proceed with removal process.
 		dispatcher(a,p);
@@ -136,6 +140,7 @@ public class os {
 		}
 		dispatcher(a,p);	
 	}
+	
 	/////////////////////////////////////////////////////////////
 	//////////////////END OF INTERRUPTS///////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
@@ -165,17 +170,15 @@ public class os {
 		}
 	}
 	
-	//Method to get elapsed time
-	public static int getTimeElapsed(int []p){
-		lastCurrentTime = totalTime;				//1. get the lastCurrentTime
-		totalTime = p[5];					//2. set totalTime to the overall time elapsed
-		timeElapsed = totalTime - lastCurrentTime;		//3. Your time elapsed is your totalTime minus your lastCurrentTime
+	//Method to set timeElapsed. Don't return anything because timeElapsed is a static variable.
+	public static void getTimeElapsed(int []p){
+		lastCurrentTime = totalTime;			//1. get the lastCurrentTime
+		totalTime = p[5];				//2. set totalTime to the overall time elapsed
+		timeElapsed = totalTime - lastCurrentTime;	//3. Time elapsed is totalTime minus lastCurrentTime
 		
 		System.out.println("TotalTime = " + totalTime);
 		System.out.println("Last Current Time = " + lastCurrentTime);
 		System.out.println("Time elapsed since last interrupt: " + timeElapsed);
-		
-		return timeElapsed;
 	}
 	
 	//Method to set job's current running time
