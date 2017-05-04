@@ -147,26 +147,25 @@ public class os {
 	
 	//I put dispatcher into its own function to avoid repeating code.
 	public static void dispatcher(int[]a, int[]p){
+		System.out.println("In dispatcher");
 		//This block of code checks if the core is empty; should really be used once
 		if (jobsOnCore == 0){
-			a[0] = 1;						//1a. Set a to 1  if emptyCoreFlag shows 1
-			System.out.println("Is readyQueue empty? " + readyQueue.isEmpty());
-			if(!readyQueue.isEmpty())
-			   emptyCoreFlag = false;	//may not need this if-statement now with the addition of transferDirection flag and jobsOnCore semaphore
+			//System.out.println("No jobs on core");
+			a[0] = 1;		//1a. Set a to 1  if there are no jobs on core
 		}	
-		else if (!readyQueue.isEmpty()){		//We still check the readyQueue because a job may be blocked and doing I/O. In this case it would be on the IOQueue and ReadyQueue can possibly be empty
-			a[0] = 2;						//1b. Else set a[0] to 2
-			jobToRun = readyQueue.poll();				//2. Set job to run to job in front of ready queue.
-			p[2]  = jobToRun.getJobAddress();				//3. Set p[2] to address of job to run
-			p[3] = jobToRun.getJobSize();						//4. Set p[3] to size of job to run
-			p[4] = TIME_SLICE;								//5. Set time slice. I'm doing round robin so this will stay the same.
+		else if (!readyQueue.isEmpty()){	//1b. We check the readyQueue because this hold jobs on the core and not blocked.
+			a[0] = 2;			//2b. Set a[0] to 2
+			jobToRun = readyQueue.poll();	//3b. Set job to run to job in front of ready queue.
+			p[2]  = jobToRun.getJobAddress();	//4b. Set p[2] to address of job to run
+			p[3] = jobToRun.getJobSize();		//5b. Set p[3] to size of job to run
+			p[4] = TIME_SLICE;			//6b. Set time slice. I'm doing round robin so this will stay the same.
 			/*System.out.println("jobToRun address: " + jobToRun.getJobAddress());
 			System.out.println("jobToRun Size: " + jobToRun.getJobSize());*/
-			readyQueue.add(jobToRun);					//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
+			readyQueue.add(jobToRun);	//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
 		}
-		else {	//I have this block in case a job is blocked
+		else {	//If a job is blocked and on the core, and there are no unblocked jobs on the core, we go to this.
 			System.out.println("ReadyQueue is empty");
-			a[0] = 1;	//In this case, is it idle?
+			a[0] = 1;					//Keep idle
 		}
 	}
 	
@@ -183,6 +182,7 @@ public class os {
 	
 	//Method to set job's current running time
 	public static void setRunningJobTime(){ 
+		System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
 			System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
