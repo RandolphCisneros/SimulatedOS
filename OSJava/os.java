@@ -180,7 +180,7 @@ public class os {
 	
 	//Method to set job's current running time
 	public static void setRunningJobTime(){ 
-		if (!readyQueue.isEmpty()){
+		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
 			System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
