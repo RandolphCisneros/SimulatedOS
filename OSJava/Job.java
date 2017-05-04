@@ -11,10 +11,10 @@ public class Job  /*implements Comparable <Job> */{
 	private int jobSize;
 	//p[4]
 	private int maxCpuTime;
-	//p[5]
-	private int currentTime;
-	//adding my own address variable
-	private int address;
+	
+	private int currentTime;	//current running time on job
+	private int address;		//adding my own address variable
+	private boolean onCore;		//let's O.S. know if it's on the core or not. will be used later for swapping.
 	
 	Job(){
 		jobNumber = 0;
@@ -23,6 +23,7 @@ public class Job  /*implements Comparable <Job> */{
 		maxCpuTime = 0;
 		currentTime = 0;
 		address = -1;
+		onCore = false;
 	}
 	
 	Job(int jN, int jP, int jS, int mCT){
@@ -32,6 +33,7 @@ public class Job  /*implements Comparable <Job> */{
 		maxCpuTime = mCT;
 		currentTime = 0;	//Default currentTime to 0.
 		address = -1;		//we don't assign an address in the constructor, the table will do that for us
+		onCore = false;
 	}
 
 	//accessors and mutators
@@ -40,9 +42,10 @@ public class Job  /*implements Comparable <Job> */{
 	public int getJobSize(){ return jobSize;}
 	public int getMaxCpuTime(){ return maxCpuTime;}
 	public int getCurrentTime(){ return currentTime;}
-	
 	public int getJobAddress(){return address;}
+	public boolean getOnCore(){return onCore;}
 	
+	public void setOnCore(boolean oC){onCore = oC;}
 	public void setJobNumber(int jN){jobNumber = jN;}
 	public void setJobPriority(int jP){jobPriority = jP;}
 	public void setJobSize(int jS){jobSize = jS;}
