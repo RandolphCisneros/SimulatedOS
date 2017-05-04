@@ -51,10 +51,11 @@ public class os {
 	public static void Crint(int[]a, int[]p){
 		System.out.println ("In Crint");
 		sos.ontrace();	//remove this later
-		getTimeElapsed(p);
-		setRunningJobTime();
-		Job newestJob = new Job(p[1],p[2],p[3],p[4],0);			//Changed last parameter to 0. May be better to get rid of it altogether in the constructor.																	//1. Job arrives. We take the parameters.
-		if (addressTable.assignJob(newestJob)){										//2a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
+		getTimeElapsed(p);				//1. Set elapsed time.
+		setRunningJobTime();				//2. Set last running Job's time, if any.
+		
+		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
+		if (addressTable.assignJob(newestJob)){		//4a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
 			transferDirection = 0;
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Don't know if I should do this with siodrum. Puts job on core (memory)
