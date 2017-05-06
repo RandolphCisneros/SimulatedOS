@@ -47,6 +47,7 @@ public class Job  /*implements Comparable <Job> */{
 	public int getCurrentTime(){ return currentTime;}
 	public int getJobAddress(){return address;}
 	public boolean getOnCore(){return onCore;}
+	public boolean getBlockFlag(){return blockFlag;}
 	
 	public void setOnCore(boolean oC){onCore = oC;}
 	public void setJobNumber(int jN){jobNumber = jN;}
@@ -55,6 +56,7 @@ public class Job  /*implements Comparable <Job> */{
 	public void setMaxCpuTime(int mCT){maxCpuTime = mCT;}
 	public void setCurrentTime(int cT){currentTime = cT;}
 	public void setJobAddress(int a){address = a;}
+	public void setBlockFlag(){return blockFlag;}
 	
 	/*		May be used to compare jobs by size and priority
 	public int compareTo(Job j){
