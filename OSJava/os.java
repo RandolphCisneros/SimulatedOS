@@ -15,6 +15,7 @@ public class os {
 	private static Job jobCompletingIO;
 	private static Job jobRequestingService;
 	private static Job jobTransferred;
+	private static Job lastJobAdded;
 	private static int jobsOnCore;
 	private static int transferDirection;
 	private static int totalTime;
@@ -46,6 +47,7 @@ public class os {
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
+		lastJobAdded = new Job();
 	}
 
 	//This method receives job info. It creates a "Job" instance, and then attempts to assign it an address.
@@ -73,6 +75,7 @@ public class os {
 		}
 		jobTable.add(newestJob);		//4 Push onto jobTable
 		comingFromCrint = true;
+		lastJobAdded = newestJob;
 		dispatcher(a, p);
 		/*System.out.println("Job address after dispatcher: " + newestJob.getJobAddress());
 		System.out.println("Job address currently assigned to dispatcher: " + p[2]);
@@ -105,7 +108,7 @@ public class os {
 		
 		if (transferDirection == 0){				//3. Check transfer direction
 			if(comingFromCrint){				//This checks if it was a new job coming in.
-				readyQueue.add(newestJob);		//4a. Add job to readyQueue here.
+				readyQueue.add(lastJobAdded);		//4a. Add job to readyQueue here.
 				comingFromCrint = false;
 			}
 			jobsOnCore += 1;				//5a. Increment jobsOnCore
