@@ -149,7 +149,7 @@ public class os {
 		}
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
 			sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
-			iOQueue.add(jobRequestingService.getJobNumber());	//6b. Still add to iOQueue, but leave blockFlag alone
+			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
 		}
 		else {							//4c. a[0] == 7, job wants to be blocked for i/o
 			readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
