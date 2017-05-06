@@ -143,15 +143,18 @@ public class os {
 		
 		jobRequestingService = jobToRun;	//3. Assign jobRequestingService
 		if (a[0] == 5){						//4a. It requested termination
+			System.out.println("Job requesting termination");
 			readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
 			addressTable.removeJob(jobRequestingService);	//function may not work perfectly
 			jobsOnCore -= 1;
 		}
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
+			System.out.println("Job requesting unblocked IO");
 			sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
 			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
 		}
 		else {							//4c. a[0] == 7, job wants to be blocked for i/o
+			System.out.println("Job requesting blocked IO");
 			readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
 			iOQueue.add(jobRequestingService);		//6c. Add to I/OQueue.
 			jobRequestingService.setBlockFlag(true);	//7c. Set blockFlag to true. It is blocked.
