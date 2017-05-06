@@ -86,11 +86,16 @@ public class os {
 	//Lastly dispatcher is called and the job in front of the readyQueue is run.
 	public static void Dskint (int[]a, int[]p){
 		System.out.println("In Dskint");
-		getTimeElapsed(p);
-		setRunningJobTime();
+		getTimeElapsed(p);	//1. Get time elapsed
+		setRunningJobTime();	//2. Set running job time... Ask professor Jones if you should do this.
+		
 		jobCompletingIO = iOQueue.poll();
-		readyQueue.add(jobCompletingIO);
-		dispatcher(a,p);		
+		if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
+			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
+			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
+		}
+		
+		dispatcher(a,p);	//6. Call dispatcher	
 	}
 
 	public static void Drmint (int[]a, int[]p){
@@ -141,11 +146,12 @@ public class os {
 		}
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
 			sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
+			iOQueue.add(jobRequestingService.getJobNumber());	//6b. Still add to iOQueue, but leave blockFlag alone
 		}
 		else {							//4c. a[0] == 7, job wants to be blocked for i/o
 			readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
 			iOQueue.add(jobRequestingService);		//6c. Add to I/OQueue.
-			//block Job? Maybe create a block flag?
+			jobRequestingService.setBlockFlag(true);	//7c. Set blockFlag to true. It is blocked.
 		}
 		dispatcher(a,p);	//Last, call dispatcher.
 	}
