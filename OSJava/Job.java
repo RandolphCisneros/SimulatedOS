@@ -15,6 +15,7 @@ public class Job  /*implements Comparable <Job> */{
 	private int currentTime;	//current running time on job
 	private int address;		//adding my own address variable
 	private boolean onCore;		//let's O.S. know if it's on the core or not. will be used later for swapping.
+	private boolean blockFlag;
 	
 	Job(){
 		jobNumber = 0;
@@ -24,6 +25,7 @@ public class Job  /*implements Comparable <Job> */{
 		currentTime = 0;
 		address = -1;
 		onCore = false;
+		blockFlage = false;
 	}
 	
 	Job(int jN, int jP, int jS, int mCT){
@@ -34,6 +36,7 @@ public class Job  /*implements Comparable <Job> */{
 		currentTime = 0;	//Default currentTime to 0.
 		address = -1;		//we don't assign an address in the constructor, the table will do that for us
 		onCore = false;
+		blockFlag = false;
 	}
 
 	//accessors and mutators
