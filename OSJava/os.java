@@ -138,7 +138,7 @@ public class os {
 	
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
-		timeElapsed = getTimeElapsed(p);	//1. Set timeElapsed
+		getTimeElapsed(p);			//1. Set timeElapsed
 		setRunningJobTime();			//2. Set running time for job
 		
 		jobRequestingService = jobToRun;	//3. Assign jobRequestingService
