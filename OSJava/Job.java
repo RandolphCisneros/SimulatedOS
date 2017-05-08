@@ -39,7 +39,7 @@ public class Job  /*implements Comparable <Job> */{
 		address = -1;		//we don't assign an address in the constructor, the table will do that for us
 		onCore = false;
 		blockFlag = false;
-		inTranist = false;
+		inTransit = false;
 	}
 
 	//accessors and mutators
