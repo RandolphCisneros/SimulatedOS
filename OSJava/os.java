@@ -90,8 +90,8 @@ public class os {
 	public static void Dskint (int[]a, int[]p){
 		System.out.println("In Dskint");
 		getTimeElapsed(p);	//1. Get time elapsed
-		setRunningJobTime();	//2. Set running job time... Ask professor Jones if you should do this.
-		
+		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
+					//	necessarily jobs finishing disk I/O.
 		jobCompletingIO = iOQueue.poll();
 		if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
 			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
