@@ -96,6 +96,7 @@ public class os {
 		jobCompletingIO = iOQueue.poll();
 		if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
 			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
+			jobCompletingIO.setIOFlag(false);
 			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
 		}
 		jobCompletingIO.setIOFlag(false);
