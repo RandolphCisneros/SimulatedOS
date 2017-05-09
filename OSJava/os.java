@@ -204,9 +204,9 @@ public class os {
 		totalTime = p[5];				//2. set totalTime to the overall time elapsed
 		timeElapsed = totalTime - lastCurrentTime;	//3. Time elapsed is totalTime minus lastCurrentTime
 		
-		System.out.println("TotalTime = " + totalTime);
+		/*System.out.println("TotalTime = " + totalTime);
 		System.out.println("Last Current Time = " + lastCurrentTime);
-		System.out.println("Time elapsed since last interrupt: " + timeElapsed);
+		System.out.println("Time elapsed since last interrupt: " + timeElapsed);*/
 	}
 	
 	//Method to set job's current running time
@@ -214,8 +214,8 @@ public class os {
 		System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
-			System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
-			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
+			/*System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
+			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());*/
 		}
 		else
 			return;
