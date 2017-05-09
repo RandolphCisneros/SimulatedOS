@@ -103,6 +103,8 @@ public class os {
 			jobToRun.setBlockFlag(false);
 			System.out.println("IOFLAG: " + jobToRun.getIOFlag());
 		}
+		System.out.println(jobCompletingIO.toString());
+		System.out.println(jobToRun.toString());
 		System.out.println("IOFlag " + jobCompletingIO.getIOFlag());
 		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		dispatcher(a,p);	//6. Call dispatcher	
@@ -165,6 +167,7 @@ public class os {
 			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
 			jobRequestingService.setIOFlag(true);
 			System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
+			System.out.println(jobRequestingService.toString());
 		}
 		else {							//4c. a[0] == 7, job wants to be blocked for i/o
 			System.out.println("Job requesting blocked IO");
