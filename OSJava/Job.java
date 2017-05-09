@@ -17,6 +17,7 @@ public class Job  /*implements Comparable <Job> */{
 	private boolean onCore;		//let's O.S. know if it's on the core or not. will be used later for swapping.
 	private boolean blockFlag;
 	private boolean inTransit;
+	private boolean IOFlag;
 	
 	Job(){
 		jobNumber = 0;
@@ -28,6 +29,7 @@ public class Job  /*implements Comparable <Job> */{
 		onCore = false;
 		blockFlag = false;
 		inTransit = false;
+		IOFlag = false;
 	}
 	
 	Job(int jN, int jP, int jS, int mCT){
@@ -40,6 +42,7 @@ public class Job  /*implements Comparable <Job> */{
 		onCore = false;
 		blockFlag = false;
 		inTransit = false;
+		IOFlag = false;
 	}
 
 	//accessors and mutators
@@ -52,7 +55,9 @@ public class Job  /*implements Comparable <Job> */{
 	public boolean getOnCore(){return onCore;}
 	public boolean getBlockFlag(){return blockFlag;}
 	public boolean getInTransit(){return inTransit;}
+	private boolean getIOFlag(){return IOFlag;}
 	
+	public void setIOFlag(boolean IOF){IOFlag = IOF;}
 	public void setInTranist(boolean iT) {inTransit = iT;}
 	public void setOnCore(boolean oC){onCore = oC;}
 	public void setJobNumber(int jN){jobNumber = jN;}
