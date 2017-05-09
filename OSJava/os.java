@@ -155,6 +155,7 @@ public class os {
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
 			System.out.println("Job requesting unblocked IO");
 			sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
+			System.out.println("JOB STARTING I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
 			jobRequestingService.setIOFlag(true);
 		}
