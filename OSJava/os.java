@@ -55,7 +55,7 @@ public class os {
 	//Regardless it is added to our main jobTable.
 	public static void Crint(int[]a, int[]p){
 		System.out.println ("In Crint");
-		sos.ontrace();	//remove this later
+
 		getTimeElapsed(p);				//1. Set elapsed time.
 		setRunningJobTime();				//2. Set last running Job's time, if any.
 		
@@ -89,6 +89,7 @@ public class os {
 	//Lastly dispatcher is called and the job in front of the readyQueue is run.
 	public static void Dskint (int[]a, int[]p){
 		System.out.println("In Dskint");
+		sos.ontrace();	//remove later
 		getTimeElapsed(p);	//1. Get time elapsed
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
@@ -99,6 +100,7 @@ public class os {
 		}
 		jobCompletingIO.setIOFlag(false);
 		dispatcher(a,p);	//6. Call dispatcher	
+		sos.offtrace();	//remove later
 	}
 
 	public static void Drmint (int[]a, int[]p){
@@ -138,6 +140,7 @@ public class os {
 	
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
+		sos.ontrace();	//remove this later
 		getTimeElapsed(p);			//1. Set timeElapsed
 		setRunningJobTime();			//2. Set running time for job
 		
@@ -163,6 +166,7 @@ public class os {
 				jobRequestingService.setBlockFlag(true);	//7c. Set blockFlag to true. It is blocked.
 			}
 		}
+		sos.offtrace();	//remove later
 		dispatcher(a,p);	//Last, call dispatcher.
 	}
 	
