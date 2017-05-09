@@ -136,6 +136,7 @@ public class os {
 		//System.out.println("In Tro");
 		getTimeElapsed(p);
 		setRunningJobTime();
+		System.out.println("IOFlag: " + jobToRun.getIOFlag());
 			//must find job to run in readyQueue and job Table, set time, check if 0. If 0, proceed with removal process.
 		dispatcher(a,p);
 	}
