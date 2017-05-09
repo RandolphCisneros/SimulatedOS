@@ -94,12 +94,14 @@ public class os {
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
 		jobCompletingIO = iOQueue.poll();
+		jobCompletingIO.setIOFlag(false);
 		if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
 			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
-			jobCompletingIO.setIOFlag(false);
 			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
 		}
-		jobCompletingIO.setIOFlag(false);
+		else if (jobCompletingIO == jobToRun){
+			jobToRun.setBlockFlag(false);
+		}
 		System.out.println("IOFlag " + jobCompletingIO.getIOFlag());
 		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		dispatcher(a,p);	//6. Call dispatcher	
