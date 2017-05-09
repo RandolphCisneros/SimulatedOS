@@ -99,6 +99,7 @@ public class os {
 			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
 		}
 		jobCompletingIO.setIOFlag(false);
+		System.out.println("IOFlag " + jobCompletingIO.getIOFlag());
 		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		dispatcher(a,p);	//6. Call dispatcher	
 		sos.offtrace();	//remove later
@@ -158,10 +159,11 @@ public class os {
 			System.out.println("JOB STARTING I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
 			jobRequestingService.setIOFlag(true);
+			System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
 		}
 		else {							//4c. a[0] == 7, job wants to be blocked for i/o
 			System.out.println("Job requesting blocked IO");
-
+			System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
 			if(jobRequestingService.getIOFlag()){
 				readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
 				iOQueue.add(jobRequestingService);		//6c. Add to I/OQueue.
