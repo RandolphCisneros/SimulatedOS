@@ -99,6 +99,7 @@ public class os {
 			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
 		}
 		jobCompletingIO.setIOFlag(false);
+		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		dispatcher(a,p);	//6. Call dispatcher	
 		sos.offtrace();	//remove later
 	}
