@@ -55,7 +55,7 @@ public class Job  /*implements Comparable <Job> */{
 	public boolean getOnCore(){return onCore;}
 	public boolean getBlockFlag(){return blockFlag;}
 	public boolean getInTransit(){return inTransit;}
-	private boolean getIOFlag(){return IOFlag;}
+	public boolean getIOFlag(){return IOFlag;}
 	
 	public void setIOFlag(boolean IOF){IOFlag = IOF;}
 	public void setInTranist(boolean iT) {inTransit = iT;}
