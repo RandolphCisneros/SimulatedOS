@@ -99,7 +99,7 @@ public class os {
 			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
 			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
 		}
-		else if (jobCompletingIO == jobToRun){
+		if (jobCompletingIO == jobToRun){
 			jobToRun.setBlockFlag(false);
 			System.out.println("IOFLAG: " + jobToRun.getIOFlag());
 		}
