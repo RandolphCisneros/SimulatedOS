@@ -132,7 +132,7 @@ public class os {
 	
 	
 	public static void Tro (int[]a, int[]p){
-		System.out.println("In Tro");
+		//System.out.println("In Tro");
 		getTimeElapsed(p);
 		setRunningJobTime();
 			//must find job to run in readyQueue and job Table, set time, check if 0. If 0, proceed with removal process.
@@ -178,7 +178,7 @@ public class os {
 	
 	//I put dispatcher into its own function to avoid repeating code.
 	public static void dispatcher(int[]a, int[]p){
-		System.out.println("In dispatcher");
+		//System.out.println("In dispatcher");
 		//This block of code checks if the core is empty; should really be used once
 		if (jobsOnCore == 0){
 			//System.out.println("No jobs on core");
@@ -213,7 +213,7 @@ public class os {
 	
 	//Method to set job's current running time
 	public static void setRunningJobTime(){ 
-		System.out.println("In setRunningJobTime");
+		//System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
 			/*System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
