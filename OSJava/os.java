@@ -101,6 +101,7 @@ public class os {
 		}
 		else if (jobCompletingIO == jobToRun){
 			jobToRun.setBlockFlag(false);
+			System.out.println("IOFLAG: " + jobToRun.getIOFlag());
 		}
 		System.out.println("IOFlag " + jobCompletingIO.getIOFlag());
 		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
