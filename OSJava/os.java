@@ -158,6 +158,7 @@ public class os {
 			readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
 			iOQueue.add(jobRequestingService);		//6c. Add to I/OQueue.
 			jobRequestingService.setBlockFlag(true);	//7c. Set blockFlag to true. It is blocked.
+			sos.siodisk(jobRequestingService.getJobNumber());	//Added this. Hopefully this is what Jones was talking about.
 		}
 		dispatcher(a,p);	//Last, call dispatcher.
 	}
