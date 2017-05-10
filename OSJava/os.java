@@ -103,8 +103,8 @@ public class os {
 			jobToRun.setBlockFlag(false);
 			System.out.println("IOFLAG: " + jobToRun.getIOFlag());
 		}
-		jobCompletingIO.getJobNumber();
-		jobToRun.getJobNumber();
+		System.out.println(jobCompletingIO.getJobNumber());
+		System.out.println(jobToRun.getJobNumber());
 		System.out.println(jobCompletingIO.toString());
 		System.out.println(jobToRun.toString());
 		System.out.println("IOFlag " + jobCompletingIO.getIOFlag());
