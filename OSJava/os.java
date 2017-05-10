@@ -94,7 +94,7 @@ public class os {
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
 		jobCompletingIO = iOQueue.remove();
-		iOQueue.remove(jobCompletingIO);
+		//iOQueue.remove(jobCompletingIO);		//at some point I have duplicates of this job. It enters in order
 		System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO.setIOFlag(false);
 		if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
@@ -178,8 +178,7 @@ public class os {
 			System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
 			if(jobRequestingService.getIOFlag()){
 				readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
-				iOQueue.add(jobRequestingService);		//6c. Add to I/OQueue.
-				jobRequestingService.setBlockFlag(true);	//7c. Set blockFlag to true. It is blocked.
+				jobRequestingService.setBlockFlag(true);	//6c. Set blockFlag to true. It is blocked.
 			}
 		}
 		sos.offtrace();	//remove later
