@@ -89,30 +89,27 @@ public class os {
 	//Lastly dispatcher is called and the job in front of the readyQueue is run.
 	public static void Dskint (int[]a, int[]p){
 		System.out.println("In Dskint");
-		sos.ontrace();	//remove later
 		getTimeElapsed(p);	//1. Get time elapsed
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
 		jobCompletingIO = iOQueue.remove();
-		//iOQueue.remove(jobCompletingIO);		//at some point I have duplicates of this job. It enters in order
-		System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
+		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO.setIOFlag(false);
 		if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
 			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
 			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
 		}
-		if (jobCompletingIO.getJobNumber() == jobToRun.getJobNumber()){
+		/*if (jobCompletingIO.getJobNumber() == jobToRun.getJobNumber()){
 			jobToRun.setBlockFlag(false);
 			System.out.println("IOFLAG: " + jobToRun.getIOFlag());
-		}
-		System.out.println(jobCompletingIO.getJobNumber());
+		}*/
+		/*System.out.println(jobCompletingIO.getJobNumber());
 		System.out.println(jobToRun.getJobNumber());
 		System.out.println(jobCompletingIO.toString());
 		System.out.println(jobToRun.toString());
 		System.out.println("IOFlag " + jobCompletingIO.getIOFlag());
-		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");*/
 		dispatcher(a,p);	//6. Call dispatcher	
-		sos.offtrace();	//remove later
 	}
 
 	public static void Drmint (int[]a, int[]p){
