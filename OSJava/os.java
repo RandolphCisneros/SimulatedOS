@@ -94,6 +94,7 @@ public class os {
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
 		jobCompletingIO = iOQueue.remove();
+		iOQueue.remove(jobCompletingIO);
 		System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO.setIOFlag(false);
 		if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
