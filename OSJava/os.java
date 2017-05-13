@@ -22,6 +22,7 @@ public class os {
 	private static int timeElapsed;
 	private static int lastCurrentTime;
 	private static boolean comingFromCrint;
+	private static boolean drumBusy;
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
@@ -40,6 +41,7 @@ public class os {
 		totalTime = 0;
 		lastCurrentTime = 0;
 		timeElapsed = 0;
+		drumBusy = false;
 		
 		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
 		//as the processes enter interrupts.
@@ -60,10 +62,11 @@ public class os {
 		setRunningJobTime();				//2. Set last running Job's time, if any.
 		
 		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
-		if (addressTable.assignJob(newestJob)){		//4a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
+		if ((!drumBusy) && addressTable.assignJob(newestJob)){		//4a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			System.out.println("Putting job on core");
 			transferDirection = 0;
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Puts job on core (memory)
+			drumBusy = true;
 			
 			System.out.println("Job max time: " + newestJob.getMaxCpuTime());
 			/*System.out.println("Job address: " + newestJob.getJobAddress());
@@ -120,6 +123,7 @@ public class os {
 		System.out.println("In Drmint");
 		getTimeElapsed(p);					//1. Get elapsed time
 		setRunningJobTime();					//2. Set running job time. Won't do if no jobsOnCore or readyQueue is empty.
+		drumBusy = false;
 		
 		if (transferDirection == 0){				//3. Check transfer direction
 			if(comingFromCrint){				//This checks if it was a new job coming in.
@@ -199,6 +203,19 @@ public class os {
 	public static void dispatcher(int[]a, int[]p){
 		//System.out.println("In dispatcher");
 		//This block of code checks if the core is empty; should really be used once
+		if ((!drumBusy) && (!waitingQueue.isEmpty()){
+			lastJobAdded = waitingQueue.poll();
+			if(assignJob(lastJobAdded)){
+				transferDirection = 0;
+				sos.siodrum(lastJobadded.getJobNumber(), lastJobAdded.getJobSize(), lastJobAdded.getJobAddress(), transferDirection);
+				drumBusy = true;
+			}
+			//if there is no room on the core use this code. change later for swapping
+			else {
+				waitingQueue.add(lastJobAdded);
+			}
+		}
+		
 		if (jobsOnCore == 0){
 			//System.out.println("No jobs on core");
 			a[0] = 1;		//1a. Set a to 1  if there are no jobs on core
