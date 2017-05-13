@@ -2,7 +2,7 @@ import java.util.*;
 
 public class os {
 
-	public static final int TIME_SLICE = 5;
+	public static final int STANDARD_TIME_SLICE = 5;
 
 	private static SizeAddressTable addressTable;
 	private static Stack<Job> processorStack;		//To be used for interrupts that want to go back.
