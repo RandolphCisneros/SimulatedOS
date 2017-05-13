@@ -253,7 +253,7 @@ public class os {
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
 			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();
-			System.out.println("Projected time total: " + timeTotal);
+			//System.out.println("Projected time total: " + timeTotal);
 			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
@@ -263,8 +263,8 @@ public class os {
 				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());
 				System.out.println("Time slice: " + jobToRun.getTimeSlice());
 			}
-			System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
-			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
+			//System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
+			//System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
 		}
 		else
 			return;
