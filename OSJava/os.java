@@ -95,7 +95,11 @@ public class os {
 		jobCompletingIO = iOQueue.remove();
 		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO.setIOFlag(false);
-		if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
+		if(jobCompletingIO.getTimeFinished()){
+			transferDirection = 1;
+			sos.siodrum(jobCompletingIO.getJobNumber(), jobCompletingIO.getJobSize(), jobCompletingIO.getJobAddress(), transferDirection);
+		}
+		else if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
 			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
 			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
 		}
