@@ -97,7 +97,7 @@ public class os {
 		jobCompletingIO.setIOFlag(false);
 		if(jobCompletingIO.getTimeFinished()){
 			transferDirection = 1;
-			sos.siodrum(jobCompletingIO.getJobNumber(), jobCompletingIO.getJobSize(), jobCompletingIO.getJobAddress(), transferDirection);
+			//Same here. In dskint I'm removing siodrum calls: sos.siodrum(jobCompletingIO.getJobNumber(), jobCompletingIO.getJobSize(), jobCompletingIO.getJobAddress(), transferDirection);
 		}
 		else if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
 			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
@@ -150,7 +150,7 @@ public class os {
 		
 		if(jobToRun.getTimeFinished() && !(jobToRun.getIOFlag())){
 			transferDirection = 1;
-			sos.siodrum(jobToRun.getJobNumber(),jobToRun.getJobSize(), jobToRun.getJobAddress(), transferDirection);
+			//Do not need to remove myself, unless there's an error here: sos.siodrum(jobToRun.getJobNumber(),jobToRun.getJobSize(), jobToRun.getJobAddress(), transferDirection);
 		}
 		//System.out.println("IOFlag: " + jobToRun.getIOFlag());
 			//must find job to run in readyQueue and job Table, set time, check if 0. If 0, proceed with removal process.
