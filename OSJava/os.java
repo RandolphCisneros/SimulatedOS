@@ -242,6 +242,7 @@ public class os {
 			}
 			else if((jobToRun.getCurrentTime() + jobToRun.getTimeSlice()) > jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());
+				System.out.println("Time slice: " + jobToRun.getTimeSlice());
 			}
 			System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
