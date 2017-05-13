@@ -226,6 +226,10 @@ public class os {
 		//System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
+			if(jobToRun.getCurrentTime() >= jobToRun.getMaxCpuTime()){
+				jobToRun.setTimeFinished(true);
+				System.out.println("Time finished: " + getTimeFinished());
+			}
 			/*System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());*/
 		}
