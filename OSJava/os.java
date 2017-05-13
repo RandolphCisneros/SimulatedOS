@@ -203,7 +203,7 @@ public class os {
 	public static void dispatcher(int[]a, int[]p){
 		//System.out.println("In dispatcher");
 		//This block of code checks if the core is empty; should really be used once
-		if ((!drumBusy) && (!waitingQueue.isEmpty()){
+		if ((!drumBusy) && (!waitingQueue.isEmpty())){
 			lastJobAdded = waitingQueue.poll();
 			if(assignJob(lastJobAdded)){
 				transferDirection = 0;
