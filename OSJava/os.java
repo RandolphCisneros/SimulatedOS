@@ -151,6 +151,7 @@ public class os {
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
 		sos.ontrace();	//remove this later
+		
 		getTimeElapsed(p);			//1. Set timeElapsed
 		setRunningJobTime();			//2. Set running time for job
 		
@@ -164,21 +165,20 @@ public class os {
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
 			System.out.println("Job requesting unblocked IO");
 			sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
-			System.out.println("JOB STARTING I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			//System.out.println("JOB STARTING I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
 			jobRequestingService.setIOFlag(true);
-			System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
-			System.out.println(jobRequestingService.toString());
+			//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
+			//System.out.println(jobRequestingService.toString());
 		}
 		else {							//4c. a[0] == 7, job wants to be blocked for i/o
 			System.out.println("Job requesting blocked IO");
-			System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
+			//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
 			if(jobRequestingService.getIOFlag()){
 				readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
 				jobRequestingService.setBlockFlag(true);	//6c. Set blockFlag to true. It is blocked.
 			}
 		}
-		sos.offtrace();	//remove later
 		dispatcher(a,p);	//Last, call dispatcher.
 	}
 	
