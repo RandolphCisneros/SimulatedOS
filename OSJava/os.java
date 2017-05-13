@@ -235,7 +235,7 @@ public class os {
 		//System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
-			timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();
+			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();
 			System.out.println("Projected time total: " + timeTotal);
 			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeFinished(true);
