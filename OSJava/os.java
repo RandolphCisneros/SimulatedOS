@@ -208,7 +208,7 @@ public class os {
 			jobToRun = readyQueue.poll();	//3b. Set job to run to job in front of ready queue.
 			p[2]  = jobToRun.getJobAddress();	//4b. Set p[2] to address of job to run
 			p[3] = jobToRun.getJobSize();		//5b. Set p[3] to size of job to run
-			p[4] = TIME_SLICE;			//6b. Set time slice. I'm doing round robin so this will stay the same.
+			p[4] = jobToRun.getTimeSlice();			//6b. Set time slice.
 			/*System.out.println("jobToRun address: " + jobToRun.getJobAddress());
 			System.out.println("jobToRun Size: " + jobToRun.getJobSize());*/
 			readyQueue.add(jobToRun);	//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
@@ -235,10 +235,13 @@ public class os {
 		//System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
-			if(jobToRun.getCurrentTime() >= jobToRun.getMaxCpuTime()){
+			if(jobToRun.getCurrentTime() = jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
 				System.out.println("Time finished: " + jobToRun.getTimeFinished());
+			}
+			else if((jobToRun.getCurrentTime() + jobToRun.getTimeSlice()) > jobToRun.getMaxCpuTime()){
+				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());
 			}
 			System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
