@@ -226,8 +226,9 @@ public class os {
 			p[2]  = jobToRun.getJobAddress();	//4b. Set p[2] to address of job to run
 			p[3] = jobToRun.getJobSize();		//5b. Set p[3] to size of job to run
 			p[4] = jobToRun.getTimeSlice();			//6b. Set time slice.
-			/*System.out.println("jobToRun address: " + jobToRun.getJobAddress());
-			System.out.println("jobToRun Size: " + jobToRun.getJobSize());*/
+			System.out.println("jobToRun number: " + jobToRun.getJobNumber());
+			System.out.println("jobToRun address: " + jobToRun.getJobAddress());
+			System.out.println("jobToRun Size: " + jobToRun.getJobSize());
 			readyQueue.add(jobToRun);	//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
 		}
 		else {	//If a job is blocked and on the core, and there are no unblocked jobs on the core, we go to this.
