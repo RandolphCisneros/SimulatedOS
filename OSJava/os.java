@@ -207,7 +207,7 @@ public class os {
 			lastJobAdded = waitingQueue.poll();
 			if(assignJob(lastJobAdded)){
 				transferDirection = 0;
-				sos.siodrum(lastJobadded.getJobNumber(), lastJobAdded.getJobSize(), lastJobAdded.getJobAddress(), transferDirection);
+				sos.siodrum(lastJobAdded.getJobNumber(), lastJobAdded.getJobSize(), lastJobAdded.getJobAddress(), transferDirection);
 				drumBusy = true;
 			}
 			//if there is no room on the core use this code. change later for swapping
