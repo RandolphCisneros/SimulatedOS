@@ -235,12 +235,14 @@ public class os {
 		//System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
+			timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();
+			System.out.println("Projected time total: " + timeTotal);
 			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
 				System.out.println("Time finished: " + jobToRun.getTimeFinished());
 			}
-			else if((jobToRun.getCurrentTime() + jobToRun.getTimeSlice()) > jobToRun.getMaxCpuTime()){
+			else if(timeTotal > jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());
 				System.out.println("Time slice: " + jobToRun.getTimeSlice());
 			}
