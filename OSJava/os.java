@@ -234,7 +234,7 @@ public class os {
 			if(jobToRun.getCurrentTime() >= jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
-				System.out.println("Time finished: " + getTimeFinished());
+				System.out.println("Time finished: " + jobToRun.getTimeFinished());
 			}
 			/*System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());*/
