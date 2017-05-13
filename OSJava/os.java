@@ -205,7 +205,7 @@ public class os {
 		//This block of code checks if the core is empty; should really be used once
 		if ((!drumBusy) && (!waitingQueue.isEmpty())){
 			lastJobAdded = waitingQueue.poll();
-			if(assignJob(lastJobAdded)){
+			if(addressTable.assignJob(lastJobAdded)){
 				transferDirection = 0;
 				sos.siodrum(lastJobAdded.getJobNumber(), lastJobAdded.getJobSize(), lastJobAdded.getJobAddress(), transferDirection);
 				drumBusy = true;
