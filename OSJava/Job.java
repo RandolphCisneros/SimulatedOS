@@ -14,6 +14,7 @@ public class Job  /*implements Comparable <Job> */{
 	
 	private int currentTime;	//current running time on job
 	private int address;		//adding my own address variable
+	private int timeSlice;
 	private boolean onCore;		//let's O.S. know if it's on the core or not. will be used later for swapping.
 	private boolean blockFlag;
 	private boolean inTransit;
@@ -32,6 +33,7 @@ public class Job  /*implements Comparable <Job> */{
 		inTransit = false;
 		IOFlag = false;
 		timeFinished = false;
+		timeSlice = 5;
 	}
 	
 	Job(int jN, int jP, int jS, int mCT){
@@ -46,6 +48,7 @@ public class Job  /*implements Comparable <Job> */{
 		inTransit = false;
 		IOFlag = false;
 		timeFinished = false;
+		timeSlice = 5;
 	}
 
 	//accessors and mutators
@@ -56,6 +59,7 @@ public class Job  /*implements Comparable <Job> */{
 	public int getMaxCpuTime(){ return maxCpuTime;}
 	public int getCurrentTime(){ return currentTime;}
 	public int getJobAddress(){return address;}
+	public int getTimeSlice(){return timeSlice;}
 	public boolean getOnCore(){return onCore;}
 	public boolean getBlockFlag(){return blockFlag;}
 	public boolean getInTransit(){return inTransit;}
@@ -72,6 +76,7 @@ public class Job  /*implements Comparable <Job> */{
 	public void setJobAddress(int a){address = a;}
 	public void setBlockFlag(boolean bF){blockFlag = bF;}
 	public void setTimeFinished(boolean tF){timeFinished = tF;}
+	public void setTimeSlice(int tS){timeSlice = tS;}
 	
 	/*		May be used to compare jobs by size and priority
 	public int compareTo(Job j){
