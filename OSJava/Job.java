@@ -18,6 +18,7 @@ public class Job  /*implements Comparable <Job> */{
 	private boolean blockFlag;
 	private boolean inTransit;
 	private boolean IOFlag;
+	private boolean timeFinished;
 	
 	Job(){
 		jobNumber = 0;
@@ -30,6 +31,7 @@ public class Job  /*implements Comparable <Job> */{
 		blockFlag = false;
 		inTransit = false;
 		IOFlag = false;
+		timeFinished = false;
 	}
 	
 	Job(int jN, int jP, int jS, int mCT){
@@ -43,9 +45,11 @@ public class Job  /*implements Comparable <Job> */{
 		blockFlag = false;
 		inTransit = false;
 		IOFlag = false;
+		timeFinished = false;
 	}
 
 	//accessors and mutators
+	public boolean getTimeFinished(){return timeFinished;}
 	public int getJobNumber(){ return jobNumber;}
 	public int getJobPriority(){ return jobPriority;}
 	public int getJobSize(){ return jobSize;}
@@ -67,6 +71,7 @@ public class Job  /*implements Comparable <Job> */{
 	public void setCurrentTime(int cT){currentTime = cT;}
 	public void setJobAddress(int a){address = a;}
 	public void setBlockFlag(boolean bF){blockFlag = bF;}
+	public void setTimeFinished(boolean tF){timeFinished = tF;}
 	
 	/*		May be used to compare jobs by size and priority
 	public int compareTo(Job j){
