@@ -16,6 +16,7 @@ public class os {
 	private static Job jobRequestingService;
 	private static Job jobTransferred;
 	private static Job lastJobAdded;
+	private static Job jobForDrum;
 	private static int jobsOnCore;
 	private static int transferDirection;
 	private static int totalTime;
@@ -50,6 +51,7 @@ public class os {
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
 		lastJobAdded = new Job();
+		jobForDrum = new Job();
 	}
 
 	//This method receives job info. It creates a "Job" instance, and then attempts to assign it an address.
@@ -67,6 +69,7 @@ public class os {
 			transferDirection = 0;
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Puts job on core (memory)
 			drumBusy = true;
+			jobForDrum = newestJob;
 			
 			System.out.println("Job max time: " + newestJob.getMaxCpuTime());
 			/*System.out.println("Job address: " + newestJob.getJobAddress());
@@ -78,7 +81,7 @@ public class os {
 		}
 		jobTable.add(newestJob);		//4 Push onto jobTable
 		comingFromCrint = true;
-		lastJobAdded = newestJob;
+		
 		dispatcher(a, p);
 		/*System.out.println("Job address after dispatcher: " + newestJob.getJobAddress());
 		System.out.println("Job address currently assigned to dispatcher: " + p[2]);
@@ -127,7 +130,7 @@ public class os {
 		
 		if (transferDirection == 0){				//3. Check transfer direction
 			if(comingFromCrint){				//This checks if it was a new job coming in.
-				readyQueue.add(lastJobAdded);		//4a. Add job to readyQueue here.
+				readyQueue.add(jobForDrum);		//4a. Add job to readyQueue here.
 				comingFromCrint = false;
 			}
 			jobsOnCore += 1;				//5a. Increment jobsOnCore
@@ -204,10 +207,10 @@ public class os {
 		//System.out.println("In dispatcher");
 		//This block of code checks if the core is empty; should really be used once
 		if ((!drumBusy) && (!waitingQueue.isEmpty())){
-			lastJobAdded = waitingQueue.poll();
+			jobForDrum = waitingQueue.poll();
 			if(addressTable.assignJob(lastJobAdded)){
 				transferDirection = 0;
-				sos.siodrum(lastJobAdded.getJobNumber(), lastJobAdded.getJobSize(), lastJobAdded.getJobAddress(), transferDirection);
+				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 				drumBusy = true;
 			}
 			//if there is no room on the core use this code. change later for swapping
