@@ -31,7 +31,7 @@ class SizeAddressTable {
   
  //This keeps track of the addresses of assigned jobs. If the jobs are removed then we know which address will get free space.
   public boolean assignJob(Job newJob){
-	 System.out.println("Largest Remaing Free Space in assignJob: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize();
+	 System.out.println("Largest Remaing Free Space in assignJob: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
 	if ((newJob.getJobAddress() < 0) && (largestRemainingFreeSpace.getSize() > newJob.getJobSize())){	//1. Check that we have free space and it's not already assigned
 		
 		newJob.setJobAddress(largestRemainingFreeSpace.getAddress());					//2a. If there is, we set the address to the largest remaining free space
