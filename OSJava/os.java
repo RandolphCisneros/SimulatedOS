@@ -103,7 +103,7 @@ public class os {
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
 		jobCompletingIO = iOQueue.remove();
-		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
+		System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO.setIOFlag(false);
 		diskBusy = false;
 		if(jobCompletingIO.getTimeFinished()){
@@ -250,9 +250,9 @@ public class os {
 			p[2]  = jobToRun.getJobAddress();	//4b. Set p[2] to address of job to run
 			p[3] = jobToRun.getJobSize();		//5b. Set p[3] to size of job to run
 			p[4] = jobToRun.getTimeSlice();			//6b. Set time slice.
-			System.out.println("jobToRun number: " + jobToRun.getJobNumber());
+			/*System.out.println("jobToRun number: " + jobToRun.getJobNumber());
 			System.out.println("jobToRun address: " + jobToRun.getJobAddress());
-			System.out.println("jobToRun Size: " + jobToRun.getJobSize());
+			System.out.println("jobToRun Size: " + jobToRun.getJobSize());*/
 			readyQueue.add(jobToRun);	//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
 		}
 		else {	//If a job is blocked and on the core, and there are no unblocked jobs on the core, we go to this.
@@ -282,11 +282,11 @@ public class os {
 			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
-				System.out.println("Time finished: " + jobToRun.getTimeFinished());
+			//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
 			}
 			else if(timeTotal > jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());
-				System.out.println("Time slice: " + jobToRun.getTimeSlice());
+			//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
 			}
 			//System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			//System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
