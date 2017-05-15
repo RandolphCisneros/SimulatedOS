@@ -102,7 +102,7 @@ public class os {
 		getTimeElapsed(p);	//1. Get time elapsed
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
-		System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
+		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO = iOQueue.remove();
 
 		jobCompletingIO.setIOFlag(false);
@@ -158,7 +158,7 @@ public class os {
 	
 	
 	public static void Tro (int[]a, int[]p){
-		System.out.println("In Tro");
+	//	System.out.println("In Tro");
 		getTimeElapsed(p);
 		setRunningJobTime();
 		
@@ -173,7 +173,6 @@ public class os {
 	
 	public static void Svc (int[]a, int[]p){
 		System.out.println("In Svc");
-		sos.ontrace();	//remove this later
 		
 		getTimeElapsed(p);			//1. Set timeElapsed
 		setRunningJobTime();			//2. Set running time for job
