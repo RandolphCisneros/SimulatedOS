@@ -51,7 +51,6 @@ public class os {
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
-		lastJobAdded = new Job();
 		jobForDrum = new Job();
 	}
 
@@ -216,7 +215,7 @@ public class os {
 			}
 			//if there is no room on the core use this code. change later for swapping
 			else {
-				waitingQueue.add(lastJobAdded);
+				waitingQueue.add(jobForDrum);
 			}
 		}
 		
