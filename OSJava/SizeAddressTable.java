@@ -67,12 +67,14 @@ class SizeAddressTable {
 			SizeAddressPair current = freeSpaceList.get(j);
 			if ((current.getAddress() + current.getSize()) == completedJobAddress){		//check for free space before the job
 				current.setSize(current.getSize() + completedJobSize);
-				freeSpaceList.remove(completedJob);
+				jobsAddressed.remove(completedJob);
 				return;
 			}
 		}
 		SizeAddressPair newFreeSpace = new SizeAddressPair(completedJobSize, completedJobAddress);
+		System.out.println("New free space created at: " + newFreeSpace.getAddress() + " " + newFreeSpace.getSize());
 		freeSpaceList.add(newFreeSpace);
+		jobsAddressed.remove(completedJob);
 		findNewLargestRemainingFreeSpace();		//finds the new largest remaining free space after
   
 	}
@@ -84,6 +86,7 @@ class SizeAddressTable {
 		SizeAddressPair current = freeSpaceList.get(i);			//2. Create pointer to object
 		if (current.getSize() > largestRemainingFreeSpace.getSize())	//3. Compare sizes. If current is largest, re-assign largest remaining free space
 			largestRemainingFreeSpace = current;
+		System.out.println("Largest Remaining Free Space: " + largestRemainingFreeSpace.getAddress());
 	}
  }
 }
