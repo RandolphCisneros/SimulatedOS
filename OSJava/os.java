@@ -16,6 +16,7 @@ public class os {
 	private static Job jobRequestingService;
 	private static Job jobTransferred;
 	private static Job jobForDrum;
+	private static Job jobForDisk;
 	
 	private static int jobsOnCore;
 	private static int transferDirection;
@@ -25,6 +26,7 @@ public class os {
 	
 	private static boolean comingFromCrint;
 	private static boolean drumBusy;
+	private static boolean diskBusy;
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
@@ -44,6 +46,7 @@ public class os {
 		lastCurrentTime = 0;
 		timeElapsed = 0;
 		drumBusy = false;
+		diskBusy = false;
 		
 		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
 		//as the processes enter interrupts.
@@ -52,6 +55,7 @@ public class os {
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
 		jobForDrum = new Job();
+		jobForDisk = new Job();
 	}
 
 	//This method receives job info. It creates a "Job" instance, and then attempts to assign it an address.
@@ -101,6 +105,7 @@ public class os {
 		jobCompletingIO = iOQueue.remove();
 		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO.setIOFlag(false);
+		diskBusy = false;
 		if(jobCompletingIO.getTimeFinished()){
 			jobsOnCore -= 1;
 			addressTable.removeJob(jobCompletingIO);
@@ -186,6 +191,7 @@ public class os {
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
 			System.out.println("Job requesting unblocked IO");
 			sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
+			diskBusy = true;
 			//System.out.println("JOB STARTING I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
 			jobRequestingService.setIOFlag(true);
@@ -210,7 +216,8 @@ public class os {
 	//I put dispatcher into its own function to avoid repeating code.
 	public static void dispatcher(int[]a, int[]p){
 		//System.out.println("In dispatcher");
-		//This block of code checks if the core is empty; should really be used once
+
+		//This block checks if the drum is busy. if not, it polls from the waiting queue and adds a job to core if possible.
 		if ((!drumBusy) && (!waitingQueue.isEmpty())){
 			jobForDrum = waitingQueue.poll();
 			if(addressTable.assignJob(jobForDrum)){
@@ -223,7 +230,14 @@ public class os {
 				waitingQueue.add(jobForDrum);
 			}
 		}
-		
+		//This block of code checks if disk is ready. If so, then job gets added from iOQueue.
+		if ((!diskBusy) && (!iOQueue.isEmpty())){
+			jobForDisk = iOQueue.poll();
+			sos.siodisk(jobForDisk.getJobNumber());
+			diskBusy = true;
+		}
+			
+		//This block of code checks if the core is empty; should really be used once		
 		if (jobsOnCore == 0){
 			//System.out.println("No jobs on core");
 			a[0] = 1;		//1a. Set a to 1  if there are no jobs on core
