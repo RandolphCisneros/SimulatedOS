@@ -44,7 +44,7 @@ class SizeAddressTable {
 	}
 	else if (newJob.getJobAddress() < 0 && largestRemainingFreeSpace.getSize() < newJob.getJobSize()){	//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
 		//The problem here is that as I get more jobs I need to swap in and out. This will  have to be changed.
-		System.out.println("Not enough space for job");
+		//System.out.println("Not enough space for job");
 		return false;
 	}
 	else{
@@ -55,7 +55,7 @@ class SizeAddressTable {
   
   //this function will be used when a job is terminated; it will removed from the list and the free space will be re-allocated
   public void removeJob(Job completedJob){
-
+	System.out.println("Removing job " + completedJob.getJobNumber());
 	if (jobsAddressed.contains(completedJob)){
 		int completedJobSize = completedJob.getJobSize();
 		int completedJobAddress = completedJob.getJobAddress();
