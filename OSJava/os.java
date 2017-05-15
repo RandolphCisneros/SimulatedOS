@@ -177,6 +177,8 @@ public class os {
 			readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
 			addressTable.removeJob(jobRequestingService);	//function may not work perfectly
 			jobsOnCore -= 1;
+			transferDirection = 1;
+			sos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), transferDirection);
 		}
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
 			System.out.println("Job requesting unblocked IO");
