@@ -1,4 +1,3 @@
-//Ask professor Jones about the meaing of []a and how it might effect my Job structure.
 //This is the individual job structure to be used in the job table, which will be a list of jobs.
 //I implement Comparable again because I don't know if I'm gonna prioritize some jobs or not;
 //we can make it rather efficient by using priorities and job size.
