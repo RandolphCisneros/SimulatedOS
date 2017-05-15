@@ -5,15 +5,16 @@ class SizeAddressTable {
   public static final int MAX_FREE_SPACE = 99;
   public static final int START_OF_MEMORY = 0;
 
-  private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100. This tracks the largest remaining free space
-  LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//data structure which tracks remaining free spaces
-  LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//Going to use this to track the job addresses
+  private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100; tracks the largest free space on list
+  LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//list that tracks remaining free spaces
+  LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//List of jobs to track the job addresses
   
   //constructor initializes largest free space and adds it to the table.
   //I used a default constructor here since it will only be used once in the OS
   public SizeAddressTable(){
-    largestRemainingFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, START_OF_MEMORY);	//There should only be one instance of this
-    freeSpaceList.add(largestRemainingFreeSpace);
+	freeSpaceList = new LinkedList<SizeAddressPair>();
+    	largestRemainingFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, START_OF_MEMORY);	//There should only be one instance of this
+    	freeSpaceList.add(largestRemainingFreeSpace);
   }
   
   //this method finds free space for the requesting job. I'm using WORST FIT algorithm so it relies on the largest
