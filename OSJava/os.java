@@ -102,7 +102,8 @@ public class os {
 		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO.setIOFlag(false);
 		if(jobCompletingIO.getTimeFinished()){
-			transferDirection = 1;
+			jobsOnCore -= 1;
+			addressTable.removeJob(jobCompletingIO);
 			//Same here. In dskint I'm removing siodrum calls: sos.siodrum(jobCompletingIO.getJobNumber(), jobCompletingIO.getJobSize(), jobCompletingIO.getJobAddress(), transferDirection);
 		}
 		else if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
@@ -175,8 +176,10 @@ public class os {
 		if (a[0] == 5){						//4a. It requested termination
 			System.out.println("Job requesting termination");
 			readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
-			addressTable.removeJob(jobRequestingService);	//function may not work perfectly
-			jobsOnCore -= 1;
+			if (!jobRequestingService.getIOFlag()){
+				addressTable.removeJob(jobRequestingService);	//function may not work perfectly
+				jobsOnCore -= 1;
+			}
 			//transferDirection = 1;
 			//sos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), transferDirection);
 		}
