@@ -265,7 +265,7 @@ public class os {
 			if((jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()) && (!jobToRun.getIOFlag())){
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
-				addressTable.remove(jobToRun);
+				addressTable.removeJob(jobToRun);
 			//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
 			}
 			else if(timeTotal > jobToRun.getMaxCpuTime()){
