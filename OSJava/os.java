@@ -235,7 +235,7 @@ public class os {
 		}
 		//This block of code checks if disk is ready. If so, then job gets added from iOQueue.
 		if ((!diskBusy) && (!iOQueue.isEmpty())){
-			jobForDisk = iOQueue.poll();
+			jobForDisk = iOQueue.peek();		//Found a use for peek. Must peek rather than poll here, we will poll in Dskint
 			sos.siodisk(jobForDisk.getJobNumber());
 			diskBusy = true;
 		}
