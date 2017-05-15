@@ -8,20 +8,21 @@ public class os {
 	private static Stack<Job> processorStack;		//To be used for interrupts that want to go back.
 	public static LinkedList<Job> jobTable;			//I made this global solely because it said to in the handout.
 	private static Queue<Job> readyQueue;
-	private static Queue<Job> waitingQueue;			//This waiting queue is for if we don't have enough space in the core.
+	private static Queue<Job> waitingQueue;			//This waiting queue is for if the drum is busy.
 	private static Queue<Job> iOQueue;			//This is the I/O queue to be used when I/O jobs want to be blocked.
 
 	private static Job jobToRun;	
 	private static Job jobCompletingIO;
 	private static Job jobRequestingService;
 	private static Job jobTransferred;
-	private static Job lastJobAdded;
 	private static Job jobForDrum;
+	
 	private static int jobsOnCore;
 	private static int transferDirection;
 	private static int totalTime;
 	private static int timeElapsed;
 	private static int lastCurrentTime;
+	
 	private static boolean comingFromCrint;
 	private static boolean drumBusy;
 	
@@ -65,14 +66,14 @@ public class os {
 		
 		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
 		if ((!drumBusy) && addressTable.assignJob(newestJob)){		//4a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
-			System.out.println("Putting job on core");
+			//System.out.println("Putting job on core");
 			transferDirection = 0;
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Puts job on core (memory)
 			drumBusy = true;
 			jobForDrum = newestJob;
 			
-			System.out.println("Job max time: " + newestJob.getMaxCpuTime());
-			/*System.out.println("Job address: " + newestJob.getJobAddress());
+			/*System.out.println("Job max time: " + newestJob.getMaxCpuTime());
+			System.out.println("Job address: " + newestJob.getJobAddress());
 			System.out.println("Job size: " + newestJob.getJobSize());
 			System.out.println("Job is addressed correctly");*/
 		}
@@ -156,7 +157,7 @@ public class os {
 		setRunningJobTime();
 		
 		if(jobToRun.getTimeFinished() && !(jobToRun.getIOFlag())){
-			transferDirection = 1;
+			jobsOnCore -=1;
 			//Do not need to remove myself, unless there's an error here: sos.siodrum(jobToRun.getJobNumber(),jobToRun.getJobSize(), jobToRun.getJobAddress(), transferDirection);
 		}
 		//System.out.println("IOFlag: " + jobToRun.getIOFlag());
