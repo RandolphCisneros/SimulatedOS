@@ -40,7 +40,7 @@ public class os {
 		waitingQueue = new LinkedList<Job>();
 		iOQueue = new LinkedList<Job>();
 		
-		//static variables, all initialized to 0
+		//static variables, all initialized to 0 or false
 		jobsOnCore = 0;
 		totalTime = 0;
 		lastCurrentTime = 0;
@@ -219,27 +219,10 @@ public class os {
 	//I put dispatcher into its own function to avoid repeating code.
 	public static void dispatcher(int[]a, int[]p){
 		//System.out.println("In dispatcher");
-
-		//This block checks if the drum is busy. if not, it polls from the waiting queue and adds a job to core if possible.
-		if ((!drumBusy) && (!waitingQueue.isEmpty())){
-			jobForDrum = waitingQueue.poll();
-			if(addressTable.assignJob(jobForDrum)){
-				transferDirection = 0;
-				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
-				drumBusy = true;
-			}
-			//if there is no room on the core use this code. change later for swapping
-			else {
-				waitingQueue.add(jobForDrum);
-			}
-		}
-		//This block of code checks if disk is ready. If so, then job gets added from iOQueue.
-		if ((!diskBusy) && (!iOQueue.isEmpty())){
-			jobForDisk = iOQueue.peek();		//Found a use for peek. Must peek rather than poll here, we will poll in Dskint
-			sos.siodisk(jobForDisk.getJobNumber());
-			diskBusy = true;
-		}
-			
+		
+		checkDrum();
+		checkDisk();
+		
 		//This block of code checks if the core is empty; should really be used once		
 		if (jobsOnCore == 0){
 			//System.out.println("No jobs on core");
@@ -295,5 +278,30 @@ public class os {
 		else
 			return;
 	}
+	
+	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
+	public static void checkDrum() {
+		if ((!drumBusy) && (!waitingQueue.isEmpty())){
+			jobForDrum = waitingQueue.poll();
+			if(addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
+				transferDirection = 0;
+				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
+				drumBusy = true;
+			}
+			//if there is no room on the core use this code. change later for swapping
+			else {
+				waitingQueue.add(jobForDrum);
+			}
+		}
+	}
+	
+	//This block of code checks if disk is ready. If so, then job gets added from iOQueue.	
+	public static void checkDisk() {
+		if ((!diskBusy) && (!iOQueue.isEmpty())){
+			jobForDisk = iOQueue.peek();		//Found a use for peek. Must peek rather than poll here, we will poll in Dskint
+			sos.siodisk(jobForDisk.getJobNumber());
+			diskBusy = true;
+		}
+	}	
 		
 }
