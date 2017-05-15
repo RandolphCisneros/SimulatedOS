@@ -102,8 +102,9 @@ public class os {
 		getTimeElapsed(p);	//1. Get time elapsed
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
-		jobCompletingIO = iOQueue.remove();
 		System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
+		jobCompletingIO = iOQueue.remove();
+
 		jobCompletingIO.setIOFlag(false);
 		diskBusy = false;
 		if(jobCompletingIO.getTimeFinished()){
