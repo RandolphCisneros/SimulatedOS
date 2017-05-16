@@ -68,6 +68,7 @@ class SizeAddressTable {
 				current.setSize(current.getSize() + completedJobSize);
 				jobsAddressed.remove(completedJob);
 				findNewLargestRemainingFreeSpace();
+				findShortestTimeSlice();
 				return;
 			}
 		}
