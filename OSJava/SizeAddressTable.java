@@ -73,6 +73,7 @@ class SizeAddressTable {
 		for(int j = 0; j < freeSpaceList.size(); j++){
 			SizeAddressPair current = freeSpaceList.get(j);
 			if ((current.getAddress() + current.getSize()) == completedJobAddress){		//check for free space before the job
+				System.out.println("Found free adjacent space in the front " + current.getAddress() + " " + current.getSize());
 				current.setSize(current.getSize() + completedJobSize);
 				jobsAddressed.remove(completedJob);
 				return;
