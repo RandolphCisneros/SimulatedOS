@@ -93,8 +93,9 @@ class SizeAddressTable {
 	for (int i = 0; i < freeSpaceList.size(); i++){				//1. Iterate through freeSpaceList
 		SizeAddressPair current = freeSpaceList.get(i);			//2. Create pointer to object
 		System.out.println("Printing all free spaces");
+		System.out.println(current.getAddress() + " " + current.getSize());
 		if (current.getSize() > largestRemainingFreeSpace.getSize()){	//3. Compare sizes. If current is largest, re-assign largest remaining free space
-			System.out.println(current.getAddress() + " " + current.getSize());
+
 			largestRemainingFreeSpace = current;
 		}
 		System.out.println("Largest Remaining Free Space: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
