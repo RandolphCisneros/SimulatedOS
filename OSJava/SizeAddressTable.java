@@ -76,6 +76,7 @@ class SizeAddressTable {
 				System.out.println("Found free adjacent space in the front " + current.getAddress() + " " + current.getSize());
 				current.setSize(current.getSize() + completedJobSize);
 				jobsAddressed.remove(completedJob);
+				findNewLargestRemainingFreeSpace();
 				return;
 			}
 		}
