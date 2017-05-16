@@ -42,7 +42,8 @@ class SizeAddressTable {
 		int newFreeSpaceSize = largestRemainingFreeSpace.getSize() - newJob.getJobSize();
 		largestRemainingFreeSpace.setSize(newFreeSpaceSize);		//4. We subtract the size of the job from the "largest remaining free space"
 		largestRemainingFreeSpace.setAddress(largestRemainingFreeSpace.getAddress() + newJob.getJobSize());	//5. We changed the address of the "largest remaining free space" to the previous address + the size of the added job
-		findNewLargestRemainingFreeSpace();																			//6. We find the real largest remaining freespace
+		findNewLargestRemainingFreeSpace();	//6. We find the real largest remaining freespace
+		findShortestTimeSlice();
 		return true;																													//7. Return true for O.S. to allocate it to the correct queue
 	}
 	else if (newJob.getJobAddress() < 0 && largestRemainingFreeSpace.getSize() < newJob.getJobSize()){	//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
@@ -87,6 +88,7 @@ class SizeAddressTable {
 		freeSpaceList.add(newFreeSpace);
 		jobsAddressed.remove(completedJob);
 		findNewLargestRemainingFreeSpace();		//finds the new largest remaining free space after
+		findShortestTimeSlice();
   
 	}
   }
@@ -114,6 +116,7 @@ class SizeAddressTable {
 		System.out.println("Largest Job is : " + largestJob.getJobNumber() + largestJob.getJobAddress() + largestJob.getJobSize());
 	}
 	
+	//This is a new method to cut down on Tro interrupts. whenever a job is added or removed, we call this and it sets the shortest time slice.
 	public void findShortestTimeSlice(){
 		if(!jobsAddressed.isEmpty()){
 			Job shortestJob = jobsAddressed.get(0);
@@ -128,8 +131,10 @@ class SizeAddressTable {
 				}
 			}
 			shortestTimeSlice = minimumTimeSlice;
+			System.out.println("Shortest time slice is: " + shortestTimeSlice);
 		}
 	}
 			
 	public Job getLargestJob(){return largestJob;}
+	public int getShortestTimeSlice(){return shortestTimeSlice;}
 }
