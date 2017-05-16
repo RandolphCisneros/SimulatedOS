@@ -24,10 +24,8 @@ public class os {
 	private static int timeElapsed;
 	private static int lastCurrentTime;
 	
-	private static boolean comingFromCrint;
 	private static boolean drumBusy;
 	private static boolean diskBusy;
-	private static boolean comingFromCheckDrum;
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
@@ -48,8 +46,6 @@ public class os {
 		timeElapsed = 0;
 		drumBusy = false;
 		diskBusy = false;
-		comingFromCrint = false;
-		comingFromCheckDrum = false;
 		
 		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
 		//as the processes enter interrupts.
@@ -77,7 +73,7 @@ public class os {
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Puts job on core (memory)
 			drumBusy = true;
 			jobForDrum = newestJob;
-			
+			jobForDrum.setComingFromCrint(true);
 			/*System.out.println("Job max time: " + newestJob.getMaxCpuTime());
 			System.out.println("Job address: " + newestJob.getJobAddress());
 			System.out.println("Job size: " + newestJob.getJobSize());
@@ -87,7 +83,6 @@ public class os {
 			waitingQueue.add(newestJob);	//2b. If not, then it gets put on the waitingQueue. May change this with swapping method
 		}
 		jobTable.add(newestJob);		//4 Push onto jobTable
-		comingFromCrint = true;
 		
 		dispatcher(a, p);
 		/*System.out.println("Job address after dispatcher: " + newestJob.getJobAddress());
@@ -141,12 +136,12 @@ public class os {
 		drumBusy = false;
 		
 		if (transferDirection == 0){				//3. Check transfer direction
-			if(comingFromCrint || comingFromCheckDrum){				//This checks if it was a new job coming in.
+			if(jobForDrum.getComingFromCrint() || jobForDrum.getComingFromCheckDrum()){				//This checks if it was a new job coming in.
 				readyQueue.add(jobForDrum);		//4a. Add job to readyQueue here.
-				if (comingFromCrint)
-					comingFromCrint = false;
-				else if (comingFromCheckDrum)
-					comingFromCheckDrum = false;
+				if (jobForDrum.getComingFromCrint())
+					jobForDrum.setComingFromCrint(false);
+				else
+					jobForDrum.setComingFromCheckDrum(false);
 			}
 			jobsOnCore += 1;				//5a. Increment jobsOnCore
 			System.out.println("Incremented jobsOnCore");
@@ -296,10 +291,10 @@ public class os {
 			jobForDrum = waitingQueue.peek();
 			if(addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
 				waitingQueue.remove();
-				comingFromCheckDrum = true;
 				transferDirection = 0;
 				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 				drumBusy = true;
+				jobForDrum.setComingFromCheckDrum(true);
 			}
 			//if there is no room on the core put code here for swapping
 		}
