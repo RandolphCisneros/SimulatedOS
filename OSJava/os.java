@@ -27,7 +27,7 @@ public class os {
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
-		System.out.println("In startup");
+		//System.out.println("In startup");
 		
 		//Initialize Containers
 		addressTable = new SizeAddressTable();	//This is a container, even though it only takes type Job
@@ -59,7 +59,8 @@ public class os {
 	//If successful, it is added to the ReadyQueue; otherwise it is added to the waiting queue.
 	//Regardless it is added to our main jobTable.
 	public static void Crint(int[]a, int[]p){
-		//System.out.println ("In Crint");
+		//
+		("In Crint");
 
 		getTimeElapsed(p);				//1. Set elapsed time.
 		setRunningJobTime();				//2. Set last running Job's time, if any.
@@ -128,7 +129,7 @@ public class os {
 	}
 
 	public static void Drmint (int[]a, int[]p){
-		System.out.println("In Drmint");
+		//System.out.println("In Drmint");
 		getTimeElapsed(p);					//1. Get elapsed time
 		setRunningJobTime();					//2. Set running job time. Won't do if no jobsOnCore or readyQueue is empty.
 		drumBusy = false;
@@ -142,18 +143,18 @@ public class os {
 					jobForDrum.setComingFromCheckDrum(false);
 			}
 			jobsOnCore += 1;				//5a. Increment jobsOnCore
-			System.out.println("Incremented jobsOnCore");
+			//System.out.println("Incremented jobsOnCore");
 		}
 		else if (transferDirection == 1){
 			//May need to do this for a swap out. Maybe make a new job: readyQueue.remove(jobToRun);			//4b. Remove last job to run
-			jobsOnCore -= 1;				//5b. Decrement jobsOnCore
+			//jobsOnCore -= 1;				//5b. Decrement jobsOnCore
 			System.out.println("Decremented jobsOnCore");
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
 		//System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
 		//Still don't know what to do with currentTime: jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);			//I don't know if I'm setting this correctly. Ask professor
 		//System.out.println("Time is now: " + jobToRun.getMaxCpuTime());
-		System.out.println("Jobs on core: " + jobsOnCore);
+		//System.out.println("Jobs on core: " + jobsOnCore);
 		dispatcher(a,p);
 	}
 	
@@ -180,7 +181,7 @@ public class os {
 		
 		jobRequestingService = jobToRun;	//3. Assign jobRequestingService
 		if (a[0] == 5){						//4a. It requested termination
-			System.out.println("Job requesting termination");
+			//System.out.println("Job requesting termination");
 			readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
 			jobRequestingService.setTimeFinished(true);
 			if (!jobRequestingService.getIOFlag()){
@@ -241,7 +242,7 @@ public class os {
 			readyQueue.add(jobToRun);	//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
 		}
 		else {	//If a job is blocked and on the core, and there are no unblocked jobs on the core, we go to this.
-			System.out.println("ReadyQueue is empty");
+			//System.out.println("ReadyQueue is empty");
 			a[0] = 1;					//Keep idle
 		}
 	}
