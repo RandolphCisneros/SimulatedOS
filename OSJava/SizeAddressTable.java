@@ -8,7 +8,7 @@ class SizeAddressTable {
   private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100; tracks the largest free space on list
   LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//list that tracks remaining free spaces
   LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//List of jobs to track the job addresses
-  private Job largestJob();
+  private static Job largestJob;
   
   //constructor initializes largest free space and adds it to the table.
   //I used a default constructor here since it will only be used once in the OS
