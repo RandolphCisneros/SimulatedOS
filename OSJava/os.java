@@ -103,6 +103,8 @@ public class os {
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
 		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
+		if(jobCompletingIO.getJobNumber() == 5)
+			System.out.println("Job 5 completing IO************************************");
 		jobCompletingIO = iOQueue.remove();
 
 		jobCompletingIO.setIOFlag(false);
