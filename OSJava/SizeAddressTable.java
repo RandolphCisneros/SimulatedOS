@@ -90,12 +90,11 @@ class SizeAddressTable {
   
   //After a job has been assigned, this function will be used to find and assign the new largest remaining free space
   public void findNewLargestRemainingFreeSpace(){
+	  System.out.println("Printing all free spaces");
 	for (int i = 0; i < freeSpaceList.size(); i++){				//1. Iterate through freeSpaceList
 		SizeAddressPair current = freeSpaceList.get(i);			//2. Create pointer to object
-		System.out.println("Printing all free spaces");
 		System.out.println(current.getAddress() + " " + current.getSize());
 		if (current.getSize() > largestRemainingFreeSpace.getSize()){	//3. Compare sizes. If current is largest, re-assign largest remaining free space
-
 			largestRemainingFreeSpace = current;
 		}
 		System.out.println("Largest Remaining Free Space: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
