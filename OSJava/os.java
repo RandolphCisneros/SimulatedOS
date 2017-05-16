@@ -284,16 +284,14 @@ public class os {
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
 	public static void checkDrum() {
 		if ((!drumBusy) && (!waitingQueue.isEmpty())){
-			jobForDrum = waitingQueue.poll();
+			jobForDrum = waitingQueue.peek();
 			if(addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
+				waitingQueue.remove();
 				transferDirection = 0;
 				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 				drumBusy = true;
 			}
-			//if there is no room on the core use this code. change later for swapping
-			else {
-				waitingQueue.add(jobForDrum);
-			}
+			//if there is no room on the core put code here for swapping
 		}
 	}
 	
