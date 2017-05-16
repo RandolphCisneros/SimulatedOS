@@ -262,10 +262,12 @@ public class os {
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
 			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();
 			//System.out.println("Projected time total: " + timeTotal);
-			if((jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()) && (!jobToRun.getIOFlag())){
+			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
-				addressTable.removeJob(jobToRun);
+				if(jobToRun.getIOFlag == false){	//if it's not doing i/o
+					addressTable.removeJob(jobToRun);	//remove from table completely
+				}
 			//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
 			}
 			else if(timeTotal > jobToRun.getMaxCpuTime()){
