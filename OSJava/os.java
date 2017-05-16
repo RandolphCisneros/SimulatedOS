@@ -264,6 +264,7 @@ public class os {
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
 			jobToRun.setTimeSlice(addressTable.getShortestTimeSlice());	//Assign to shortest time slice in job table first
 			checkTimeout();
+			
 			//System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			//System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
 		}
@@ -273,20 +274,21 @@ public class os {
 	
 	//Method to check if the job has reached its max time or if it will exceed it with current time slice
 	public static void checkTimeout(){
+		int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
 		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time
-			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
+			
 			//System.out.println("Projected time total: " + timeTotal);
 			jobToRun.setTimeFinished(true);
 			readyQueue.remove(jobToRun);
 			if(jobToRun.getIOFlag() == false){	//if it's not doing i/o
 				addressTable.removeJob(jobToRun);	//remove from table completely
 			}
-			else if (timeTotal > jobToRun.getMaxCpuTime()){				//Check if time slice exceeds max
-				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//If it does, we set it to a new number
-			//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
-			}
-		//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
 		}
+		else if (timeTotal > jobToRun.getMaxCpuTime()){				//Check if time slice exceeds max
+			jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//If it does, we set it to a new number
+		//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
+		}
+		//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
 	}		
 	
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
