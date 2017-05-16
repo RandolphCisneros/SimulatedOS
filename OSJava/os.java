@@ -2,8 +2,6 @@ import java.util.*;
 
 public class os {
 
-	public static final int STANDARD_TIME_SLICE = 5;
-
 	private static SizeAddressTable addressTable;
 	private static Stack<Job> processorStack;		//To be used for interrupts that want to go back.
 	public static LinkedList<Job> jobTable;			//I made this global solely because it said to in the handout.
@@ -294,13 +292,16 @@ public class os {
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
 	public static void checkDrum() {
 		if ((!drumBusy) && (!waitingQueue.isEmpty())){
-			jobForDrum = waitingQueue.peek();
+			jobForDrum = waitingQueue.poll();		//Changed this from peek to poll. Trying to traverse and get to other jobs
 			if(addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
-				waitingQueue.remove();
+				//Commenting out since it was already polled. waitingQueue.remove();
 				transferDirection = 0;
 				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 				drumBusy = true;
 				jobForDrum.setComingFromCheckDrum(true);
+			}
+			else{
+				waitingQueue.add(jobForDrum);
 			}
 			//if there is no room on the core put code here for swapping
 		}
