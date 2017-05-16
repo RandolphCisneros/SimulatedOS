@@ -55,17 +55,21 @@ class SizeAddressTable {
   
   //this function will be used when a job is terminated; it will removed from the list and the free space will be re-allocated
   public void removeJob(Job completedJob){
-	System.out.println("Removing job " + completedJob.getJobNumber());
+	System.out.println("Removing job " + completedJob.getJobNumber() + " from " + completedJob.getJobAddress() + " " + completedJob.getJobSize());
 	if (jobsAddressed.contains(completedJob)){
 		int completedJobSize = completedJob.getJobSize();
 		int completedJobAddress = completedJob.getJobAddress();
+		System.out.println("Checking for adjacent free space in the back");
 		for(int i = 0; i < freeSpaceList.size(); i++){
 			SizeAddressPair current = freeSpaceList.get(i);				
 			if((completedJobSize + completedJobAddress) == current.getAddress()){	//check for free space after the job
+				System.out.println("Found free adjacent free space in the back " + current.getAddress() + " " + current.getSize());
 				completedJobSize += current.getSize();
 				freeSpaceList.remove(current);
+				
 			}
 		}
+		System.out.println("Checking for adjacent free space in the front");
 		for(int j = 0; j < freeSpaceList.size(); j++){
 			SizeAddressPair current = freeSpaceList.get(j);
 			if ((current.getAddress() + current.getSize()) == completedJobAddress){		//check for free space before the job
