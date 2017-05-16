@@ -267,14 +267,7 @@ public class os {
 			jobToRun.setTimeSlice(addressTable.getShortestTimeSlice());	//Assign to shortest time slice in job table first
 			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
 			//System.out.println("Projected time total: " + timeTotal);
-			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time
-				jobToRun.setTimeFinished(true);
-				readyQueue.remove(jobToRun);
-				if(jobToRun.getIOFlag() == false){	//if it's not doing i/o
-					addressTable.removeJob(jobToRun);	//remove from table completely
-				}
-			//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
-			}
+			checkTimeout();
 			else if(timeTotal > jobToRun.getMaxCpuTime()){				//Check if time slice exceeds max
 				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//If it does, we set it to a new number
 			//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
@@ -285,6 +278,18 @@ public class os {
 		else
 			return;
 	}
+	
+	//Method to check if the job has reached its max time
+	public static void checkTimeout(){
+		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time
+			jobToRun.setTimeFinished(true);
+			readyQueue.remove(jobToRun);
+			if(jobToRun.getIOFlag() == false){	//if it's not doing i/o
+				addressTable.removeJob(jobToRun);	//remove from table completely
+			}
+		//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
+		}
+	}		
 	
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
 	public static void checkDrum() {
