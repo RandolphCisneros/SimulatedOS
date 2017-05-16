@@ -266,10 +266,6 @@ public class os {
 			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
 			//System.out.println("Projected time total: " + timeTotal);
 			checkTimeout();
-			else if(timeTotal > jobToRun.getMaxCpuTime()){				//Check if time slice exceeds max
-				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//If it does, we set it to a new number
-			//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
-			}
 			//System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			//System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
 		}
@@ -277,13 +273,17 @@ public class os {
 			return;
 	}
 	
-	//Method to check if the job has reached its max time
+	//Method to check if the job has reached its max time or if it will exceed it with current time slice
 	public static void checkTimeout(){
 		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time
 			jobToRun.setTimeFinished(true);
 			readyQueue.remove(jobToRun);
 			if(jobToRun.getIOFlag() == false){	//if it's not doing i/o
 				addressTable.removeJob(jobToRun);	//remove from table completely
+			}
+			else if (timeTotal > jobToRun.getMaxCpuTime()){				//Check if time slice exceeds max
+				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//If it does, we set it to a new number
+			//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
 			}
 		//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
 		}
@@ -300,7 +300,7 @@ public class os {
 				drumBusy = true;
 				jobForDrum.setComingFromCheckDrum(true);
 			}
-			else{
+			else {
 				waitingQueue.add(jobForDrum);
 			}
 			//if there is no room on the core put code here for swapping
