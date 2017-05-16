@@ -24,7 +24,7 @@ class SizeAddressTable {
   public boolean assignJob(Job newJob){
 	 //System.out.println("Largest Remaing Free Space in assignJob: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
 	if ((newJob.getJobAddress() < 0) && (largestRemainingFreeSpace.getSize() > newJob.getJobSize())){	//1. Check that we have free space and it's not already assigned
-		System.out.println("Adding job " + newJob.getJobNumber() + " at " + largestRemainingFreeSpace.getAddress());
+		//System.out.println("Adding job " + newJob.getJobNumber() + " at " + largestRemainingFreeSpace.getAddress());
 		newJob.setJobAddress(largestRemainingFreeSpace.getAddress());					//2a. If there is, we set the address to the largest remaining free space
 		jobsAddressed.add(newJob);									//3. We add it to our list of jobs with addresses
 		int newFreeSpaceSize = largestRemainingFreeSpace.getSize() - newJob.getJobSize();
@@ -40,7 +40,7 @@ class SizeAddressTable {
 		return false;
 	}
 	else{
-		System.out.println("Job already assigned");																		//2c. This shouldn't happen, but if it's already assigned then it will return false.
+		//System.out.println("Job already assigned");																		//2c. This shouldn't happen, but if it's already assigned then it will return false.
 		return false;
 	}	
   }
@@ -51,7 +51,7 @@ class SizeAddressTable {
 	if (jobsAddressed.contains(completedJob)){
 		int completedJobSize = completedJob.getJobSize();
 		int completedJobAddress = completedJob.getJobAddress();
-		System.out.println("Checking for adjacent free space in the back");
+		//System.out.println("Checking for adjacent free space in the back");
 		for(int i = 0; i < freeSpaceList.size(); i++){
 			SizeAddressPair current = freeSpaceList.get(i);				
 			if((completedJobSize + completedJobAddress) == current.getAddress()){	//check for free space after the job
@@ -60,11 +60,11 @@ class SizeAddressTable {
 				freeSpaceList.remove(current);	
 			}
 		}
-		System.out.println("Checking for adjacent free space in the front");
+		//System.out.println("Checking for adjacent free space in the front");
 		for(int j = 0; j < freeSpaceList.size(); j++){
 			SizeAddressPair current = freeSpaceList.get(j);
 			if ((current.getAddress() + current.getSize()) == completedJobAddress){		//check for free space before the job
-				System.out.println("Found free adjacent space in the front " + current.getAddress() + " " + current.getSize());
+				//System.out.println("Found free adjacent space in the front " + current.getAddress() + " " + current.getSize());
 				current.setSize(current.getSize() + completedJobSize);
 				jobsAddressed.remove(completedJob);
 				findNewLargestRemainingFreeSpace();
@@ -73,7 +73,7 @@ class SizeAddressTable {
 			}
 		}
 		SizeAddressPair newFreeSpace = new SizeAddressPair(completedJobSize, completedJobAddress);
-		System.out.println("New free space created at: " + newFreeSpace.getAddress() + " " + newFreeSpace.getSize());
+		//System.out.println("New free space created at: " + newFreeSpace.getAddress() + " " + newFreeSpace.getSize());
 		freeSpaceList.add(newFreeSpace);
 		jobsAddressed.remove(completedJob);
 		findNewLargestRemainingFreeSpace();		//finds the new largest remaining free space after
@@ -84,14 +84,14 @@ class SizeAddressTable {
   
   //After a job has been assigned, this function will be used to find and assign the new largest remaining free space
  	 public void findNewLargestRemainingFreeSpace(){
-		System.out.println("Printing all free spaces");
+		//System.out.println("Printing all free spaces");
 		for (int i = 0; i < freeSpaceList.size(); i++){				//1. Iterate through freeSpaceList
 			SizeAddressPair current = freeSpaceList.get(i);			//2. Create pointer to object
-			System.out.println(current.getAddress() + " " + current.getSize());
+			//System.out.println(current.getAddress() + " " + current.getSize());
 			if (current.getSize() > largestRemainingFreeSpace.getSize()){	//3. Compare sizes. If current is largest, re-assign largest remaining free space
 				largestRemainingFreeSpace = current;
 			}
-		System.out.println("Largest Remaining Free Space: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
+		//System.out.println("Largest Remaining Free Space: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
 		}
   	}
 	
@@ -102,7 +102,7 @@ class SizeAddressTable {
 				largestJob = current;
 			}
 		}
-		System.out.println("Largest Job is : " + largestJob.getJobNumber() + largestJob.getJobAddress() + largestJob.getJobSize());
+		//System.out.println("Largest Job is : " + largestJob.getJobNumber() + largestJob.getJobAddress() + largestJob.getJobSize());
 	}
 	
 	//This is a new method to cut down on Tro interrupts. whenever a job is added or removed, we call this and it sets the shortest time slice.
@@ -120,7 +120,7 @@ class SizeAddressTable {
 				}
 			}
 			shortestTimeSlice = minimumTimeSlice;
-			System.out.println("Shortest time slice is: " + shortestTimeSlice);
+			//System.out.println("Shortest time slice is: " + shortestTimeSlice);
 		}
 	}
 			
