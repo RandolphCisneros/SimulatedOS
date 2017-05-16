@@ -265,7 +265,7 @@ public class os {
 			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
-				if(jobToRun.getIOFlag == false){	//if it's not doing i/o
+				if(jobToRun.getIOFlag() == false){	//if it's not doing i/o
 					addressTable.removeJob(jobToRun);	//remove from table completely
 				}
 			//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
