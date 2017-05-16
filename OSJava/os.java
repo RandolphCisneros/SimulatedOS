@@ -27,6 +27,7 @@ public class os {
 	private static boolean comingFromCrint;
 	private static boolean drumBusy;
 	private static boolean diskBusy;
+	private static boolean comingFromCheckDrum;
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
@@ -47,6 +48,8 @@ public class os {
 		timeElapsed = 0;
 		drumBusy = false;
 		diskBusy = false;
+		comingFromCrint = false;
+		comingFromCheckDrum = false;
 		
 		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
 		//as the processes enter interrupts.
@@ -138,9 +141,12 @@ public class os {
 		drumBusy = false;
 		
 		if (transferDirection == 0){				//3. Check transfer direction
-			if(comingFromCrint){				//This checks if it was a new job coming in.
+			if(comingFromCrint || comingFromCheckDrum){				//This checks if it was a new job coming in.
 				readyQueue.add(jobForDrum);		//4a. Add job to readyQueue here.
-				comingFromCrint = false;
+				if (comingFromCrint)
+					comingFromCrint = false;
+				else if (comingFromCheckDrum)
+					comingFromCheckDrum = false;
 			}
 			jobsOnCore += 1;				//5a. Increment jobsOnCore
 			System.out.println("Incremented jobsOnCore");
@@ -290,6 +296,7 @@ public class os {
 			jobForDrum = waitingQueue.peek();
 			if(addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
 				waitingQueue.remove();
+				comingFromCheckDrum = true;
 				transferDirection = 0;
 				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 				drumBusy = true;
