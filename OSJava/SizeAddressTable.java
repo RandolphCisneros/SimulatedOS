@@ -8,6 +8,7 @@ class SizeAddressTable {
   private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100; tracks the largest free space on list
   LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//list that tracks remaining free spaces
   LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//List of jobs to track the job addresses
+  private Job largestJob();
   
   //constructor initializes largest free space and adds it to the table.
   //I used a default constructor here since it will only be used once in the OS
@@ -15,6 +16,7 @@ class SizeAddressTable {
 	freeSpaceList = new LinkedList<SizeAddressPair>();
     	largestRemainingFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, START_OF_MEMORY);	//There should only be one instance of this
     	freeSpaceList.add(largestRemainingFreeSpace);
+	largestJob = new Job();
   }
   
   //this method finds free space for the requesting job. I'm using WORST FIT algorithm so it relies on the largest
@@ -100,5 +102,17 @@ class SizeAddressTable {
 		}
 		System.out.println("Largest Remaining Free Space: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
 	}
- }
+  }
+	
+	public void findNewLargestJob(){
+		for (int i = 0; i < jobsAddressed.size(); i++){
+			Job current = jobsAddressed.get(i)
+			if (current.getJobSize() > largestJob.getJobSize()){
+				largestJob = current;
+			}
+		}
+		System.out.println("Largest Job is : " + largestJob.getJobNumber() + largestJob.getJobAddress() + largestJob.getJobSize());
+	}
+	
+	public Job getLargestJob(){return largestJob;}
 }
