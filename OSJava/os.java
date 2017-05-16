@@ -263,8 +263,6 @@ public class os {
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
 			jobToRun.setTimeSlice(addressTable.getShortestTimeSlice());	//Assign to shortest time slice in job table first
-			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
-			//System.out.println("Projected time total: " + timeTotal);
 			checkTimeout();
 			//System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			//System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
@@ -276,6 +274,8 @@ public class os {
 	//Method to check if the job has reached its max time or if it will exceed it with current time slice
 	public static void checkTimeout(){
 		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time
+			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
+			//System.out.println("Projected time total: " + timeTotal);
 			jobToRun.setTimeFinished(true);
 			readyQueue.remove(jobToRun);
 			if(jobToRun.getIOFlag() == false){	//if it's not doing i/o
