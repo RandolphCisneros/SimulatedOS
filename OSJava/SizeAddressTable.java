@@ -20,18 +20,6 @@ class SizeAddressTable {
 	largestJob = new Job();
   }
   
-  //this method finds free space for the requesting job. I'm using WORST FIT algorithm so it relies on the largest
-  //remaining free space. It returns an error if there is no memory for the job size.
-    /*			commenting out because I didn't use this in the OS code
-  public int findFreeSpace(int JobSize){
-      try { if(largestRemainingFreeSpace.getSize() > jobSize)
-              return largestREmainingFreeSpace.getAddress();
-          }
-    catch (IndexOutOfBoundsException e){
-        System.out.println("Not enough memory for job " +e.getMessage();)					
-    }
-  }*/
-  
  //This keeps track of the addresses of assigned jobs. If the jobs are removed then we know which address will get free space.
   public boolean assignJob(Job newJob){
 	 //System.out.println("Largest Remaing Free Space in assignJob: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
