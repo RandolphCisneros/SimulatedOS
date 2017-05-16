@@ -183,6 +183,7 @@ public class os {
 		if (a[0] == 5){						//4a. It requested termination
 			System.out.println("Job requesting termination");
 			readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
+			jobRequestingService.setTimeFinished(true);
 			if (!jobRequestingService.getIOFlag()){
 				addressTable.removeJob(jobRequestingService);	//function may not work perfectly
 				jobsOnCore -= 1;
