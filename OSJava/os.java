@@ -264,9 +264,10 @@ public class os {
 		//System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
-			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();
+			jobToRun.setTimeSlice(addressTable.getShortestTimeSlice());	//Assign to shortest time slice in job table first
+			int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
 			//System.out.println("Projected time total: " + timeTotal);
-			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){
+			if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time
 				jobToRun.setTimeFinished(true);
 				readyQueue.remove(jobToRun);
 				if(jobToRun.getIOFlag() == false){	//if it's not doing i/o
@@ -274,8 +275,8 @@ public class os {
 				}
 			//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
 			}
-			else if(timeTotal > jobToRun.getMaxCpuTime()){
-				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());
+			else if(timeTotal > jobToRun.getMaxCpuTime()){				//Check if time slice exceeds max
+				jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//If it does, we set it to a new number
 			//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
 			}
 			//System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
