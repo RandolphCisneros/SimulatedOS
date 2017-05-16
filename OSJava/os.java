@@ -59,8 +59,8 @@ public class os {
 	//If successful, it is added to the ReadyQueue; otherwise it is added to the waiting queue.
 	//Regardless it is added to our main jobTable.
 	public static void Crint(int[]a, int[]p){
-		//
-		("In Crint");
+		
+		//System.out.println("In Crint");
 
 		getTimeElapsed(p);				//1. Set elapsed time.
 		setRunningJobTime();				//2. Set last running Job's time, if any.
