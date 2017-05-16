@@ -62,7 +62,7 @@ public class os {
 	//If successful, it is added to the ReadyQueue; otherwise it is added to the waiting queue.
 	//Regardless it is added to our main jobTable.
 	public static void Crint(int[]a, int[]p){
-		System.out.println ("In Crint");
+		//System.out.println ("In Crint");
 
 		getTimeElapsed(p);				//1. Set elapsed time.
 		setRunningJobTime();				//2. Set last running Job's time, if any.
@@ -98,7 +98,7 @@ public class os {
 	//It is then added to the readyQueue.
 	//Lastly dispatcher is called and the job in front of the readyQueue is run.
 	public static void Dskint (int[]a, int[]p){
-		System.out.println("In Dskint");
+		//System.out.println("In Dskint");
 		getTimeElapsed(p);	//1. Get time elapsed
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
@@ -189,7 +189,7 @@ public class os {
 			//sos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), transferDirection);
 		}
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
-			System.out.println("Job requesting unblocked IO");
+			//System.out.println("Job requesting unblocked IO");
 			if(!diskBusy){
 				sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
 				diskBusy = true;
@@ -201,7 +201,7 @@ public class os {
 			//System.out.println(jobRequestingService.toString());
 		}
 		else {							//4c. a[0] == 7, job wants to be blocked for i/o
-			System.out.println("Job requesting blocked IO");
+			//System.out.println("Job requesting blocked IO");
 			//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
 			if(jobRequestingService.getIOFlag()){
 				readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
