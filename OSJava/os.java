@@ -68,7 +68,7 @@ public class os {
 		setRunningJobTime();				//2. Set last running Job's time, if any.
 		
 		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
-		if ((!drumBusy) && addressTable.assignJob(newestJob)){		//4a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
+		if ((!drumBusy && waitingQueue.isEmpty()) && addressTable.assignJob(newestJob)){		//4a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
 			//System.out.println("Putting job on core");
 			transferDirection = 0;
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Puts job on core (memory)
