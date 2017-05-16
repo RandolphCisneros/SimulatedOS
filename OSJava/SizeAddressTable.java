@@ -106,7 +106,7 @@ class SizeAddressTable {
 	
 	public void findNewLargestJob(){
 		for (int i = 0; i < jobsAddressed.size(); i++){
-			Job current = jobsAddressed.get(i)
+			Job current = jobsAddressed.get(i);
 			if (current.getJobSize() > largestJob.getJobSize()){
 				largestJob = current;
 			}
