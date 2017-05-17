@@ -158,7 +158,7 @@ class SizeAddressTable {
 		sortJobsAddressed();
 		for(int i = 0; i < jobsAddressed.size(); i++){
 			Job current = jobsAddressed.get(i);
-			if(current.getJobSize() < jobSwappingIn.getJobSize()){
+			if(current.getJobSize() < jobSwappingIn.getJobSize() && (!current.getIOFlag() && !current.getBlockFlag()){
 				swapJob = current;
 				return true;
 			}
