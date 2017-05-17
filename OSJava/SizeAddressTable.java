@@ -126,6 +126,34 @@ class SizeAddressTable {
 		}
 	}
 	
+	public void sortJobsAddressed(){
+		System.out.println("Before sorting ");
+		for (int i = 0; i < jobsAddressed.size(); i++){
+			Job currentJob = jobsAddressed.get(i);
+			System.out.println("Job: " + currentJob.getJobNumber() + " Size: " + currentJob.getJobSize());
+		}
+		for (int i = 0; i < jobsAddressed.size() - 1; i++){
+			Job iJob = jobsAddressed.get(i);
+			int min = i;
+			for (int j = i + 1; j < jobsAddressed.size(); j++){
+				Job jJob = jobsAddressed.get(j);
+				if (jJob.getJobSize() < iJob.getJobSize()){
+					min = j;
+				}
+			}
+			if(min != i){
+				Job temp = jobsAddressed.get(i);
+				jobsAddressed.set(i, jobsAddressed.get(j));
+				jobsAddressed.set(j, temp);
+			}
+		}
+		System.out.println("After sorting");
+		for (int i = 0; i < jobsAddressed.size(); i++){
+			Job currentJob = jobsAddressed.get(i);
+			System.out.println("Job: " + currentJob.getJobNumber() + " Size: " + currentJob.getJobSize());
+		}
+	}
+	
 	public Job getSwapJob(){return swapJob;}
 	public Job getLargestJob(){return largestJob;}
 	public int getShortestTimeSlice(){return shortestTimeSlice;}
