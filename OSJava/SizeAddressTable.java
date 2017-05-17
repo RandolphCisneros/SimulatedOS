@@ -143,8 +143,8 @@ class SizeAddressTable {
 			}
 			if(min != i){
 				Job temp = jobsAddressed.get(i);
-				jobsAddressed.set(i, jobsAddressed.get(j));
-				jobsAddressed.set(j, temp);
+				jobsAddressed.set(i, jobsAddressed.get(min));
+				jobsAddressed.set(min, temp);
 			}
 		}
 		System.out.println("After sorting");
