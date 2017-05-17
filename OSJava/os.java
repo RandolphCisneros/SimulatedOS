@@ -307,7 +307,7 @@ public class os {
 				waitingQueue.add(jobForDrum);
 			}
 			else if (!swapping) {
-				if(addressTable.canSwap()){
+				if(addressTable.canSwap(jobForDrum)){
 					//start swapping code here
 				}
 				else{
