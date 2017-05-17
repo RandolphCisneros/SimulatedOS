@@ -297,9 +297,9 @@ public class os {
 	
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
 	public static void checkDrum() {
+		//Only run this code if the drum is not busy and there is something on the waitingQueue
 		if ((!drumBusy) && (!waitingQueue.isEmpty())){
-			jobForDrum = waitingQueue.poll();		//Changed this from peek to poll. Trying to traverse and get to other jobs
-			
+			jobForDrum = waitingQueue.poll();		//Changed this from peek to poll		
 			//if job for drum has not been passed once, mark it as passed and continue
 			if (!jobForDrum.getPassed()) {
 				jobForDrum.setPassed(true);
@@ -346,7 +346,7 @@ public class os {
 				swappingIn = false;
 				swapping = false;
 			}
-				
+			}		
 		}
 	}
 	
