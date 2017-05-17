@@ -100,8 +100,6 @@ public class os {
 		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
 					//	necessarily jobs finishing disk I/O.
 		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
-		if(jobCompletingIO.getJobNumber() == 5)
-			System.out.println("Job 5 completing IO************************************");
 		jobCompletingIO = iOQueue.remove();
 
 		jobCompletingIO.setIOFlag(false);
@@ -109,7 +107,6 @@ public class os {
 		if(jobCompletingIO.getTimeFinished()){
 			jobsOnCore -= 1;
 			addressTable.removeJob(jobCompletingIO);
-			//Same here. In dskint I'm removing siodrum calls: sos.siodrum(jobCompletingIO.getJobNumber(), jobCompletingIO.getJobSize(), jobCompletingIO.getJobAddress(), transferDirection);
 		}
 		else if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
 			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
@@ -181,15 +178,7 @@ public class os {
 		
 		jobRequestingService = jobToRun;	//3. Assign jobRequestingService
 		if (a[0] == 5){						//4a. It requested termination
-			//System.out.println("Job requesting termination");
-			readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
-			jobRequestingService.setTimeFinished(true);
-			if (!jobRequestingService.getIOFlag()){
-				addressTable.removeJob(jobRequestingService);	//function may not work perfectly
-				jobsOnCore -= 1;
-			}
-			//transferDirection = 1;
-			//sos.siodrum(jobRequestingService.getJobNumber(), jobRequestingService.getJobSize(), jobRequestingService.getJobAddress(), transferDirection);
+			terminateService();
 		}
 		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
 			//System.out.println("Job requesting unblocked IO");
@@ -317,6 +306,17 @@ public class os {
 			sos.siodisk(jobForDisk.getJobNumber());
 			diskBusy = true;
 		}
-	}	
+	}
+	
+	public static void terminateService() {
+		//System.out.println("Job requesting termination");
+		readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
+		jobRequestingService.setTimeFinished(true);
+		if (!jobRequestingService.getIOFlag()){
+			addressTable.removeJob(jobRequestingService);	//function may not work perfectly
+			jobsOnCore -= 1;
+		}
+	}
+		
 		
 }
