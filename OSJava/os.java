@@ -139,6 +139,7 @@ public class os {
 		//System.out.println("In Drmint");
 		getTimeElapsed(p);					//1. Get elapsed time
 		setRunningJobTime();					//2. Set running job time. Won't do if no jobsOnCore or readyQueue is empty.
+		
 		drumBusy = false;
 		
 		if (transferDirection == 0){				//3. Check transfer direction
@@ -153,8 +154,11 @@ public class os {
 			//System.out.println("Incremented jobsOnCore");
 		}
 		else if (transferDirection == 1){
-			//May need to do this for a swap out. Maybe make a new job: readyQueue.remove(jobToRun);			//4b. Remove last job to run
-			//jobsOnCore -= 1;				//5b. Decrement jobsOnCore
+			jobsOnCore -= 1;				//5b. Decrement jobsOnCore
+			swapOut.setPassed(false);
+			swapOut.setJobAddress(-1);		//make notAddressed an int variable
+			waitingQueue.add(swapOut);
+			swappingOut = false;
 			System.out.println("Decremented jobsOnCore");
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
@@ -295,26 +299,47 @@ public class os {
 	public static void checkDrum() {
 		if ((!drumBusy) && (!waitingQueue.isEmpty())){
 			jobForDrum = waitingQueue.poll();		//Changed this from peek to poll. Trying to traverse and get to other jobs
-			if(addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
-				//Commenting out since it was already polled. waitingQueue.remove();
+			
+			if (!jobForDrum.getPassed()) {
+				jobForDrum.setPassed(true);
+				waitingQueue.add(jobForDrum);
+			}
+			
+			else if (!swapping && addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
 				transferDirection = 0;
 				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 				drumBusy = true;
 				jobForDrum.setComingFromCheckDrum(true);
 			}
-			else if (!jobForDrum.getPassed()) {
-				jobForDrum.setPassed(true);
-				waitingQueue.add(jobForDrum);
-			}
+
 			else if (!swapping) {
 				if(addressTable.canSwap(jobForDrum)){
 					System.out.println("Can swap out. Strating code here");
-					//start swapping code here
+					swapping = true;
+					swappingIn = true;
+					swapIn = jobForDrum;
+					swapOut = addressTable.getSwapJob();
+					swappingOut = true;
+					drumBusy = true;
+					transferDirection = 1;
+					readyQueue.remove(swapOut);
+					sos.siodrum(swapOut.getJobNumber(), swapOut.getJobSize(), swapOut.getJobAddress(), transferDirection);
 				}
 				else{
 					waitingQueue.add(jobForDrum);
 				}
 			}
+			else if (swapping && !swappingOut){
+				drumBusy = true;
+				transferDirection = 0;
+				jobForDrum = swapIn;
+				addressTable.assignJob(jobForDrum);
+				jobForDrum.setComingFromCheckDrum(true);
+				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
+				swappingIn = false;
+				swapping = false;
+			}
+				
 		}
 	}
 	
