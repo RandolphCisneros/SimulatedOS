@@ -15,6 +15,8 @@ public class os {
 	private static Job jobTransferred;
 	private static Job jobForDrum;
 	private static Job jobForDisk;
+	private static Job swapIn;
+	private static Job swapOut;
 	
 	private static int jobsOnCore;
 	private static int transferDirection;
@@ -24,6 +26,9 @@ public class os {
 	
 	private static boolean drumBusy;
 	private static boolean diskBusy;
+	private static boolean swappingIn;
+	private static boolean swappingOut;
+	private static boolean swapping;
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
@@ -44,6 +49,9 @@ public class os {
 		timeElapsed = 0;
 		drumBusy = false;
 		diskBusy = false;
+		swappingIn = false;
+		swappingOut = false;
+		swapping = false;
 		
 		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
 		//as the processes enter interrupts.
@@ -53,6 +61,8 @@ public class os {
 		jobRequestingService = new Job();
 		jobForDrum = new Job();
 		jobForDisk = new Job();
+		swapIn = new Job();
+		swapOut = new Job();
 	}
 
 	//This method receives job info. It creates a "Job" instance, and then attempts to assign it an address.
@@ -292,10 +302,18 @@ public class os {
 				drumBusy = true;
 				jobForDrum.setComingFromCheckDrum(true);
 			}
-			else {
+			else if (!jobForDrum.getPassed()) {
+				jobForDrum.setPassed(true);
 				waitingQueue.add(jobForDrum);
 			}
-			//if there is no room on the core put code here for swapping
+			else if (!swapping) {
+				if(addressTable.canSwap()){
+					//start swapping code here
+				}
+				else{
+					waitingQueue.add(jobForDrum);
+				}
+			}
 		}
 	}
 	
