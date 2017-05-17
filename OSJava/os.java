@@ -302,6 +302,7 @@ public class os {
 			jobForDrum = waitingQueue.poll();		//Changed this from peek to poll		
 			//if job for drum has not been passed once, mark it as passed and continue
 			if (!jobForDrum.getPassed()) {
+				System.out.println("Job " + jobForDrum.getJobNumber() + " has been marked passed.");
 				jobForDrum.setPassed(true);
 				waitingQueue.add(jobForDrum);
 			}
@@ -359,12 +360,14 @@ public class os {
 		}
 	}
 	
+	//Terminate service is in its own block. Removes from readyQueue, sets timeFinished flag, and removes from address Table
+	//if it is not doing I/O
 	public static void terminateService() {
 		//System.out.println("Job requesting termination");
-		readyQueue.remove(jobRequestingService);	//5a. I may have to traverse the whole queue to get to this job, and then iterate over again to get back where I was. Check documentation
-		jobRequestingService.setTimeFinished(true);
+		readyQueue.remove(jobRequestingService);	
+		jobRequestingService.setTimeFinished(true);	//This flag is marked true. If it's doing I/O this will be used to remove it later.
 		if (!jobRequestingService.getIOFlag()){
-			addressTable.removeJob(jobRequestingService);	//function may not work perfectly
+			addressTable.removeJob(jobRequestingService);
 			jobsOnCore -= 1;
 		}
 	}
