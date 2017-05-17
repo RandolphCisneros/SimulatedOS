@@ -111,11 +111,11 @@ class SizeAddressTable {
 	public void findShortestTimeSlice(){
 		if(!jobsAddressed.isEmpty()){
 			Job shortestJob = jobsAddressed.get(0);
-			int minimumTimeSlice = shortestJob.getMaxCpuTime() / 4;
+			int minimumTimeSlice = shortestJob.getMaxCpuTime();
 			if(jobsAddressed.size() > 1){
 				for (int i = 1; i < jobsAddressed.size(); i++){
 					Job current = jobsAddressed.get(i);
-					int currentTimeSlice = current.getMaxCpuTime() / 4;
+					int currentTimeSlice = current.getMaxCpuTime();
 					if(currentTimeSlice < minimumTimeSlice){
 						minimumTimeSlice = currentTimeSlice;
 					}
