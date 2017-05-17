@@ -300,35 +300,42 @@ public class os {
 		if ((!drumBusy) && (!waitingQueue.isEmpty())){
 			jobForDrum = waitingQueue.poll();		//Changed this from peek to poll. Trying to traverse and get to other jobs
 			
+			//if job for drum has not been passed once, mark it as passed and continue
 			if (!jobForDrum.getPassed()) {
 				jobForDrum.setPassed(true);
 				waitingQueue.add(jobForDrum);
 			}
-			
-			else if (!swapping && addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
-				transferDirection = 0;
-				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
-				drumBusy = true;
-				jobForDrum.setComingFromCheckDrum(true);
-			}
-
-			else if (!swapping) {
-				if(addressTable.canSwap(jobForDrum)){
-					System.out.println("Can swap out. Strating code here");
-					swapping = true;
-					swappingIn = true;
-					swapIn = jobForDrum;
-					swapOut = addressTable.getSwapJob();
-					swappingOut = true;
+			//if job has been marked as passed, check if we're in the middle of a swap. If we are, skip to next line
+			else if (!swapping){
+				//Check if we can assign the job directly, without swapping
+				if (addressTable.assignJob(jobForDrum)){	//We still check if there is room on the core
+					transferDirection = 0;
+					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 					drumBusy = true;
-					transferDirection = 1;
-					readyQueue.remove(swapOut);
-					sos.siodrum(swapOut.getJobNumber(), swapOut.getJobSize(), swapOut.getJobAddress(), transferDirection);
+					jobForDrum.setComingFromCheckDrum(true);
 				}
-				else{
-					waitingQueue.add(jobForDrum);
+
+				//if we can't assign a job, and we're not swapping
+				else if (!swapping) {
+					//Check if there's a job we can swap and prepare the data values
+					if(addressTable.canSwap(jobForDrum)){
+						System.out.println("Can swap out. Strating code here");
+						swapping = true;
+						swappingIn = true;
+						swapIn = jobForDrum;
+						swapOut = addressTable.getSwapJob();
+						swappingOut = true;
+						drumBusy = true;
+						transferDirection = 1;
+						readyQueue.remove(swapOut);
+						sos.siodrum(swapOut.getJobNumber(), swapOut.getJobSize(), swapOut.getJobAddress(), transferDirection);
+					}
+					//if There's no job we can swap it with, put it on the back of the waitingQueue and try again next cycle
+					else {	
+						waitingQueue.add(jobForDrum);
+					}
 				}
-			}
+			//If we're in the middle of a swap, finish the swap.
 			else if (swapping && !swappingOut){
 				drumBusy = true;
 				transferDirection = 0;
