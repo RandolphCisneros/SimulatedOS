@@ -127,11 +127,11 @@ class SizeAddressTable {
 	}
 	
 	public void sortJobsAddressed(){
-		System.out.println("Before sorting ");
+		/*System.out.println("Before sorting ");
 		for (int i = 0; i < jobsAddressed.size(); i++){
 			Job currentJob = jobsAddressed.get(i);
 			System.out.println("Job: " + currentJob.getJobNumber() + " Size: " + currentJob.getJobSize());
-		}
+		}*/
 		for (int i = 0; i < jobsAddressed.size() - 1; i++){
 			Job iJob = jobsAddressed.get(i);
 			int min = i;
@@ -147,15 +147,22 @@ class SizeAddressTable {
 				jobsAddressed.set(min, temp);
 			}
 		}
-		System.out.println("After sorting");
+		/*System.out.println("After sorting");
 		for (int i = 0; i < jobsAddressed.size(); i++){
 			Job currentJob = jobsAddressed.get(i);
 			System.out.println("Job: " + currentJob.getJobNumber() + " Size: " + currentJob.getJobSize());
-		}
+		}*/
 	}
 	
 	public boolean canSwap(Job jobSwappingIn){
 		sortJobsAddressed();
+		for(int i = 0; i < jobsAddressed.size(); i++){
+			Job current = jobsAddress.get(i);
+			if(current.getJobSize() < jobSwappingIn.getJobSize()){
+				swapJob = current;
+				return true;
+			}
+		}
 		return false;
 	}
 	
