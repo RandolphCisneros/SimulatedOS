@@ -9,6 +9,7 @@ class SizeAddressTable {
   LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//list that tracks remaining free spaces
   LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//List of jobs to track the job addresses
   private static Job largestJob;
+  private static Job swapJob;
   private static int shortestTimeSlice;
   
   //constructor initializes largest free space and adds it to the table.
@@ -18,6 +19,7 @@ class SizeAddressTable {
     	largestRemainingFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, START_OF_MEMORY);	//There should only be one instance of this
     	freeSpaceList.add(largestRemainingFreeSpace);
 	largestJob = new Job();
+	swapJob = new Job();
   }
   
  //This keeps track of the addresses of assigned jobs. If the jobs are removed then we know which address will get free space.
@@ -123,7 +125,8 @@ class SizeAddressTable {
 			//System.out.println("Shortest time slice is: " + shortestTimeSlice);
 		}
 	}
-			
+	
+	public Job getSwapJob(){return swapJob;}
 	public Job getLargestJob(){return largestJob;}
 	public int getShortestTimeSlice(){return shortestTimeSlice;}
 }
