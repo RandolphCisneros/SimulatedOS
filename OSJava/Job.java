@@ -21,6 +21,7 @@ public class Job  /*implements Comparable <Job> */{
 	private boolean timeFinished;
 	private boolean comingFromCrint;
 	private boolean comingFromCheckDrum;
+	private boolean passed;
 	
 	Job(){
 		jobNumber = 0;
@@ -36,6 +37,7 @@ public class Job  /*implements Comparable <Job> */{
 		timeFinished = false;
 		comingFromCrint = false;
 		comingFromCheckDrum = false;
+		passed = false;
 		timeSlice = 5;
 	}
 	
@@ -53,10 +55,12 @@ public class Job  /*implements Comparable <Job> */{
 		timeFinished = false;
 		comingFromCrint = false;
 		comingFromCheckDrum = false;
+		passed = false;
 		timeSlice = 5;
 	}
 
 	//accessors and mutators
+	public boolean getPassed(){return passed;}
 	public boolean getTimeFinished(){return timeFinished;}
 	public int getJobNumber(){ return jobNumber;}
 	public int getJobPriority(){ return jobPriority;}
@@ -86,6 +90,7 @@ public class Job  /*implements Comparable <Job> */{
 	public void setComingFromCrint(boolean cFC){comingFromCrint = cFC;}
 	public void setComingFromCheckDrum(boolean cFCD){comingFromCheckDrum = cFCD;}
 	public void setTimeSlice(int tS){timeSlice = tS;}
+	public void setPassed(boolean p){passed = p;}
 	
 	/*		May be used to compare jobs by size and priority
 	public int compareTo(Job j){
