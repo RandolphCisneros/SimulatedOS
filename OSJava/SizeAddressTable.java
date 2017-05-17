@@ -157,7 +157,7 @@ class SizeAddressTable {
 	public boolean canSwap(Job jobSwappingIn){
 		sortJobsAddressed();
 		for(int i = 0; i < jobsAddressed.size(); i++){
-			Job current = jobsAddress.get(i);
+			Job current = jobsAddressed.get(i);
 			if(current.getJobSize() < jobSwappingIn.getJobSize()){
 				swapJob = current;
 				return true;
