@@ -308,6 +308,7 @@ public class os {
 			}
 			else if (!swapping) {
 				if(addressTable.canSwap(jobForDrum)){
+					System.out.println("Can swap out. Strating code here");
 					//start swapping code here
 				}
 				else{
