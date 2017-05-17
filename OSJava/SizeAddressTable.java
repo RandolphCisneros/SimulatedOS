@@ -154,6 +154,11 @@ class SizeAddressTable {
 		}
 	}
 	
+	public boolean canSwap(Job jobSwappingIn){
+		sortJobsAddressed();
+		return false;
+	}
+	
 	public Job getSwapJob(){return swapJob;}
 	public Job getLargestJob(){return largestJob;}
 	public int getShortestTimeSlice(){return shortestTimeSlice;}
