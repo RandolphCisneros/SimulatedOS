@@ -47,16 +47,7 @@ public class os {
 		
 		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
 		if ((!drumBusy && waitingQueue.isEmpty()) && addressTable.assignJob(newestJob)){//4a. Check drumBusy, freeSpace, waitingQueue. If so, get address.
-			//System.out.println("Putting job on core");
-			transferDirection = 0;							//5a. Set transferDirection for drum-to-Core. It holds this.
-			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);	//6a. Puts job on core
-			drumBusy = true;							//7a. Flag drum as busy 	
-			jobForDrum = newestJob;							//8a. Set the jobForDrum as the newestJob
-			jobForDrum.setComingFromCrint(true);					//9a. Flag as coming from Crint
-			/*System.out.println("Job max time: " + newestJob.getMaxCpuTime());
-			System.out.println("Job address: " + newestJob.getJobAddress());
-			System.out.println("Job size: " + newestJob.getJobSize());
-			System.out.println("Job is addressed correctly");*/
+			crintAdd();
 		}
 		else{
 			waitingQueue.add(newestJob);	//4b. If not, then it gets put on the waitingQueue.
@@ -312,15 +303,29 @@ public class os {
 			diskBusy = true;
 		}
 	}
+
+	//Add function for Crint
+	public static void crintAdd(){
+		//System.out.println("Putting job on core");
+		transferDirection = 0;							//5a. Set transferDirection for drum-to-Core. It holds this.
+		sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);	//6a. Puts job on core
+		drumBusy = true;							//7a. Flag drum as busy 	
+		jobForDrum = newestJob;							//8a. Set the jobForDrum as the newestJob
+		/*System.out.println("Job max time: " + newestJob.getMaxCpuTime());
+		System.out.println("Job address: " + newestJob.getJobAddress());
+		System.out.println("Job size: " + newestJob.getJobSize());
+		System.out.println("Job is addressed correctly");*/				
+	}
+	
 	
 /////////////////////////////////////////SERVICE METHODS////////////////////////////////////////////////////////////////////////////
 	//Terminate service. Removes from readyQueue, sets timeFinished flag, and removes from addressTable
 	//if it is not doing I/O
 	public static void terminateService() {
 		//System.out.println("Job requesting termination");
-		readyQueue.remove(jobRequestingService);	
-		jobRequestingService.setTimeFinished(true);	//This flag is marked true. If it's doing I/O this will be used to remove it later.
-		if (!jobRequestingService.getIOFlag()){
+		readyQueue.remove(jobRequestingService);	//1. Remove from ReadyQueue.	
+		jobRequestingService.setTimeFinished(true);	//2. Set timeFinished in case it's still doing I/O.
+		if (!jobRequestingService.getIOFlag()){		//3. If it's not doing I/O, remove from table and decrement jobsOnCore.
 			addressTable.removeJob(jobRequestingService);
 			jobsOnCore -= 1;
 		}
