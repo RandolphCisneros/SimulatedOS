@@ -46,7 +46,7 @@ public class os {
 		setRunningJobTime();				//2. Set last running Job's time, if any. Other checks done.
 		
 		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
-		if ((!drumBusy && waitingQueue.isEmpty()) && addressTable.assignJob(newestJob)){	//4a. Check drumBusy, freeSpace, waitingQueue. If so, get address.
+		if ((!drumBusy && waitingQueue.isEmpty()) && addressTable.assignJob(newestJob)){//4a. Check drumBusy, freeSpace, waitingQueue. If so, get address.
 			//System.out.println("Putting job on core");
 			transferDirection = 0;							//5a. Set transferDirection for drum-to-Core. It holds this.
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);	//6a. Puts job on core
@@ -230,10 +230,10 @@ public class os {
 	//Method to set job's current running time
 	public static void setRunningJobTime(){ 
 		//System.out.println("In setRunningJobTime");
-		if (!readyQueue.isEmpty() && jobsOnCore > 0){			//Possible logic error here
-			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);
-			jobToRun.setTimeSlice(addressTable.getShortestTimeSlice());	//Assign to shortest time slice in job table first
-			checkTimeout();
+		if (!readyQueue.isEmpty() && jobsOnCore > 0){	//1. Call every time, but only run it there's a running job.
+			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);//2. Add elapsed time to current time.
+			jobToRun.setTimeSlice(addressTable.getShortestTimeSlice());	//3. Assign to shortest time slice in job table first
+			checkTimeout();							//4. This method checks if we're at or close to maxtime.
 			
 			//System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
 			//System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
@@ -244,17 +244,17 @@ public class os {
 	
 	//Method to check if the job has reached its max time or if it will exceed it with current time slice
 	public static void checkTimeout(){
-		int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
-		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time	
+		int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//1. Get the current time + time slice
+		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//2a. Check if the current time equals max time	
 			//System.out.println("Projected time total: " + timeTotal);
-			jobToRun.setTimeFinished(true);
-			readyQueue.remove(jobToRun);
-			if(jobToRun.getIOFlag() == false){	//if it's not doing i/o
-				addressTable.removeJob(jobToRun);	//remove from table completely
+			jobToRun.setTimeFinished(true);					//3a. If so, set TimeFinished flag to true.
+			readyQueue.remove(jobToRun);					//4a. Remove from readyQueue.
+			if(jobToRun.getIOFlag() == false){				//5a. Check if it's not doing i/o
+				addressTable.removeJob(jobToRun);			//6a. If not, remove from table completely.
 			}
 		}
-		else if (timeTotal > jobToRun.getMaxCpuTime()){				//Check if time slice exceeds max
-			jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//If it does, we set it to a new number
+		else if (timeTotal > jobToRun.getMaxCpuTime()){				//2b. Check if time slice exceeds max
+			jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//3b. If it does, set timeSlice to difference.
 		//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
 		}
 		//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
@@ -263,8 +263,8 @@ public class os {
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
 	public static void checkDrum() {
 		//Only run this code if the drum is not busy and there is something on the waitingQueue
-		if ((!drumBusy) && (!waitingQueue.isEmpty())){
-			jobForDrum = waitingQueue.poll();		//Changed this from peek to poll		
+		if (!drumBusy && !waitingQueue.isEmpty()){
+			jobForDrum = waitingQueue.poll();	//Changed this from peek to poll		
 			//if job for drum has not been passed once, mark it as passed and continue
 			if (!jobForDrum.getPassed()) {
 				System.out.println("Job " + jobForDrum.getJobNumber() + " has been marked passed.");
@@ -316,16 +316,20 @@ public class os {
 		}
 	}
 	
+	
+	
+	
+	
 	//This block of code checks if disk is ready. If so, then job gets added from iOQueue.	
 	public static void checkDisk() {
 		if ((!diskBusy) && (!iOQueue.isEmpty())){
-			jobForDisk = iOQueue.peek();		//Found a use for peek. Must peek rather than poll here, we will poll in Dskint
+			jobForDisk = iOQueue.peek();		//Must peek rather than poll here. We poll later in Dskint.
 			sos.siodisk(jobForDisk.getJobNumber());
 			diskBusy = true;
 		}
 	}
 	
-	//Terminate service is in its own block. Removes from readyQueue, sets timeFinished flag, and removes from address Table
+	//Terminate service. Removes from readyQueue, sets timeFinished flag, and removes from addressTable
 	//if it is not doing I/O
 	public static void terminateService() {
 		//System.out.println("Job requesting termination");
@@ -345,7 +349,7 @@ public class os {
 	
 	//Initialize Containers. Simple method to add modularity.
 	public static void initializeContainers(){
-		addressTable = new SizeAddressTable();	//This is a container, even though it only takes type Job
+		addressTable = new SizeAddressTable();
 		jobTable = new LinkedList<Job>();
 		readyQueue = new LinkedList<Job>();
 		waitingQueue = new LinkedList<Job>();
