@@ -36,6 +36,7 @@ public class os {
 		initializeJobObjects();
 	}
 
+	//A new job has entered the system anc caused this interrupt.
 	//This method receives job info. It creates a "Job" instance, and then attempts to assign it an address.
 	//If successful, it is added to the ReadyQueue; otherwise it is added to the waiting queue.
 	//Regardless it is added to our main jobTable.
@@ -70,6 +71,7 @@ public class os {
 		return;
 	}
 
+	//A job has completed I/O and generated this interrupt.
 	//The job at the front of the I/O queue is removed and assigned to jobCompletingIO.
 	//It is then added to the readyQueue.
 	//Lastly dispatcher is called and the job in front of the readyQueue is run.
@@ -103,13 +105,15 @@ public class os {
 		dispatcher(a,p);	//7. Call dispatcher	
 	}
 
+	//The drum has finished either putting a job on the core or taking it out, generating this interrupt.
+	//It sets the drumBusy flag as false, checks the direction of transfer,
+	//and either adds it to the waitingQueue or the readyQueue, depending on direction.
 	public static void Drmint (int[]a, int[]p){
 		//System.out.println("In Drmint");
 		getTimeElapsed(p);		//1. Get elapsed time
 		setRunningJobTime();		//2. Set running job time
 		
-		drumBusy = false;		//3. Set drumBusy to false.
-		
+		drumBusy = false;		//3. Set drumBusy to false.	
 		if (transferDirection == 0){	//4a. Check transfer direction
 			if(jobForDrum.getComingFromCrint() || jobForDrum.getComingFromCheckDrum()){				//This checks if it was a new job coming in.
 				readyQueue.add(jobForDrum);		//4a. Add job to readyQueue here.
