@@ -31,30 +31,9 @@ public class os {
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
 		//System.out.println("In startup");
-		
 		initializeContainers();
-
-		
-		//static variables, all initialized to 0 or false
-		jobsOnCore = 0;
-		totalTime = 0;
-		lastCurrentTime = 0;
-		timeElapsed = 0;
-		drumBusy = false;
-		diskBusy = false;
-		swappingIn = false;
-		swappingOut = false;
-		swapping = false;
-		
-		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
-		//as the processes enter interrupts.
-		jobToRun = new Job();
-		jobCompletingIO = new Job();
-		jobRequestingService = new Job();
-		jobForDrum = new Job();
-		jobForDisk = new Job();
-		swapIn = new Job();
-		swapOut = new Job();
+		initializeVariables();
+		initializeJobObjects();
 	}
 
 	//This method receives job info. It creates a "Job" instance, and then attempts to assign it an address.
@@ -371,5 +350,31 @@ public class os {
 		waitingQueue = new LinkedList<Job>();
 		iOQueue = new LinkedList<Job>();
 	}
+
+	//static variables, all initialized to 0 or false
+	public static void initializeVariables(){
+		jobsOnCore = 0;
+		totalTime = 0;
+		lastCurrentTime = 0;
+		timeElapsed = 0;
+		drumBusy = false;
+		diskBusy = false;
+		swappingIn = false;
+		swappingOut = false;
+		swapping = false;
+	}
+	
+	//static Job copies. The default values are 0 and null; they will hold Job addresses
+	//as the processes enter interrupts.	
+	public static void initializeJobObjects(){
+		jobToRun = new Job();
+		jobCompletingIO = new Job();
+		jobRequestingService = new Job();
+		jobForDrum = new Job();
+		jobForDisk = new Job();
+		swapIn = new Job();
+		swapOut = new Job();
+	}
+		
 		
 }
