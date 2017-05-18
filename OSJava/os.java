@@ -151,8 +151,7 @@ public class os {
 	}
 	
 	public static void Svc (int[]a, int[]p){
-		//System.out.println("In Svc");
-		
+		//System.out.println("In Svc");	
 		getTimeElapsed(p);			//1. Set timeElapsed
 		setRunningJobTime();			//2. Set running time for job
 		
@@ -163,13 +162,8 @@ public class os {
 		else if (a[0] == 6) {		//4b. It requests disk i/o. Goes to iOService method.
 			iOService();
 		}
-		else {							//4c. a[0] == 7, job wants to be blocked for i/o
-			//System.out.println("Job requesting blocked IO");
-			//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
-			if(jobRequestingService.getIOFlag()){
-				readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
-				jobRequestingService.setBlockFlag(true);	//6c. Set blockFlag to true. It is blocked.
-			}
+		else {				//4c. a[0] == 7, job wants to be blocked for i/o
+			blockService();
 		}
 		dispatcher(a,p);	//Last, call dispatcher.
 	}
@@ -319,6 +313,7 @@ public class os {
 		}
 	}
 	
+/////////////////////////////////////////SERVICE METHODS////////////////////////////////////////////////////////////////////////////
 	//Terminate service. Removes from readyQueue, sets timeFinished flag, and removes from addressTable
 	//if it is not doing I/O
 	public static void terminateService() {
@@ -344,13 +339,19 @@ public class os {
 			//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
 			//System.out.println(jobRequestingService.toString());
 	}
+	
+	//Block service. Removes from ReadyQueue and sets a block flag.
+	public static void blockService(){
+		//System.out.println("Job requesting blocked IO");
+		//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
+		if(jobRequestingService.getIOFlag()){
+			readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
+			jobRequestingService.setBlockFlag(true);	//6c. Set blockFlag to true. It is blocked.
+		}
+	}
 
 	
-	
-	
-	
-	
-	
+//////////////////////////////////STARTUP METHODS/////////////////////////////////////////////////////////////////////
 	//Initialize Containers. Simple method to add modularity.
 	public static void initializeContainers(){
 		addressTable = new SizeAddressTable();
