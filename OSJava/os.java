@@ -366,7 +366,6 @@ public class os {
 	//Initialize Containers. Simple method to add modularity.
 	public static void initializeContainers(){
 		addressTable = new SizeAddressTable();	//This is a container, even though it only takes type Job
-		processorStack = new Stack<Job>();	//Haven't found a use for this stack yet
 		jobTable = new LinkedList<Job>();
 		readyQueue = new LinkedList<Job>();
 		waitingQueue = new LinkedList<Job>();
