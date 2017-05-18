@@ -105,12 +105,12 @@ public class os {
 
 	public static void Drmint (int[]a, int[]p){
 		//System.out.println("In Drmint");
-		getTimeElapsed(p);					//1. Get elapsed time
-		setRunningJobTime();					//2. Set running job time. Won't do if no jobsOnCore or readyQueue is empty.
+		getTimeElapsed(p);		//1. Get elapsed time
+		setRunningJobTime();		//2. Set running job time
 		
-		drumBusy = false;
+		drumBusy = false;		//3. Set drumBusy to false.
 		
-		if (transferDirection == 0){				//3. Check transfer direction
+		if (transferDirection == 0){	//4a. Check transfer direction
 			if(jobForDrum.getComingFromCrint() || jobForDrum.getComingFromCheckDrum()){				//This checks if it was a new job coming in.
 				readyQueue.add(jobForDrum);		//4a. Add job to readyQueue here.
 				if (jobForDrum.getComingFromCrint())
@@ -121,7 +121,7 @@ public class os {
 			jobsOnCore += 1;				//5a. Increment jobsOnCore
 			//System.out.println("Incremented jobsOnCore");
 		}
-		else if (transferDirection == 1){
+		else if (transferDirection == 1){	//4b.
 			jobsOnCore -= 1;				//5b. Decrement jobsOnCore
 			swapOut.setPassed(false);
 			swapOut.setJobAddress(-1);		//make notAddressed an int variable
