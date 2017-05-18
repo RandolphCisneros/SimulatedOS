@@ -115,13 +115,13 @@ public class os {
 		
 		drumBusy = false;		//3. Set drumBusy to false.	
 		if (transferDirection == 0){	//4a. Check transfer direction
-			if(jobForDrum.getComingFromCrint() || jobForDrum.getComingFromCheckDrum()){				//This checks if it was a new job coming in.
+			//if(jobForDrum.getComingFromCrint() || jobForDrum.getComingFromCheckDrum()){				//This checks if it was a new job coming in.
 				readyQueue.add(jobForDrum);		//4a. Add job to readyQueue here.
-				if (jobForDrum.getComingFromCrint())
+				/*if (jobForDrum.getComingFromCrint())
 					jobForDrum.setComingFromCrint(false);
 				else
 					jobForDrum.setComingFromCheckDrum(false);
-			}
+			}*/
 			jobsOnCore += 1;				//5a. Increment jobsOnCore
 			//System.out.println("Incremented jobsOnCore");
 		}
