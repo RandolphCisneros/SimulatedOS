@@ -13,20 +13,20 @@ public class os {
 	private static Job jobRequestingService;	//This is the job calling for service
 	private static Job jobForDrum;			//Tracks job requesting drum service.
 	private static Job jobForDisk;
-	private static Job swapIn;
-	private static Job swapOut;
+	private static Job swapIn;			//Tracks job swapping in
+	private static Job swapOut;			//Tracks job swapping out
 	
 	private static int jobsOnCore;			//Used to track whether there's an empty core.
 	private static int transferDirection;		//Used to hold last transferDirection for Drumint
-	private static int totalTime;			//
-	private static int timeElapsed;
-	private static int lastCurrentTime;
+	private static int totalTime;			//Holds the time from start to finish
+	private static int timeElapsed;			//Holds the amount of time elapsed from last run to last interrupt
+	private static int lastCurrentTime;		//Holds the time from the last interrupt
 	
-	private static boolean drumBusy;
-	private static boolean diskBusy;
-	private static boolean swappingIn;
-	private static boolean swappingOut;
-	private static boolean swapping;
+	private static boolean drumBusy;		//Flags if drum in use
+	private static boolean diskBusy;		//Flags if disk in use
+	private static boolean swappingIn;		//Flags if there's a job waiting to swap in
+	private static boolean swappingOut;		//Flags if there's a job waiting to swap out
+	private static boolean swapping;		//Flags if there's a general swapping process occurring.
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
