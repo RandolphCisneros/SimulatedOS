@@ -114,24 +114,18 @@ public class os {
 		setRunningJobTime();		//2. Set running job time
 		
 		drumBusy = false;		//3. Set drumBusy to false.	
-		if (transferDirection == 0){	//4a. Check transfer direction
-			//if(jobForDrum.getComingFromCrint() || jobForDrum.getComingFromCheckDrum()){				//This checks if it was a new job coming in.
-				readyQueue.add(jobForDrum);		//4a. Add job to readyQueue here.
-				/*if (jobForDrum.getComingFromCrint())
-					jobForDrum.setComingFromCrint(false);
-				else
-					jobForDrum.setComingFromCheckDrum(false);
-			}*/
-			jobsOnCore += 1;				//5a. Increment jobsOnCore
+		if (transferDirection == 0){			//4a. Transfer direction from drum-to-core
+			readyQueue.add(jobForDrum);		//4b. Add job to readyQueue here.
+			jobsOnCore += 1;			//5a. Increment jobsOnCore
 			//System.out.println("Incremented jobsOnCore");
 		}
-		else if (transferDirection == 1){	//4b.
-			jobsOnCore -= 1;				//5b. Decrement jobsOnCore
-			swapOut.setPassed(false);
-			swapOut.setJobAddress(-1);		//make notAddressed an int variable
-			addressTable.removeJob(swapOut);
-			waitingQueue.add(swapOut);
-			swappingOut = false;
+		else if (transferDirection == 1){		//4b. Transfer direction from core-to-drum
+			jobsOnCore -= 1;			//5b. Decrement jobsOnCore
+			swapOut.setPassed(false);		//6b. Set the pass flag for the job to false.
+			swapOut.setJobAddress(-1);		//7b. Set the jobs address to -1 for when it gets assigned again.
+			addressTable.removeJob(swapOut);	//8b. Remove from addressTable
+			waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
+			swappingOut = false;			//10b. Set swappingOut flag to false.
 			System.out.println("Decremented jobsOnCore");
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
@@ -144,8 +138,8 @@ public class os {
 	//Timer run out. It checks the elapsed time at the start and then sets the time for the last running job.
 	public static void Tro (int[]a, int[]p){
 	//	System.out.println("In Tro");
-		getTimeElapsed(p);
-		setRunningJobTime();	//Antoher method is called in here that checks if it has used its max time
+		getTimeElapsed(p);	//1. Set time elapsed.
+		setRunningJobTime();	//2. Set job time.
 		
 		//The time finished flag is checked in the checkTimeOut() method. If there is no I/O then we decrement
 		//jobsOnCore. Removal from addressTable is done in Drumint
@@ -193,32 +187,32 @@ public class os {
 	//////////////////END OF INTERRUPTS///////////////////////////////////
 	/////////////////////////////////////////////////////////////////////
 	
-	//I put dispatcher into its own function to avoid repeating code.
+	//Dispatcher is its own function. We check disk status, drum status,
+	//and readyQueue status to see what operations we should do.
 	public static void dispatcher(int[]a, int[]p){
 		//System.out.println("In dispatcher");
+		checkDrum();	//1. Check if we can/should do drum operations
+		checkDisk();	//2. Check if we can/should do disk operations
 		
-		checkDrum();
-		checkDisk();
-		
-		//This block of code checks if the core is empty; should really be used once		
-		if (jobsOnCore == 0){
+				
+		if (jobsOnCore == 0){	//3a. If core is empty, do wait.
 			//System.out.println("No jobs on core");
-			a[0] = 1;		//1a. Set a to 1  if there are no jobs on core
+			a[0] = 1;		//4a. Set a to 1 if there are no jobs on core
 		}	
-		else if (!readyQueue.isEmpty()){	//1b. We check the readyQueue because this hold jobs on the core and not blocked.
-			a[0] = 2;			//2b. Set a[0] to 2
-			jobToRun = readyQueue.poll();	//3b. Set job to run to job in front of ready queue.
-			p[2]  = jobToRun.getJobAddress();	//4b. Set p[2] to address of job to run
-			p[3] = jobToRun.getJobSize();		//5b. Set p[3] to size of job to run
-			p[4] = jobToRun.getTimeSlice();			//6b. Set time slice.
+		else if (!readyQueue.isEmpty()){	//3b. If there are jobs on the core, check if they're ready.
+			a[0] = 2;			//4b. Set a[0] to 2
+			jobToRun = readyQueue.poll();	//5b. Set job to run to job in front of ready queue.
+			p[2]  = jobToRun.getJobAddress();	//6b. Set p[2] to address of job to run
+			p[3] = jobToRun.getJobSize();		//7b. Set p[3] to size of job to run
+			p[4] = jobToRun.getTimeSlice();			//8b. Set time slice.
 			/*System.out.println("jobToRun number: " + jobToRun.getJobNumber());
 			System.out.println("jobToRun address: " + jobToRun.getJobAddress());
 			System.out.println("jobToRun Size: " + jobToRun.getJobSize());*/
-			readyQueue.add(jobToRun);	//5. Put job to run in back of queue. When dispatcher is called again, jobToRun will be assigned the next job in the queue
+			readyQueue.add(jobToRun);	//9b. Add job to back of queue for after service finish.
 		}
-		else {	//If a job is blocked and on the core, and there are no unblocked jobs on the core, we go to this.
+		else {	//3c. If a job is blocked and on the core, and there are no unblocked jobs on the core, we go to this.
 			//System.out.println("ReadyQueue is empty");
-			a[0] = 1;					//Keep idle
+			a[0] = 1;					//4c. Keep idle
 		}
 	}
 	
