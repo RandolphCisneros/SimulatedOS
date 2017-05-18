@@ -62,7 +62,7 @@ public class os {
 		}
 		jobTable.add(newestJob);		//5. Push onto jobTable
 		
-		dispatcher(a, p);
+		dispatcher(a, p);			//6. Call dispatcher
 		/*System.out.println("Job address after dispatcher: " + newestJob.getJobAddress());
 		System.out.println("Job address currently assigned to dispatcher: " + p[2]);
 		System.out.println("Job size after dispatcher: " + newestJob.getJobSize());
@@ -76,20 +76,19 @@ public class os {
 	public static void Dskint (int[]a, int[]p){
 		//System.out.println("In Dskint");
 		getTimeElapsed(p);	//1. Get time elapsed
-		setRunningJobTime();	//2. Set running job time. I still call this here because other jobs are running, not
-					//	necessarily jobs finishing disk I/O.
+		setRunningJobTime();	//2. Set running job time.
+		
 		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
-		jobCompletingIO = iOQueue.remove();
-
-		jobCompletingIO.setIOFlag(false);
-		diskBusy = false;
-		if(jobCompletingIO.getTimeFinished()){
-			jobsOnCore -= 1;
-			addressTable.removeJob(jobCompletingIO);
+		jobCompletingIO = iOQueue.remove();	//3. Remove from IOQueue
+		jobCompletingIO.setIOFlag(false);	//4. Set IOFlag for job as false
+		diskBusy = false;			//5. Set diskBusy flag as false
+		if(jobCompletingIO.getTimeFinished()){	//6a. Check if Job is finished. If so, it will be removed from core.
+			jobsOnCore -= 1;		//7a. Decrement jobsOnCore
+			addressTable.removeJob(jobCompletingIO);	//8a. Remove finished job from address table
 		}
-		else if (jobCompletingIO.getBlockFlag()){		//3. Poll from IOQueue. All calls to siodisk now get added to iOQueue.
-			jobCompletingIO.setBlockFlag(false);	//4. Set the blockFlag to false.
-			readyQueue.add(jobCompletingIO);	//5. Put on readyQueue. If a job wasn't blocked, it is already on the queue.
+		else if (jobCompletingIO.getBlockFlag()){	//6b. Check if job was blocked.
+			jobCompletingIO.setBlockFlag(false);	//7b. If it was, we can set the blockFlag to false.
+			readyQueue.add(jobCompletingIO);	//8b. Put back on readyQueue.
 		}
 		/*if (jobCompletingIO.getJobNumber() == jobToRun.getJobNumber()){
 			jobToRun.setBlockFlag(false);
@@ -101,7 +100,7 @@ public class os {
 		System.out.println(jobToRun.toString());
 		System.out.println("IOFlag " + jobCompletingIO.getIOFlag());
 		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");*/
-		dispatcher(a,p);	//6. Call dispatcher	
+		dispatcher(a,p);	//7. Call dispatcher	
 	}
 
 	public static void Drmint (int[]a, int[]p){
