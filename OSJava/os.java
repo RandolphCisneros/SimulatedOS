@@ -157,20 +157,11 @@ public class os {
 		setRunningJobTime();			//2. Set running time for job
 		
 		jobRequestingService = jobToRun;	//3. Assign jobRequestingService
-		if (a[0] == 5){						//4a. It requested termination
+		if (a[0] == 5){						//4a. It requests termination
 			terminateService();
 		}
-		else if (a[0] == 6) {						//4b. It requests disk i/o. Dskint will come after,
-			//System.out.println("Job requesting unblocked IO");
-			if(!diskBusy){
-				sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
-				diskBusy = true;
-			}
-			//System.out.println("JOB STARTING I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
-			jobRequestingService.setIOFlag(true);
-			//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
-			//System.out.println(jobRequestingService.toString());
+		else if (a[0] == 6) {		//4b. It requests disk i/o. Goes to iOService method.
+			iOService();
 		}
 		else {							//4c. a[0] == 7, job wants to be blocked for i/o
 			//System.out.println("Job requesting blocked IO");
@@ -192,8 +183,7 @@ public class os {
 	public static void dispatcher(int[]a, int[]p){
 		//System.out.println("In dispatcher");
 		checkDrum();	//1. Check if we can/should do drum operations
-		checkDisk();	//2. Check if we can/should do disk operations
-		
+		checkDisk();	//2. Check if we can/should do disk operations	
 				
 		if (jobsOnCore == 0){	//3a. If core is empty, do wait.
 			//System.out.println("No jobs on core");
@@ -339,6 +329,20 @@ public class os {
 			addressTable.removeJob(jobRequestingService);
 			jobsOnCore -= 1;
 		}
+	}
+	
+	//IOService. Puts on disk if not busy, otherwise adds it to the queue and sets flag.
+	public static void iOService(){
+			//System.out.println("Job requesting unblocked IO");
+			if(!diskBusy){
+				sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
+				diskBusy = true;
+			}
+			//System.out.println("JOB STARTING I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
+			jobRequestingService.setIOFlag(true);
+			//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
+			//System.out.println(jobRequestingService.toString());
 	}
 
 	
