@@ -11,8 +11,7 @@ public class os {
 	private static Job jobToRun;			//This is the current job to run in dispatcher
 	private static Job jobCompletingIO;		//This is the job finishing I/O in Dskint
 	private static Job jobRequestingService;	//This is the job calling for service
-	private static Job jobTransferred;		//
-	private static Job jobForDrum;
+	private static Job jobForDrum;			//Tracks job requesting drum service.
 	private static Job jobForDisk;
 	private static Job swapIn;
 	private static Job swapOut;
@@ -49,8 +48,6 @@ public class os {
 		
 		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
 		//as the processes enter interrupts.
-		
-		jobTransferred = new Job();
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
 		jobRequestingService = new Job();
