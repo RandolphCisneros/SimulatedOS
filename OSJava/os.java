@@ -2,25 +2,24 @@ import java.util.*;
 
 public class os {
 
-	private static SizeAddressTable addressTable;
-	private static Stack<Job> processorStack;		//To be used for interrupts that want to go back.
-	public static LinkedList<Job> jobTable;			//I made this global solely because it said to in the handout.
-	private static Queue<Job> readyQueue;
-	private static Queue<Job> waitingQueue;			//This waiting queue is for if the drum is busy.
-	private static Queue<Job> iOQueue;			//This is the I/O queue to be used when I/O jobs want to be blocked.
+	private static SizeAddressTable addressTable;	//My addressTable. Holds free space and assigned jobs
+	public static LinkedList<Job> jobTable;		//I made this global solely because it said to in the handout.
+	private static Queue<Job> readyQueue;		//These are jobs onCore and ready to run.
+	private static Queue<Job> waitingQueue;		//This waiting queue is for if the drum is busy or there's no space.
+	private static Queue<Job> iOQueue;		//This is the I/O queue to be used when I/O jobs want to be blocked.
 
-	private static Job jobToRun;	
-	private static Job jobCompletingIO;
-	private static Job jobRequestingService;
-	private static Job jobTransferred;
+	private static Job jobToRun;			//This is the current job to run in dispatcher
+	private static Job jobCompletingIO;		//This is the job finishing I/O in Dskint
+	private static Job jobRequestingService;	//This is the job calling for service
+	private static Job jobTransferred;		//
 	private static Job jobForDrum;
 	private static Job jobForDisk;
 	private static Job swapIn;
 	private static Job swapOut;
 	
-	private static int jobsOnCore;
-	private static int transferDirection;
-	private static int totalTime;
+	private static int jobsOnCore;			//Used to track whether there's an empty core.
+	private static int transferDirection;		//Used to hold last transferDirection for Drumint
+	private static int totalTime;			//
 	private static int timeElapsed;
 	private static int lastCurrentTime;
 	
@@ -34,13 +33,8 @@ public class os {
 	public static void startup(){
 		//System.out.println("In startup");
 		
-		//Initialize Containers
-		addressTable = new SizeAddressTable();	//This is a container, even though it only takes type Job
-		processorStack = new Stack<Job>();	//Haven't found a use for this stack yet
-		jobTable = new LinkedList<Job>();
-		readyQueue = new LinkedList<Job>();
-		waitingQueue = new LinkedList<Job>();
-		iOQueue = new LinkedList<Job>();
+		initializeContainers();
+
 		
 		//static variables, all initialized to 0 or false
 		jobsOnCore = 0;
@@ -55,6 +49,7 @@ public class os {
 		
 		//static Job copies. The default values are 0 and null; they will hold copies of the addresses
 		//as the processes enter interrupts.
+		
 		jobTransferred = new Job();
 		jobToRun = new Job();
 		jobCompletingIO = new Job();
@@ -73,12 +68,12 @@ public class os {
 		//System.out.println("In Crint");
 
 		getTimeElapsed(p);				//1. Set elapsed time.
-		setRunningJobTime();				//2. Set last running Job's time, if any.
+		setRunningJobTime();				//2. Set last running Job's time, if any. Other checks done.
 		
 		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
-		if ((!drumBusy && waitingQueue.isEmpty()) && addressTable.assignJob(newestJob)){		//4a. addressTable checks if there's enough free space. If there is it gets allocated free space and put on the readyqueue
+		if ((!drumBusy && waitingQueue.isEmpty()) && addressTable.assignJob(newestJob)){		//4a. Check drumBusy, freeSpace, waitingQueue. If so, get address
 			//System.out.println("Putting job on core");
-			transferDirection = 0;
+			transferDirection = 0;									//4b. Set transferDirection
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);		//3a. Puts job on core (memory)
 			drumBusy = true;
 			jobForDrum = newestJob;
@@ -157,30 +152,30 @@ public class os {
 			jobsOnCore -= 1;				//5b. Decrement jobsOnCore
 			swapOut.setPassed(false);
 			swapOut.setJobAddress(-1);		//make notAddressed an int variable
+			addressTable.removeJob(swapOut);
 			waitingQueue.add(swapOut);
 			swappingOut = false;
 			System.out.println("Decremented jobsOnCore");
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
 		//System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
-		//Still don't know what to do with currentTime: jobToRun.setCurrentTime(jobToRun.getCurrentTime() - p[5]);			//I don't know if I'm setting this correctly. Ask professor
 		//System.out.println("Time is now: " + jobToRun.getMaxCpuTime());
 		//System.out.println("Jobs on core: " + jobsOnCore);
 		dispatcher(a,p);
 	}
 	
-	
+	//Timer run out. It checks the elapsed time at the start and then sets the time for the last running job.
 	public static void Tro (int[]a, int[]p){
 	//	System.out.println("In Tro");
 		getTimeElapsed(p);
-		setRunningJobTime();
+		setRunningJobTime();	//Antoher method is called in here that checks if it has used its max time
 		
-		if(jobToRun.getTimeFinished() && !(jobToRun.getIOFlag())){
+		//The time finished flag is checked in the checkTimeOut() method. If there is no I/O then we decrement
+		//jobsOnCore. Removal from addressTable is done in Drumint
+		if(jobToRun.getTimeFinished() && !jobToRun.getIOFlag()){
 			jobsOnCore -=1;
-			//Do not need to remove myself, unless there's an error here: sos.siodrum(jobToRun.getJobNumber(),jobToRun.getJobSize(), jobToRun.getJobAddress(), transferDirection);
 		}
 		//System.out.println("IOFlag: " + jobToRun.getIOFlag());
-			//must find job to run in readyQueue and job Table, set time, check if 0. If 0, proceed with removal process.
 		dispatcher(a,p);
 	}
 	
@@ -279,8 +274,7 @@ public class os {
 	//Method to check if the job has reached its max time or if it will exceed it with current time slice
 	public static void checkTimeout(){
 		int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//Get the current time + time slice
-		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time
-			
+		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//Check if the current time equals max time	
 			//System.out.println("Projected time total: " + timeTotal);
 			jobToRun.setTimeFinished(true);
 			readyQueue.remove(jobToRun);
@@ -336,7 +330,7 @@ public class os {
 						waitingQueue.add(jobForDrum);
 					}
 				}
-			//If we're in the middle of a swap, finish the swap.
+			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
 			else if (swapping && !swappingOut){
 				drumBusy = true;
 				transferDirection = 0;
@@ -347,7 +341,7 @@ public class os {
 				swappingIn = false;
 				swapping = false;
 			}
-			}		
+		}		
 		}
 	}
 	
@@ -371,6 +365,15 @@ public class os {
 			jobsOnCore -= 1;
 		}
 	}
-		
+
+	//Initialize Containers. Simple method to add modularity.
+	public static void initializeContainers(){
+		addressTable = new SizeAddressTable();	//This is a container, even though it only takes type Job
+		processorStack = new Stack<Job>();	//Haven't found a use for this stack yet
+		jobTable = new LinkedList<Job>();
+		readyQueue = new LinkedList<Job>();
+		waitingQueue = new LinkedList<Job>();
+		iOQueue = new LinkedList<Job>();
+	}
 		
 }
