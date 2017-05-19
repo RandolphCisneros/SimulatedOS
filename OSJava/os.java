@@ -304,6 +304,7 @@ public class os {
 			}
 			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
 			else if (swapping && !swappingOut){
+				waitingQueue.add(jobForDrum);	//put job back on queue
 				System.out.println("Swap out completed. Now starting swapIn.");
 				drumBusy = true;
 				transferDirection = 0;
