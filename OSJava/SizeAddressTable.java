@@ -160,7 +160,8 @@ class SizeAddressTable {
 			Job current = jobsAddressed.get(i);
 			if(current.getJobSize() > jobSwappingIn.getJobSize() && (!current.getIOFlag() && !current.getBlockFlag())){
 				swapJob = current;
-				System.out.println("Can swap with Job " + swapJob.getJobNumber());
+				System.out.println("Can swap " + jobSwappingIn.getJobNumber() + " with Job " + swapJob.getJobNumber());
+				System.out.println(jobSwappingIn.getJobSize() + " " + swapJob.getJobSize());
 				return true;
 			}
 		}
