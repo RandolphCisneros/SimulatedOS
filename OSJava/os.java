@@ -283,6 +283,7 @@ public class os {
 						waitingQueue.add(jobForDrum);
 					}
 				}
+			}
 			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
 			else if (swapping && !swappingOut){
 				drumBusy = true;
@@ -293,8 +294,7 @@ public class os {
 				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 				swappingIn = false;
 				swapping = false;
-			}
-		}		
+			}		
 		}
 	}
 	
