@@ -14,6 +14,7 @@ public class os {
 	private static Job jobForDrum;			//Tracks job requesting drum service.
 	private static Job swapIn;			//Tracks job swapping in
 	private static Job swapOut;			//Tracks job swapping out
+	private static Job jobForDisk;
 	
 	private static int jobsOnCore;			//Used to track whether there's an empty core.
 	private static int transferDirection;		//Used to hold last transferDirection for Drumint
