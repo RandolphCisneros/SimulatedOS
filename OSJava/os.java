@@ -129,7 +129,7 @@ public class os {
 			addressTable.removeJob(swapOut);	//8b. Remove from addressTable
 			waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
 			swappingOut = false;			//10b. Set swappingOut flag to false.
-			System.out.println("Decremented jobsOnCore");
+			System.out.println("Successfully swapped out job " + swapOut.getJobNumber());
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
 		//System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
