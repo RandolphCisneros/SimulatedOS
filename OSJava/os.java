@@ -116,6 +116,11 @@ public class os {
 		if (transferDirection == 0){			//4a. Transfer direction from drum-to-core
 			readyQueue.add(jobForDrum);		//4b. Add job to readyQueue here.
 			jobsOnCore += 1;			//5a. Increment jobsOnCore
+			if(swapping){
+				swapping = false;
+				swappingIn = false;
+				System.out.println("Swap-in completed");
+			}
 			//System.out.println("Incremented jobsOnCore");
 		}
 		else if (transferDirection == 1){		//4b. Transfer direction from core-to-drum
@@ -294,13 +299,12 @@ public class os {
 			}
 			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
 			else if (swapping && !swappingOut){
+				System.out.println("Swap out completed. Now starting swapIn.");
 				drumBusy = true;
 				transferDirection = 0;
 				jobForDrum = swapIn;
 				addressTable.assignJob(jobForDrum);
 				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
-				swappingIn = false;
-				swapping = false;
 				swapOut.setJobAddress(-1);		//7b. Set the jobs address to -1 for when it gets assigned again.
 			}		
 		}
