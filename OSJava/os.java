@@ -253,7 +253,7 @@ public class os {
 		if (!drumBusy && !waitingQueue.isEmpty()){
 			jobForDrum = waitingQueue.poll();	//Changed this from peek to poll		
 			//2a. if job for drum has not been passed once, mark it as passed and put in back of queue.
-			if (!jobForDrum.getPassed()) {
+			if (!jobForDrum.getPassed() && !swapping) {
 				System.out.println("Attempting assign job in checkDrum");
 				if (addressTable.assignJob(jobForDrum)){
 					System.out.println("Added job " + jobForDrum.getJobNumber() + " in check drum.");
