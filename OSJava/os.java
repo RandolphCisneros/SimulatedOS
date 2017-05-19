@@ -249,9 +249,16 @@ public class os {
 			jobForDrum = waitingQueue.poll();	//Changed this from peek to poll		
 			//2a. if job for drum has not been passed once, mark it as passed and put in back of queue.
 			if (!jobForDrum.getPassed()) {
-				System.out.println("Job " + jobForDrum.getJobNumber() + " has been marked passed.");
-				jobForDrum.setPassed(true);
-				waitingQueue.add(jobForDrum);
+				if (addressTable.assignJob(jobForDrum)){
+					transferDirection = 0;
+					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
+					drumBusy = true;
+				}
+				else{
+					System.out.println("Job " + jobForDrum.getJobNumber() + " has been marked passed.");
+					jobForDrum.setPassed(true);
+					waitingQueue.add(jobForDrum);
+				}
 			}
 			//2b. If job has been marked as passed, check if we're in the middle of a swap.
 			else if (!swapping){
