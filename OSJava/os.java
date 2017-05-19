@@ -249,14 +249,15 @@ public class os {
 			jobForDrum = waitingQueue.poll();	//Changed this from peek to poll		
 			//2a. if job for drum has not been passed once, mark it as passed and put in back of queue.
 			if (!jobForDrum.getPassed()) {
-				System.out.println("Attempting assign job");
+				System.out.println("Attempting assign job in checkDrum");
 				if (addressTable.assignJob(jobForDrum)){
+					System.out.println("Added job " + jobForDrum.getJobNumber() + " in check drum.");
 					transferDirection = 0;
 					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 					drumBusy = true;
 				}
 				else{
-					System.out.println("Job " + jobForDrum.getJobNumber() + " has been marked passed.");
+					System.out.println("Job " + jobForDrum.getJobNumber() + " has been marked passed. Couldn't add directly in checkDrum");
 					jobForDrum.setPassed(true);
 					waitingQueue.add(jobForDrum);
 				}
@@ -265,7 +266,7 @@ public class os {
 			else if (!swapping){
 				//3ba. If we're not swapping, check if we can assign the job directly without swapping.
 				if (addressTable.assignJob(jobForDrum)){
-					System.out.println("Job " + jobForDrum.getJobNumber() + " was added without swapping.");
+					System.out.println("Passed job " + jobForDrum.getJobNumber() + " was added without swapping.");
 					transferDirection = 0;
 					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 					drumBusy = true;
