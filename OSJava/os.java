@@ -12,7 +12,6 @@ public class os {
 	private static Job jobCompletingIO;		//This is the job finishing I/O in Dskint
 	private static Job jobRequestingService;	//This is the job calling for service
 	private static Job jobForDrum;			//Tracks job requesting drum service.
-	private static Job jobForDisk;
 	private static Job swapIn;			//Tracks job swapping in
 	private static Job swapOut;			//Tracks job swapping out
 	
@@ -47,7 +46,15 @@ public class os {
 		
 		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
 		if ((!drumBusy && waitingQueue.isEmpty()) && addressTable.assignJob(newestJob)){//4a. Check drumBusy, freeSpace, waitingQueue. If so, get address.
-			crintAdd();
+			//System.out.println("Putting job on core");
+			transferDirection = 0;							//5a. Set transferDirection for drum-to-Core. It holds this.
+			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);	//6a. Puts job on core
+			drumBusy = true;							//7a. Flag drum as busy 	
+			jobForDrum = newestJob;							//8a. Set the jobForDrum as the newestJob
+			/*System.out.println("Job max time: " + newestJob.getMaxCpuTime());
+			System.out.println("Job address: " + newestJob.getJobAddress());
+			System.out.println("Job size: " + newestJob.getJobSize());
+			System.out.println("Job is addressed correctly");*/	
 		}
 		else{
 			waitingQueue.add(newestJob);	//4b. If not, then it gets put on the waitingQueue.
@@ -304,18 +311,9 @@ public class os {
 		}
 	}
 
-	//Add function for Crint
-	public static void crintAdd(){
-		//System.out.println("Putting job on core");
-		transferDirection = 0;							//5a. Set transferDirection for drum-to-Core. It holds this.
-		sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);	//6a. Puts job on core
-		drumBusy = true;							//7a. Flag drum as busy 	
-		jobForDrum = newestJob;							//8a. Set the jobForDrum as the newestJob
-		/*System.out.println("Job max time: " + newestJob.getMaxCpuTime());
-		System.out.println("Job address: " + newestJob.getJobAddress());
-		System.out.println("Job size: " + newestJob.getJobSize());
-		System.out.println("Job is addressed correctly");*/				
-	}
+
+	
+	
 	
 	
 /////////////////////////////////////////SERVICE METHODS////////////////////////////////////////////////////////////////////////////
