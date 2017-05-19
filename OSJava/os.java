@@ -250,6 +250,8 @@ public class os {
 	
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
 	public static void checkDrum() {
+		System.out.println("Drum Busy: " + drumBusy);
+		System.out.println("WaitingQueue empty: " + waitingQueue.isEmpty());
 		//1. Only run this code if the drum is not busy and there is something on the waitingQueue
 		if (!drumBusy && !waitingQueue.isEmpty()){
 			System.out.println("Able to enter checkDrum");
