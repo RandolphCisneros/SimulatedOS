@@ -26,7 +26,7 @@ class SizeAddressTable {
   public boolean assignJob(Job newJob){
 	 //System.out.println("Largest Remaing Free Space in assignJob: " + largestRemainingFreeSpace.getAddress() + " " + largestRemainingFreeSpace.getSize());
 	if ((newJob.getJobAddress() < 0) && (largestRemainingFreeSpace.getSize() > newJob.getJobSize())){	//1. Check that we have free space and it's not already assigned
-		//System.out.println("Adding job " + newJob.getJobNumber() + " at " + largestRemainingFreeSpace.getAddress());
+		System.out.println("Adding job " + newJob.getJobNumber() + " at " + largestRemainingFreeSpace.getAddress());
 		newJob.setJobAddress(largestRemainingFreeSpace.getAddress());					//2a. If there is, we set the address to the largest remaining free space
 		jobsAddressed.add(newJob);									//3. We add it to our list of jobs with addresses
 		int newFreeSpaceSize = largestRemainingFreeSpace.getSize() - newJob.getJobSize();
