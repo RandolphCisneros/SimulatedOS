@@ -128,6 +128,7 @@ public class os {
 			swapOut.setPassed(false);		//6b. Set the pass flag for the job to false.
 			addressTable.removeJob(swapOut);	//8b. Remove from addressTable
 			waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
+			System.out.println("Waiting Queue empty? : " + waitingQueue.isEmpty());
 			swappingOut = false;			//10b. Set swappingOut flag to false.
 			swapOut.setJobAddress(-1);	
 			System.out.println("Successfully swapped out job " + swapOut.getJobNumber());
