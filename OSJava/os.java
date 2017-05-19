@@ -252,6 +252,7 @@ public class os {
 	public static void checkDrum() {
 		//1. Only run this code if the drum is not busy and there is something on the waitingQueue
 		if (!drumBusy && !waitingQueue.isEmpty()){
+			System.out.println("Able to enter checkDrum");
 			jobForDrum = waitingQueue.poll();	//Changed this from peek to poll		
 			//2a. if job for drum has not been passed once, mark it as passed and put in back of queue.
 			if (!jobForDrum.getPassed() && !swapping) {
