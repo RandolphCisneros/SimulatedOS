@@ -121,8 +121,8 @@ public class os {
 		else if (transferDirection == 1){		//4b. Transfer direction from core-to-drum
 			jobsOnCore -= 1;			//5b. Decrement jobsOnCore
 			swapOut.setPassed(false);		//6b. Set the pass flag for the job to false.
-			swapOut.setJobAddress(-1);		//7b. Set the jobs address to -1 for when it gets assigned again.
 			addressTable.removeJob(swapOut);	//8b. Remove from addressTable
+			swapOut.setJobAddress(-1);		//7b. Set the jobs address to -1 for when it gets assigned again.
 			waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
 			swappingOut = false;			//10b. Set swappingOut flag to false.
 			System.out.println("Decremented jobsOnCore");
