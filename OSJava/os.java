@@ -129,6 +129,7 @@ public class os {
 			addressTable.removeJob(swapOut);	//8b. Remove from addressTable
 			waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
 			swappingOut = false;			//10b. Set swappingOut flag to false.
+			swapOut.setJobAddress(-1);	
 			System.out.println("Successfully swapped out job " + swapOut.getJobNumber());
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
@@ -305,7 +306,6 @@ public class os {
 				jobForDrum = swapIn;
 				addressTable.assignJob(jobForDrum);
 				sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
-				swapOut.setJobAddress(-1);		//7b. Set the jobs address to -1 for when it gets assigned again.
 			}		
 		}
 	}
