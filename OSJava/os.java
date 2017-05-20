@@ -151,22 +151,14 @@ public class os {
 		lastCurrentTime = totalTime;			//1. get the lastCurrentTime
 		totalTime = p[5];				//2. set totalTime to the overall time elapsed
 		timeElapsed = totalTime - lastCurrentTime;	//3. Time elapsed is totalTime minus lastCurrentTime
-		
-		/*System.out.println("TotalTime = " + totalTime);
-		System.out.println("Last Current Time = " + lastCurrentTime);
-		System.out.println("Time elapsed since last interrupt: " + timeElapsed);*/
 	}
 	
 	//Method to set job's current running time
 	public static void setRunningJobTime(){ 
-		//System.out.println("In setRunningJobTime");
 		if (!readyQueue.isEmpty() && jobsOnCore > 0){	//1. Call every time, but only run it there's a running job.
 			jobToRun.setCurrentTime(jobToRun.getCurrentTime() + timeElapsed);//2. Add elapsed time to current time.
 			jobToRun.setTimeSlice(addressTable.getShortestTimeSlice());	//3. Assign to shortest time slice in job table first
 			checkTimeout();							//4. This method checks if we're at or close to maxtime.
-			
-			//System.out.println("Last running job's current time: " + jobToRun.getCurrentTime());
-			//System.out.println("Last running job's max time: " + jobToRun.getMaxCpuTime());
 		}
 		else
 			return;
@@ -176,25 +168,18 @@ public class os {
 	public static void checkTimeout(){
 		int timeTotal = jobToRun.getCurrentTime() + jobToRun.getTimeSlice();	//1. Get the current time + time slice
 		if(jobToRun.getCurrentTime() == jobToRun.getMaxCpuTime()){		//2a. Check if the current time equals max time	
-			//System.out.println("Projected time total: " + timeTotal);
 			jobToRun.setTimeFinished(true);					//3a. If so, set TimeFinished flag to true.
 			readyQueue.remove(jobToRun);					//4a. Remove from readyQueue.
-			if(jobToRun.getIOFlag() == false){				//5a. Check if it's not doing i/o
+			if(jobToRun.getIOFlag() == false)				//5a. Check if it's not doing i/o
 				addressTable.removeJob(jobToRun);			//6a. If not, remove from table completely.
-			}
 		}
-		else if (timeTotal > jobToRun.getMaxCpuTime()){				//2b. Check if time slice exceeds max
+		else if (timeTotal > jobToRun.getMaxCpuTime())				//2b. Check if time slice exceeds max
 			jobToRun.setTimeSlice(jobToRun.getMaxCpuTime() - jobToRun.getCurrentTime());	//3b. If it does, set timeSlice to difference.
-		//	System.out.println("Time slice: " + jobToRun.getTimeSlice());
-		}
-		//	System.out.println("Time finished: " + jobToRun.getTimeFinished());
 	}		
 	
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
 	public static void checkDrum() {
-		sortWaitingQueue();
-		//System.out.println("Drum Busy: " + drumBusy);
-		//System.out.println("WaitingQueue empty: " + waitingQueue.isEmpty());
+		sortWaitingQueue();	
 		//1. Only run this code if the drum is not busy and there is something on the waitingQueue
 		if (!drumBusy && !waitingQueue.isEmpty()){
 			//System.out.println("Able to enter checkDrum");
@@ -248,7 +233,6 @@ public class os {
 			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
 			else if (swapping && !swappingOut){
 				waitingQueue.add(jobForDrum);	//put job back on queue
-				//System.out.println("Swap out completed. Now starting swapIn.");
 				drumBusy = true;
 				transferDirection = 0;
 				jobForDrum = swapIn;
@@ -296,7 +280,6 @@ public class os {
 	//Terminate service. Removes from readyQueue, sets timeFinished flag, and removes from addressTable
 	//if it is not doing I/O
 	public static void terminateService() {
-		//System.out.println("Job requesting termination");
 		readyQueue.remove(jobRequestingService);	//1. Remove from ReadyQueue.	
 		jobRequestingService.setTimeFinished(true);	//2. Set timeFinished in case it's still doing I/O.
 		if (!jobRequestingService.getIOFlag()){		//3. If it's not doing I/O, remove from table and decrement jobsOnCore.
@@ -307,22 +290,16 @@ public class os {
 	
 	//IOService. Puts on disk if not busy, otherwise adds it to the queue and sets flag.
 	public static void iOService(){
-			//System.out.println("Job requesting unblocked IO");
-			if(!diskBusy){
-				sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
-				diskBusy = true;
-			}
-			//System.out.println("JOB STARTING I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
-			jobRequestingService.setIOFlag(true);
-			//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
-			//System.out.println(jobRequestingService.toString());
+		if(!diskBusy){
+			sos.siodisk(jobRequestingService.getJobNumber());	//5b. but job stays on ReadyQueue.
+			diskBusy = true;
+		}
+		iOQueue.add(jobRequestingService);	//6b. Still add to iOQueue, but leave blockFlag alone
+		jobRequestingService.setIOFlag(true);
 	}
 	
 	//Block service. Removes from ReadyQueue and sets a block flag.
 	public static void blockService(){
-		//System.out.println("Job requesting blocked IO");
-		//System.out.println("IOFlag: " + jobRequestingService.getIOFlag());
 		if(jobRequestingService.getIOFlag()){
 			readyQueue.remove(jobRequestingService);	//5c. Remove from ReadyQueue.
 			jobRequestingService.setBlockFlag(true);	//6c. Set blockFlag to true. It is blocked.
