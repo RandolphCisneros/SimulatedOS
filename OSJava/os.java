@@ -50,9 +50,8 @@ public class os {
 			drumBusy = true;							//7a. Flag drum as busy 	
 			jobForDrum = newestJob;							//8a. Set the jobForDrum as the newestJob	
 		}
-		else{
+		else
 			waitingQueue.add(newestJob);	//4b. If not, then it gets put on the waitingQueue.
-		}
 		jobTable.add(newestJob);		//5. Push onto jobTable	
 		dispatcher(a, p);			//6. Call dispatcher
 		return;
@@ -184,21 +183,10 @@ public class os {
 		if (!drumBusy && !waitingQueue.isEmpty()){	//1. Only run this code if the drum is not busy and there is something on the waitingQueue
 			jobForDrum = waitingQueue.get(0);	//Changed this from peek to poll
 			waitingQueue.remove(jobForDrum);
-			if (!jobForDrum.getPassed() && !swapping) {	//2a. if job for drum has not been passed once, mark it as passed and put in back of queue.
+			if (!jobForDrum.getPassed() && !swapping)	//2a. if job for drum has not been passed once, mark it as passed and put in back of queue.
 				markPassed();
-			}
 			else if (!swapping){	//2b. If job has been marked as passed, check if we're in the middle of a swap.
-				if (addressTable.assignJob(jobForDrum)){	//3ba. If we're not swapping, check if we can assign the job directly without swapping.
-					transferDirection = 0;
-					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
-					drumBusy = true;
-				}		
-				else {						//3bb. If we can't assign directly, start swap.
-					if(addressTable.canSwap(jobForDrum))	//3bba. Check if there's a job we can swap and prepare the data values
-						commenceSwapOut();	
-					else 	//3bbb. If There's no job we can swap it with, put it on the back of the waitingQueue and try again next cycle
-						waitingQueue.add(jobForDrum);
-				}
+				trySwap();
 			}
 			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
 			else if (swapping && !swappingOut)
@@ -216,6 +204,21 @@ public class os {
 		else{
 			jobForDrum.setPassed(true);
 			waitingQueue.add(jobForDrum);
+		}
+	}
+	
+	//Again, attempts to add directly. If it can't, attempts to swap. If it can't, adds back to the queue.
+	public static void trySwap(){
+		if (addressTable.assignJob(jobForDrum)){	//3ba. If we're not swapping, check if we can assign the job directly without swapping.
+			transferDirection = 0;
+			sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
+			drumBusy = true;
+		}		
+		else {						//3bb. If we can't assign directly, start swap.
+			if(addressTable.canSwap(jobForDrum))	//3bba. Check if there's a job we can swap and prepare the data values
+				commenceSwapOut();	
+			else 	//3bbb. If There's no job we can swap it with, put it on the back of the waitingQueue and try again next cycle
+				waitingQueue.add(jobForDrum);
 		}
 	}
 	
