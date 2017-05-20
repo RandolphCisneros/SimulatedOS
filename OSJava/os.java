@@ -375,7 +375,10 @@ public class os {
 		swapOut = new Job();
 	}
 	
-	//Sorts by shortest job next. Kind of cheating, but we just go by the maxCpuTime.
+	
+//////////////////////////////////////SHORTEST JOB NEXT IMPLEMENTATION/////////////////////////////////////////////////////////////////	
+	//Sorts by shortest job next. Kind of cheating, but we just go by the maxCpuTime. Last effort to
+	//get my O.S. to process jobs faster.
 	public static void sortWaitingQueue(){
 		if(!waitingQueue.isEmpty()){
 			for(int i = 0; i < waitingQueue.size(); i++){
@@ -383,9 +386,8 @@ public class os {
 				int min = i;
 				for(int j = i + 1; j < waitingQueue.size(); j++){
 					Job jJob = waitingQueue.get(j);
-					if(jJob.getMaxCpuTime() < iJob.getMaxCpuTime()){
+					if(jJob.getMaxCpuTime() < iJob.getMaxCpuTime())
 						min = j;
-					}
 				}
 				if(min != i){
 					Job temp = waitingQueue.get(i);
