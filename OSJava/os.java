@@ -89,20 +89,10 @@ public class os {
 		
 		drumBusy = false;		//3. Set drumBusy to false.	
 		if (transferDirection == 0){			//4a. Transfer direction from drum-to-core
-			readyQueue.add(jobForDrum);		//4b. Add job to readyQueue here.
-			jobsOnCore += 1;			//5a. Increment jobsOnCore
-			if(swapping){
-				swapping = false;
-				swappingIn = false;
-			}
+			coreIn();
 		}
 		else if (transferDirection == 1){		//4b. Transfer direction from core-to-drum
-			jobsOnCore -= 1;			//5b. Decrement jobsOnCore
-			swapOut.setPassed(false);		//6b. Set the pass flag for the job to false.
-			addressTable.removeJob(swapOut);	//8b. Remove from addressTable
-			waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
-			swappingOut = false;			//10b. Set swappingOut flag to false.
-			swapOut.setJobAddress(-1);	
+
 		}
 		dispatcher(a,p);
 	}
@@ -297,7 +287,29 @@ public class os {
 		}
 	}
 
-
+	
+	
+/////////////////////////////////////////DRUMINT METHODS/////////////////////////////////////////////////////////////////////
+	//Method to complete a job being swapped in to the core. Adds to readyQueue and updates flags/semaphores
+	public static void coreIn() {
+		readyQueue.add(jobForDrum);		//4b. Add job to readyQueue here.
+		jobsOnCore += 1;			//5a. Increment jobsOnCore
+		if(swapping){				//6a. Check swap code. flag accordingly
+			swapping = false;
+			swappingIn = false;
+		}
+	}
+	
+	//Method to complete a job being swapped out of the core. Moves to waitingQueue and sets flags/semaphores accordingly.
+	public static void coreOut(){
+		jobsOnCore -= 1;			//5b. Decrement jobsOnCore
+		swapOut.setPassed(false);		//6b. Set the pass flag for the job to false.
+		addressTable.removeJob(swapOut);	//8b. Remove from addressTable
+		waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
+		swappingOut = false;			//10b. Set swappingOut flag to false.
+		swapOut.setJobAddress(-1);			
+	}
+		
 	
 	
 	
