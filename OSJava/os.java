@@ -129,29 +129,21 @@ public class os {
 	//Dispatcher is its own function. We check disk status, drum status,
 	//and readyQueue status to see what operations we should do.
 	public static void dispatcher(int[]a, int[]p){
-		//System.out.println("In dispatcher");
 		checkDrum();	//1. Check if we can/should do drum operations
 		checkDisk();	//2. Check if we can/should do disk operations	
 				
-		if (jobsOnCore == 0){	//3a. If core is empty, do wait.
-			//System.out.println("No jobs on core");
+		if (jobsOnCore == 0)	//3a. If core is empty, do wait.
 			a[0] = 1;		//4a. Set a to 1 if there are no jobs on core
-		}	
 		else if (!readyQueue.isEmpty()){	//3b. If there are jobs on the core, check if they're ready.
 			a[0] = 2;			//4b. Set a[0] to 2
 			jobToRun = readyQueue.poll();	//5b. Set job to run to job in front of ready queue.
 			p[2]  = jobToRun.getJobAddress();	//6b. Set p[2] to address of job to run
 			p[3] = jobToRun.getJobSize();		//7b. Set p[3] to size of job to run
 			p[4] = jobToRun.getTimeSlice();			//8b. Set time slice.
-			/*System.out.println("jobToRun number: " + jobToRun.getJobNumber());
-			System.out.println("jobToRun address: " + jobToRun.getJobAddress());
-			System.out.println("jobToRun Size: " + jobToRun.getJobSize());*/
 			readyQueue.add(jobToRun);	//9b. Add job to back of queue for after service finish.
 		}
-		else {	//3c. If a job is blocked and on the core, and there are no unblocked jobs on the core, we go to this.
-			//System.out.println("ReadyQueue is empty");
+		else	//3c. If a job is blocked and on the core, and there are no unblocked jobs on the core, we go to this.
 			a[0] = 1;					//4c. Keep idle
-		}
 	}
 	
 	//Method to set timeElapsed. Don't return anything because timeElapsed is a static variable.
