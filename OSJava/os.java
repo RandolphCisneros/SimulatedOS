@@ -344,7 +344,7 @@ public class os {
 	//Sorts by shortest job next. Kind of cheating, but we just go by the maxCpuTime. Last effort to
 	//get my O.S. to process jobs faster.
 	public static void sortWaitingQueue(){
-		if(!waitingQueue.isEmpty() && (waitingQueue.size() % 5 == 0)){
+		if(!waitingQueue.isEmpty()){
 			for(int i = 0; i < waitingQueue.size(); i++){
 				Job iJob = waitingQueue.get(i);
 				int min = i;
