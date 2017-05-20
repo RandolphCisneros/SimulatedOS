@@ -30,7 +30,6 @@ public class os {
 	
 	//This is to initialize static variables. All variables must be static for the static functions.
 	public static void startup(){
-		//System.out.println("In startup");
 		initializeContainers();
 		initializeVariables();
 		initializeJobObjects();
@@ -41,32 +40,21 @@ public class os {
 	//If successful, it is added to the ReadyQueue; otherwise it is added to the waiting queue.
 	//Regardless it is added to our main jobTable.
 	public static void Crint(int[]a, int[]p){
-		//System.out.println("In Crint");
 		getTimeElapsed(p);				//1. Set elapsed time.
 		setRunningJobTime();				//2. Set last running Job's time, if any. Other checks done.
 		
 		Job newestJob = new Job(p[1],p[2],p[3],p[4]);	//3. Assign input to newestJob.
 		if ((!drumBusy && waitingQueue.isEmpty()) && addressTable.assignJob(newestJob)){//4a. Check drumBusy, freeSpace, waitingQueue. If so, get address.
-			//System.out.println("Putting job on core");
 			transferDirection = 0;							//5a. Set transferDirection for drum-to-Core. It holds this.
 			sos.siodrum(newestJob.getJobNumber(), newestJob.getJobSize(), newestJob.getJobAddress(), transferDirection);	//6a. Puts job on core
 			drumBusy = true;							//7a. Flag drum as busy 	
-			jobForDrum = newestJob;							//8a. Set the jobForDrum as the newestJob
-			/*System.out.println("Job max time: " + newestJob.getMaxCpuTime());
-			System.out.println("Job address: " + newestJob.getJobAddress());
-			System.out.println("Job size: " + newestJob.getJobSize());
-			System.out.println("Job is addressed correctly");*/	
+			jobForDrum = newestJob;							//8a. Set the jobForDrum as the newestJob	
 		}
 		else{
 			waitingQueue.add(newestJob);	//4b. If not, then it gets put on the waitingQueue.
 		}
-		jobTable.add(newestJob);		//5. Push onto jobTable
-		
+		jobTable.add(newestJob);		//5. Push onto jobTable	
 		dispatcher(a, p);			//6. Call dispatcher
-		/*System.out.println("Job address after dispatcher: " + newestJob.getJobAddress());
-		System.out.println("Job address currently assigned to dispatcher: " + p[2]);
-		System.out.println("Job size after dispatcher: " + newestJob.getJobSize());
-		System.out.println("Job size currently assigned to dispatcher : " + p[3]);*/
 		return;
 	}
 
