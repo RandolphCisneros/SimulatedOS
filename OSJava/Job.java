@@ -19,8 +19,6 @@ public class Job  /*implements Comparable <Job> */{
 	private boolean inTransit;
 	private boolean IOFlag;
 	private boolean timeFinished;
-	private boolean comingFromCrint;
-	private boolean comingFromCheckDrum;
 	private boolean passed;
 	
 	Job(){
@@ -35,8 +33,6 @@ public class Job  /*implements Comparable <Job> */{
 		inTransit = false;
 		IOFlag = false;
 		timeFinished = false;
-		comingFromCrint = false;
-		comingFromCheckDrum = false;
 		passed = false;
 		timeSlice = 5;
 	}
@@ -53,8 +49,6 @@ public class Job  /*implements Comparable <Job> */{
 		inTransit = false;
 		IOFlag = false;
 		timeFinished = false;
-		comingFromCrint = false;
-		comingFromCheckDrum = false;
 		passed = false;
 		timeSlice = 5;
 	}
@@ -73,8 +67,6 @@ public class Job  /*implements Comparable <Job> */{
 	public boolean getBlockFlag(){return blockFlag;}
 	public boolean getInTransit(){return inTransit;}
 	public boolean getIOFlag(){return IOFlag;}
-	public boolean getComingFromCrint(){return comingFromCrint;}
-	public boolean getComingFromCheckDrum(){return comingFromCheckDrum;}
 	
 	public void setIOFlag(boolean IOF){IOFlag = IOF;}
 	public void setInTranist(boolean iT) {inTransit = iT;}
@@ -87,13 +79,7 @@ public class Job  /*implements Comparable <Job> */{
 	public void setJobAddress(int a){address = a;}
 	public void setBlockFlag(boolean bF){blockFlag = bF;}
 	public void setTimeFinished(boolean tF){timeFinished = tF;}
-	public void setComingFromCrint(boolean cFC){comingFromCrint = cFC;}
-	public void setComingFromCheckDrum(boolean cFCD){comingFromCheckDrum = cFCD;}
 	public void setTimeSlice(int tS){timeSlice = tS;}
 	public void setPassed(boolean p){passed = p;}
 	
-	/*		May be used to compare jobs by size and priority
-	public int compareTo(Job j){
-	//Put more code here
-	}*/
 }
