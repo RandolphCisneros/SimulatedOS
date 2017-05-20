@@ -119,7 +119,7 @@ public class os {
 			if(swapping){
 				swapping = false;
 				swappingIn = false;
-				System.out.println("Swap-in completed");
+				//System.out.println("Swap-in completed");
 			}
 			//System.out.println("Incremented jobsOnCore");
 		}
@@ -128,10 +128,10 @@ public class os {
 			swapOut.setPassed(false);		//6b. Set the pass flag for the job to false.
 			addressTable.removeJob(swapOut);	//8b. Remove from addressTable
 			waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
-			System.out.println("Waiting Queue empty? : " + waitingQueue.isEmpty());
+			//System.out.println("Waiting Queue empty? : " + waitingQueue.isEmpty());
 			swappingOut = false;			//10b. Set swappingOut flag to false.
 			swapOut.setJobAddress(-1);	
-			System.out.println("Successfully swapped out job " + swapOut.getJobNumber());
+			//System.out.println("Successfully swapped out job " + swapOut.getJobNumber());
 		}
 		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
 		//System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
@@ -251,23 +251,23 @@ public class os {
 	
 	//This function checks if the drum is busy. If not, it polls from the waiting queue and adds a job to core if possible.
 	public static void checkDrum() {
-		System.out.println("Drum Busy: " + drumBusy);
-		System.out.println("WaitingQueue empty: " + waitingQueue.isEmpty());
+		//System.out.println("Drum Busy: " + drumBusy);
+		//System.out.println("WaitingQueue empty: " + waitingQueue.isEmpty());
 		//1. Only run this code if the drum is not busy and there is something on the waitingQueue
 		if (!drumBusy && !waitingQueue.isEmpty()){
-			System.out.println("Able to enter checkDrum");
+			//System.out.println("Able to enter checkDrum");
 			jobForDrum = waitingQueue.poll();	//Changed this from peek to poll		
 			//2a. if job for drum has not been passed once, mark it as passed and put in back of queue.
 			if (!jobForDrum.getPassed() && !swapping) {
-				System.out.println("Attempting assign job in checkDrum");
+				//System.out.println("Attempting assign job in checkDrum");
 				if (addressTable.assignJob(jobForDrum)){
-					System.out.println("Added job " + jobForDrum.getJobNumber() + " in check drum.");
+					//System.out.println("Added job " + jobForDrum.getJobNumber() + " in check drum.");
 					transferDirection = 0;
 					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 					drumBusy = true;
 				}
 				else{
-					System.out.println("Job " + jobForDrum.getJobNumber() + " has been marked passed. Couldn't add directly in checkDrum");
+					//System.out.println("Job " + jobForDrum.getJobNumber() + " has been marked passed. Couldn't add directly in checkDrum");
 					jobForDrum.setPassed(true);
 					waitingQueue.add(jobForDrum);
 				}
@@ -276,7 +276,7 @@ public class os {
 			else if (!swapping){
 				//3ba. If we're not swapping, check if we can assign the job directly without swapping.
 				if (addressTable.assignJob(jobForDrum)){
-					System.out.println("Passed job " + jobForDrum.getJobNumber() + " was added without swapping.");
+					//System.out.println("Passed job " + jobForDrum.getJobNumber() + " was added without swapping.");
 					transferDirection = 0;
 					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 					drumBusy = true;
@@ -285,7 +285,7 @@ public class os {
 				else {
 					//3bba. Check if there's a job we can swap and prepare the data values
 					if(addressTable.canSwap(jobForDrum)){
-						System.out.println("Can swap out. Starting code here");
+						//System.out.println("Can swap out. Starting code here");
 						swapping = true;
 						swappingIn = true;
 						swapIn = jobForDrum;
@@ -305,7 +305,7 @@ public class os {
 			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
 			else if (swapping && !swappingOut){
 				waitingQueue.add(jobForDrum);	//put job back on queue
-				System.out.println("Swap out completed. Now starting swapIn.");
+				//System.out.println("Swap out completed. Now starting swapIn.");
 				drumBusy = true;
 				transferDirection = 0;
 				jobForDrum = swapIn;
