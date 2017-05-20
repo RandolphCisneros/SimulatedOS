@@ -213,9 +213,8 @@ public class os {
 				}
 			}
 			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
-			else if (swapping && !swappingOut){
-
-			}		
+			else if (swapping && !swappingOut)
+				commenceSwapIn();		
 		}
 	}
 	
@@ -234,7 +233,7 @@ public class os {
 	
 	//Sets all flags and processes for the swap in portion of the swap. Drumint will finish remaining swap processes.
 	public static void commenceSwapIn(){
-		waitingQueue.add(jobForDrum);	//put job back on queue
+		//waitingQueue.add(jobForDrum);	//put job back on queue
 		drumBusy = true;
 		transferDirection = 0;
 		jobForDrum = swapIn;
