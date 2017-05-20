@@ -406,6 +406,27 @@ public class os {
 		swapIn = new Job();
 		swapOut = new Job();
 	}
+	
+	//Sorts by shortest job next. Kind of cheating, but we just go by the maxCpuTime.
+	public static void sortWaitingQueue(){
+		if(!waitingQueue.isEmpty()){
+			for(int i = 0; i < waitingQueue.size(); i++){
+				Job iJob = waitingQueue.get(i);
+				int min = i;
+				for(int j = i + 1; j < jobsAddressed.size(); j++){
+					Job jJob = waitingQueue.get(j);
+					if(jJob.getMaxCpuTime() < iJob.getMaxCpuTime()){
+						min = j;
+					}
+				}
+				if(min != i){
+					Job temp = waitingQueue.get(i);
+					waitingQueue.set(i, waitingQueue.get(min));
+					waitingQueue.set(min, temp);
+				}
+			}
+		}
+	}
 		
 		
 }
