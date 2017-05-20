@@ -47,13 +47,8 @@ class SizeAddressTable {
 		if (jobsAddressed.contains(completedJob)){
 			completedJobSize = completedJob.getJobSize();
 			completedJobAddress = completedJob.getJobAddress();
-			for(int i = 0; i < freeSpaceList.size(); i++){
-				SizeAddressPair current = freeSpaceList.get(i);				
-				if((completedJobSize + completedJobAddress) == current.getAddress()){	//check for free space after the job
-					completedJobSize += current.getSize();
-					freeSpaceList.remove(current);	
-				}
-			}	
+			checkRearFreeSpace();
+			//Can't make this into a method because it returns to O.S. if it adds free space to the front.
 			for(int j = 0; j < freeSpaceList.size(); j++){
 				SizeAddressPair current = freeSpaceList.get(j);
 				if ((current.getAddress() + current.getSize()) == completedJobAddress){		//check for free space before the job
@@ -64,14 +59,19 @@ class SizeAddressTable {
 					return;
 				}
 			}
-			SizeAddressPair newFreeSpace = new SizeAddressPair(completedJobSize, completedJobAddress);
-			freeSpaceList.add(newFreeSpace);
-			jobsAddressed.remove(completedJob);
-			findNewLargestRemainingFreeSpace();
-			findShortestTimeSlice();
+			addNewFreeSpace();
 		}
   	}
   
+	//If there is no adjacent free space in the front, this method adds the new free space to the free space table.
+	public void addNewFreeSpace(){
+		SizeAddressPair newFreeSpace = new SizeAddressPair(completedJobSize, completedJobAddress);
+		freeSpaceList.add(newFreeSpace);
+		jobsAddressed.remove(completedJob);
+		findNewLargestRemainingFreeSpace();
+		findShortestTimeSlice();
+	}
+	
   	//After a job has been assigned, this function will be used to find and assign the new largest remaining free space
  	public void findNewLargestRemainingFreeSpace(){
 		for (int i = 0; i < freeSpaceList.size(); i++){				//1. Iterate through freeSpaceList
@@ -82,7 +82,16 @@ class SizeAddressTable {
 		}
   	}
 	
-	public void checkAdjacentFreeSpace(){}
+	//Checks for free space in the rear of the new free space.
+	public void checkRearFreeSpace(){
+		for(int i = 0; i < freeSpaceList.size(); i++){
+			SizeAddressPair current = freeSpaceList.get(i);				
+			if((completedJobSize + completedJobAddress) == current.getAddress()){	//check for free space after the job
+				completedJobSize += current.getSize();
+				freeSpaceList.remove(current);	
+			}
+		}		
+	}
 	
 	//This is a new method to cut down on Tro interrupts. whenever a job is added or removed, we call this and it sets the shortest time slice.
 	public void findShortestTimeSlice(){
