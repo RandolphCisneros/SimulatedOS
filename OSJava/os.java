@@ -88,51 +88,43 @@ public class os {
 		setRunningJobTime();		//2. Set running job time
 		
 		drumBusy = false;		//3. Set drumBusy to false.	
-		if (transferDirection == 0){			//4a. Transfer direction from drum-to-core
+		if (transferDirection == 0)			//4a. Transfer direction from drum-to-core
 			coreIn();
-		}
-		else if (transferDirection == 1){		//4b. Transfer direction from core-to-drum
+		else if (transferDirection == 1)		//4b. Transfer direction from core-to-drum
 			coreOut();
-		}
 		dispatcher(a,p);
 	}
 	
 	//Timer run out. It checks the elapsed time at the start and then sets the time for the last running job.
 	public static void Tro (int[]a, int[]p){
-	//	System.out.println("In Tro");
 		getTimeElapsed(p);	//1. Set time elapsed.
 		setRunningJobTime();	//2. Set job time.
 		
-		//The time finished flag is checked in the checkTimeOut() method. If there is no I/O then we decrement
-		//jobsOnCore. Removal from addressTable is done in Drumint
-		if(jobToRun.getTimeFinished() && !jobToRun.getIOFlag()){
+		//The time finished flag is checked in the checkTimeOut() method in setRunningJobTime(). 
+		//If there is no I/O then we decrement jobsOnCore. Removal from addressTable is done in Drumint
+		if(jobToRun.getTimeFinished() && !jobToRun.getIOFlag())
 			jobsOnCore -=1;
-		}
-		//System.out.println("IOFlag: " + jobToRun.getIOFlag());
 		dispatcher(a,p);
 	}
 	
+	//Service interrupt. Job signals for service and O.S. acts accordingly.
 	public static void Svc (int[]a, int[]p){
-		//System.out.println("In Svc");	
 		getTimeElapsed(p);			//1. Set timeElapsed
 		setRunningJobTime();			//2. Set running time for job
 		
 		jobRequestingService = jobToRun;	//3. Assign jobRequestingService
-		if (a[0] == 5){						//4a. It requests termination
+		if (a[0] == 5)				//4a. It requests termination
 			terminateService();
-		}
-		else if (a[0] == 6) {		//4b. It requests disk i/o. Goes to iOService method.
+		else if (a[0] == 6) 			//4b. It requests disk i/o. Goes to iOService method.
 			iOService();
-		}
-		else {				//4c. a[0] == 7, job wants to be blocked for i/o
+		else					//4c. a[0] == 7, job wants to be blocked for i/o
 			blockService();
-		}
 		dispatcher(a,p);	//Last, call dispatcher.
 	}
 	
-	/////////////////////////////////////////////////////////////
-	//////////////////END OF INTERRUPTS///////////////////////////////////
-	/////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////END OF INTERRUPTS/////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//Dispatcher is its own function. We check disk status, drum status,
 	//and readyQueue status to see what operations we should do.
@@ -285,9 +277,7 @@ public class os {
 			sos.siodisk(jobForDisk.getJobNumber());
 			diskBusy = true;
 		}
-	}
-
-	
+	}	
 	
 /////////////////////////////////////////DRUMINT METHODS/////////////////////////////////////////////////////////////////////
 	//Method to complete a job being swapped in to the core. Adds to readyQueue and updates flags/semaphores
@@ -308,11 +298,7 @@ public class os {
 		waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
 		swappingOut = false;			//10b. Set swappingOut flag to false.
 		swapOut.setJobAddress(-1);			
-	}
-		
-	
-	
-	
+	}	
 	
 /////////////////////////////////////////SERVICE METHODS////////////////////////////////////////////////////////////////////////////
 	//Terminate service. Removes from readyQueue, sets timeFinished flag, and removes from addressTable
@@ -350,7 +336,6 @@ public class os {
 			jobRequestingService.setBlockFlag(true);	//6c. Set blockFlag to true. It is blocked.
 		}
 	}
-
 	
 //////////////////////////////////STARTUP METHODS/////////////////////////////////////////////////////////////////////
 	//Initialize Containers. Simple method to add modularity.
@@ -386,8 +371,7 @@ public class os {
 		swapIn = new Job();
 		swapOut = new Job();
 	}
-	
-	
+		
 //////////////////////////////////////SHORTEST JOB NEXT IMPLEMENTATION/////////////////////////////////////////////////////////////////	
 	//Sorts by shortest job next. Kind of cheating, but we just go by the maxCpuTime. Last effort to
 	//get my O.S. to process jobs faster.
@@ -409,6 +393,5 @@ public class os {
 			}
 		}
 	}
-		
-		
+///////FINISH		
 }
