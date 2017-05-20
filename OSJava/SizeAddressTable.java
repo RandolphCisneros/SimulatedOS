@@ -34,7 +34,7 @@ class SizeAddressTable {
 		findShortestTimeSlice();
 		return true;																													//7. Return true for O.S. to allocate it to the correct queue
 	}
-	else if (newJob.getJobAddress() < 0 && largestRemainingFreeSpace.getSize() < newJob.getJobSize()){	//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
+	else if (newJob.getJobAddress() < 0 && largestRemainingFreeSpace.getSize() < newJob.getJobSize())	//2b. If there's not enough space, throw message and return false. O.S. puts it in waiting queue.
 		return false;
 	else																	//2c. This shouldn't happen, but if it's already assigned then it will return false.
 		return false;	
