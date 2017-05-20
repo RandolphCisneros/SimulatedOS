@@ -92,7 +92,7 @@ public class os {
 			coreIn();
 		}
 		else if (transferDirection == 1){		//4b. Transfer direction from core-to-drum
-
+			coreOut();
 		}
 		dispatcher(a,p);
 	}
