@@ -10,6 +10,7 @@ class SizeAddressTable {
   	LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//List of jobs to track the job addresses
   	private static Job largestJob;
   	private static Job swapJob;
+	private static Job completedJob;
   	private static int shortestTimeSlice;
 	private static int completedJobSize;
 	private static int completedJobAddress;
@@ -22,6 +23,7 @@ class SizeAddressTable {
     		freeSpaceList.add(largestRemainingFreeSpace);
 		largestJob = new Job();
 		swapJob = new Job();
+		completedJob = new Job();
   	}
   
  	//This method attempts to find an address for a job. Returns true if successful and gives the job the address. Also adds to table.
@@ -43,7 +45,8 @@ class SizeAddressTable {
   	}
   
   	//this function will be used when a job is terminated; it will removed from the list and the free space will be re-allocated
-  	public void removeJob(Job completedJob){
+  	public void removeJob(Job removedJob){
+		completedJob = removedJob;
 		if (jobsAddressed.contains(completedJob)){
 			completedJobSize = completedJob.getJobSize();
 			completedJobAddress = completedJob.getJobAddress();
