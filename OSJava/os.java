@@ -413,7 +413,7 @@ public class os {
 			for(int i = 0; i < waitingQueue.size(); i++){
 				Job iJob = waitingQueue.get(i);
 				int min = i;
-				for(int j = i + 1; j < jobsAddressed.size(); j++){
+				for(int j = i + 1; j < waitingQueue.size(); j++){
 					Job jJob = waitingQueue.get(j);
 					if(jJob.getMaxCpuTime() < iJob.getMaxCpuTime()){
 						min = j;
