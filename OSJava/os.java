@@ -185,36 +185,37 @@ public class os {
 			jobForDrum = waitingQueue.get(0);	//Changed this from peek to poll
 			waitingQueue.remove(jobForDrum);
 			if (!jobForDrum.getPassed() && !swapping) {	//2a. if job for drum has not been passed once, mark it as passed and put in back of queue.
-				if (addressTable.assignJob(jobForDrum)){
-					transferDirection = 0;
-					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
-					drumBusy = true;
-				}
-				else{
-					jobForDrum.setPassed(true);
-					waitingQueue.add(jobForDrum);
-				}
+				markPassed();
 			}
-		
 			else if (!swapping){	//2b. If job has been marked as passed, check if we're in the middle of a swap.
-			
 				if (addressTable.assignJob(jobForDrum)){	//3ba. If we're not swapping, check if we can assign the job directly without swapping.
 					transferDirection = 0;
 					sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
 					drumBusy = true;
-				}
-			
+				}		
 				else {						//3bb. If we can't assign directly, start swap.
 					if(addressTable.canSwap(jobForDrum))	//3bba. Check if there's a job we can swap and prepare the data values
-						commenceSwapOut();
-					//3bbb. If There's no job we can swap it with, put it on the back of the waitingQueue and try again next cycle
-					else 	
+						commenceSwapOut();	
+					else 	//3bbb. If There's no job we can swap it with, put it on the back of the waitingQueue and try again next cycle
 						waitingQueue.add(jobForDrum);
 				}
 			}
 			//If we're in the middle of a swap, finish the swap. Check if we're swapping and not swapping out
 			else if (swapping && !swappingOut)
 				commenceSwapIn();		
+		}
+	}
+	
+	//This method tries to assign the job directly. If it can't, mark it as passed.
+	public static void markPassed(){
+		if (addressTable.assignJob(jobForDrum)){
+			transferDirection = 0;
+			sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);
+			drumBusy = true;
+		}
+		else{
+			jobForDrum.setPassed(true);
+			waitingQueue.add(jobForDrum);
 		}
 	}
 	
@@ -233,16 +234,15 @@ public class os {
 	
 	//Sets all flags and processes for the swap in portion of the swap. Drumint will finish remaining swap processes.
 	public static void commenceSwapIn(){
-		//waitingQueue.add(jobForDrum);	//put job back on queue
+		waitingQueue.add(jobForDrum);	//puts removed job back on waitingQueue
 		drumBusy = true;
 		transferDirection = 0;
 		jobForDrum = swapIn;
 		addressTable.assignJob(jobForDrum);
 		sos.siodrum(jobForDrum.getJobNumber(), jobForDrum.getJobSize(), jobForDrum.getJobAddress(), transferDirection);		
 	}
-	
-	
-	//This block of code checks if disk is ready. If so, then job gets added from iOQueue.	
+		
+//////////This method checks if disk is ready. If so, then job gets added from iOQueue.	///////////////////////////////
 	public static void checkDisk() {
 		if ((!diskBusy) && (!iOQueue.isEmpty())){
 			jobForDisk = iOQueue.peek();		//Must peek rather than poll here. We poll later in Dskint.
