@@ -5,7 +5,7 @@ public class os {
 	private static SizeAddressTable addressTable;	//My addressTable. Holds free space and assigned jobs
 	public static LinkedList<Job> jobTable;		//I made this global solely because it said to in the handout.
 	private static Queue<Job> readyQueue;		//These are jobs onCore and ready to run.
-	private static Queue<Job> waitingQueue;		//This waiting queue is for if the drum is busy or there's no space.
+	private static List<Job> waitingQueue;		//This waiting queue is for if the drum is busy or there's no space.
 	private static Queue<Job> iOQueue;		//This is the I/O queue to be used when I/O jobs want to be blocked.
 
 	private static Job jobToRun;			//This is the current job to run in dispatcher
