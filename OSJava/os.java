@@ -63,11 +63,9 @@ public class os {
 	//It is then added to the readyQueue.
 	//Lastly dispatcher is called and the job in front of the readyQueue is run.
 	public static void Dskint (int[]a, int[]p){
-		//System.out.println("In Dskint");
 		getTimeElapsed(p);	//1. Get time elapsed
 		setRunningJobTime();	//2. Set running job time.
 		
-		//System.out.println("Is iOQueue empty?" + iOQueue.isEmpty());
 		jobCompletingIO = iOQueue.remove();	//3. Remove from IOQueue
 		jobCompletingIO.setIOFlag(false);	//4. Set IOFlag for job as false
 		diskBusy = false;			//5. Set diskBusy flag as false
@@ -79,16 +77,6 @@ public class os {
 			jobCompletingIO.setBlockFlag(false);	//7b. If it was, we can set the blockFlag to false.
 			readyQueue.add(jobCompletingIO);	//8b. Put back on readyQueue.
 		}
-		/*if (jobCompletingIO.getJobNumber() == jobToRun.getJobNumber()){
-			jobToRun.setBlockFlag(false);
-			System.out.println("IOFLAG: " + jobToRun.getIOFlag());
-		}*/
-		/*System.out.println(jobCompletingIO.getJobNumber());
-		System.out.println(jobToRun.getJobNumber());
-		System.out.println(jobCompletingIO.toString());
-		System.out.println(jobToRun.toString());
-		System.out.println("IOFlag " + jobCompletingIO.getIOFlag());
-		System.out.println("JOB HAS FINISHED I/O!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");*/
 		dispatcher(a,p);	//7. Call dispatcher	
 	}
 
@@ -96,7 +84,6 @@ public class os {
 	//It sets the drumBusy flag as false, checks the direction of transfer,
 	//and either adds it to the waitingQueue or the readyQueue, depending on direction.
 	public static void Drmint (int[]a, int[]p){
-		//System.out.println("In Drmint");
 		getTimeElapsed(p);		//1. Get elapsed time
 		setRunningJobTime();		//2. Set running job time
 		
@@ -107,24 +94,16 @@ public class os {
 			if(swapping){
 				swapping = false;
 				swappingIn = false;
-				//System.out.println("Swap-in completed");
 			}
-			//System.out.println("Incremented jobsOnCore");
 		}
 		else if (transferDirection == 1){		//4b. Transfer direction from core-to-drum
 			jobsOnCore -= 1;			//5b. Decrement jobsOnCore
 			swapOut.setPassed(false);		//6b. Set the pass flag for the job to false.
 			addressTable.removeJob(swapOut);	//8b. Remove from addressTable
 			waitingQueue.add(swapOut);		//9b. Add to the waitingQueue
-			//System.out.println("Waiting Queue empty? : " + waitingQueue.isEmpty());
 			swappingOut = false;			//10b. Set swappingOut flag to false.
 			swapOut.setJobAddress(-1);	
-			//System.out.println("Successfully swapped out job " + swapOut.getJobNumber());
 		}
-		//System.out.println("Job current time: " + jobToRun.getCurrentTime());
-		//System.out.println("Job max time: " + jobToRun.getMaxCpuTime());
-		//System.out.println("Time is now: " + jobToRun.getMaxCpuTime());
-		//System.out.println("Jobs on core: " + jobsOnCore);
 		dispatcher(a,p);
 	}
 	
