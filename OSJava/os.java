@@ -193,7 +193,8 @@ public class os {
 				commenceSwapIn();		
 		}
 	}
-	
+
+	/////////////////////////////SWAP OUT METHODS///////////////////////////////////////////////////////////////////////////
 	//This method tries to assign the job directly. If it can't, mark it as passed.
 	public static void markPassed(){
 		if (addressTable.assignJob(jobForDrum)){
