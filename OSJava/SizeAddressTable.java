@@ -1,14 +1,15 @@
 import java.util.*;
-
+//This class is my free space table, though it does a lot more than just hold the addresses. It can find a job to swap and let the O.S. know
+//if we can do that. It manages adjacent free space and acts accordingly. It keeps track of where running jobs are on the core.
+//It adds jobs according to WORST FIT, therefore we track the largest remaining free space. It swaps job out based on BEST FIT,
+//therefore it will sort the running jobs by size and find an appropriate job to swap with. --R. Cisneros
 class SizeAddressTable {
-	
   	public static final int MAX_FREE_SPACE = 99;
   	public static final int START_OF_MEMORY = 0;
 
   	private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100; tracks the largest free space on list
   	LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//list that tracks remaining free spaces
   	LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//List of jobs to track the job addresses
-  	//private static Job largestJob;
   	private static Job swapJob;
 	private static Job completedJob;
   	private static int shortestTimeSlice;
@@ -19,9 +20,8 @@ class SizeAddressTable {
   	//I used a default constructor here since it will only be used once in the OS
   	public SizeAddressTable(){
 		freeSpaceList = new LinkedList<SizeAddressPair>();
-    		largestRemainingFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, START_OF_MEMORY);	//There should only be one instance of this
+    		largestRemainingFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, START_OF_MEMORY);	//Initialize an empty core
     		freeSpaceList.add(largestRemainingFreeSpace);
-		//largestJob = new Job();
 		swapJob = new Job();
 		completedJob = new Job();
   	}
