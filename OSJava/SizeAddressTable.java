@@ -8,7 +8,7 @@ class SizeAddressTable {
   	private static SizeAddressPair largestRemainingFreeSpace;    //initialize to 0,100; tracks the largest free space on list
   	LinkedList<SizeAddressPair> freeSpaceList = new LinkedList<SizeAddressPair>();//list that tracks remaining free spaces
   	LinkedList<Job> jobsAddressed = new LinkedList<Job>();	//List of jobs to track the job addresses
-  	private static Job largestJob;
+  	//private static Job largestJob;
   	private static Job swapJob;
 	private static Job completedJob;
   	private static int shortestTimeSlice;
@@ -21,7 +21,7 @@ class SizeAddressTable {
 		freeSpaceList = new LinkedList<SizeAddressPair>();
     		largestRemainingFreeSpace = new SizeAddressPair(MAX_FREE_SPACE, START_OF_MEMORY);	//There should only be one instance of this
     		freeSpaceList.add(largestRemainingFreeSpace);
-		largestJob = new Job();
+		//largestJob = new Job();
 		swapJob = new Job();
 		completedJob = new Job();
   	}
