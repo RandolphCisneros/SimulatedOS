@@ -115,6 +115,7 @@ class SizeAddressTable {
 	}
 	
 	//Sorts our addressed job. When I swap, I use a BEST FIT algorithm to replace the smallest possible job.
+	//I also use insertion sort to sort it because it's a small amount of data and will remain sorted thereafter.
 	public void sortJobsAddressed(){
 		for (int i = 0; i < jobsAddressed.size() - 1; i++){
 			Job iJob = jobsAddressed.get(i);
