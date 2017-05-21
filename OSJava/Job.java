@@ -11,7 +11,7 @@ public class Job  /*implements Comparable <Job> */{
 	private int address;	
 	private int timeSlice;
 	//private boolean onCore;		//let's O.S. know if it's on the core or not. will be used later for swapping.
-	//private boolean blockFlag;
+	private boolean blockFlag;
 	//private boolean inTransit;
 	private boolean IOFlag;
 	private boolean timeFinished;
@@ -25,7 +25,7 @@ public class Job  /*implements Comparable <Job> */{
 		currentTime = 0;
 		address = -1;
 		//onCore = false;
-		//blockFlag = false;
+		blockFlag = false;
 		//inTransit = false;
 		IOFlag = false;
 		timeFinished = false;
@@ -41,7 +41,7 @@ public class Job  /*implements Comparable <Job> */{
 		currentTime = 0;	//Default currentTime to 0.
 		address = -1;		//we don't assign an address in the constructor, the table will do that for us
 		//onCore = false;
-		//blockFlag = false;
+		blockFlag = false;
 		//inTransit = false;
 		IOFlag = false;
 		timeFinished = false;
@@ -60,7 +60,7 @@ public class Job  /*implements Comparable <Job> */{
 	public int getJobAddress(){return address;}
 	public int getTimeSlice(){return timeSlice;}
 	//public boolean getOnCore(){return onCore;}
-	//public boolean getBlockFlag(){return blockFlag;}
+	public boolean getBlockFlag(){return blockFlag;}
 	//public boolean getInTransit(){return inTransit;}
 	public boolean getIOFlag(){return IOFlag;}
 	
@@ -73,7 +73,7 @@ public class Job  /*implements Comparable <Job> */{
 	public void setMaxCpuTime(int mCT){maxCpuTime = mCT;}
 	public void setCurrentTime(int cT){currentTime = cT;}
 	public void setJobAddress(int a){address = a;}
-	//public void setBlockFlag(boolean bF){blockFlag = bF;}
+	public void setBlockFlag(boolean bF){blockFlag = bF;}
 	public void setTimeFinished(boolean tF){timeFinished = tF;}
 	public void setTimeSlice(int tS){timeSlice = tS;}
 	public void setPassed(boolean p){passed = p;}
