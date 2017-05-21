@@ -1,5 +1,9 @@
 import java.util.*;
-
+//OS Project for my O.S. class, CISC 3320, taught by Professor Jacqueline Jones. Makes use of 
+//classes/containers and demonstrates O.S. scheduling algorithms, sorting algorithms, modularity, OOP, Java,
+//and structured programming. Designed to run in conjunction with the student O.S. system given to us by the professor.
+//Main is contained in the sos.
+//								--R. Cisneros
 public class os {
 
 	private static SizeAddressTable addressTable;	//My addressTable. Holds free space and assigned jobs
