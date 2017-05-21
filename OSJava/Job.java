@@ -1,7 +1,5 @@
 //This is the individual job structure to be used in the job table, which will be a list of jobs.
-//I implement Comparable again because I don't know if I'm gonna prioritize some jobs or not;
-//we can make it rather efficient by using priorities and job size.
-public class Job  /*implements Comparable <Job> */{
+public class Job {
 	private int jobNumber;	//p[1]
 	private int jobPriority;//p[2]
 	private int jobSize;	//p[3]
@@ -10,9 +8,7 @@ public class Job  /*implements Comparable <Job> */{
 	private int currentTime;	//current running time on job
 	private int address;	
 	private int timeSlice;
-	//private boolean onCore;		//let's O.S. know if it's on the core or not. will be used later for swapping.
 	private boolean blockFlag;
-	//private boolean inTransit;
 	private boolean IOFlag;
 	private boolean timeFinished;
 	private boolean passed;
@@ -24,9 +20,7 @@ public class Job  /*implements Comparable <Job> */{
 		maxCpuTime = 0;
 		currentTime = 0;
 		address = -1;
-		//onCore = false;
 		blockFlag = false;
-		//inTransit = false;
 		IOFlag = false;
 		timeFinished = false;
 		passed = false;
@@ -38,11 +32,9 @@ public class Job  /*implements Comparable <Job> */{
 		jobPriority = jP;
 		jobSize = jS;
 		maxCpuTime = mCT;
-		currentTime = 0;	//Default currentTime to 0.
-		address = -1;		//we don't assign an address in the constructor, the table will do that for us
-		//onCore = false;
+		currentTime = 0;
+		address = -1;		//If job has no legal address, this number is negative
 		blockFlag = false;
-		//inTransit = false;
 		IOFlag = false;
 		timeFinished = false;
 		passed = false;
@@ -59,14 +51,10 @@ public class Job  /*implements Comparable <Job> */{
 	public int getCurrentTime(){ return currentTime;}
 	public int getJobAddress(){return address;}
 	public int getTimeSlice(){return timeSlice;}
-	//public boolean getOnCore(){return onCore;}
 	public boolean getBlockFlag(){return blockFlag;}
-	//public boolean getInTransit(){return inTransit;}
 	public boolean getIOFlag(){return IOFlag;}
 	
 	public void setIOFlag(boolean IOF){IOFlag = IOF;}
-	//public void setInTranist(boolean iT) {inTransit = iT;}
-	//public void setOnCore(boolean oC){onCore = oC;}
 	public void setJobNumber(int jN){jobNumber = jN;}
 	public void setJobPriority(int jP){jobPriority = jP;}
 	public void setJobSize(int jS){jobSize = jS;}
