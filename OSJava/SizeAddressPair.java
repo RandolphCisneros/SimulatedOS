@@ -1,6 +1,6 @@
 //This is a simple pair class to be used in the FreeSpaceTable, organized by the WORST FIT 
 //algorithm. Hence, size comes first.	-R. Cisneros
-public class SizeAddressPair implements Comparable<SizeAddressPair> {
+public class SizeAddressPair /*implements Comparable<SizeAddressPair>*/ {
 	
 	private int size;
 	private int address;
@@ -16,7 +16,7 @@ public class SizeAddressPair implements Comparable<SizeAddressPair> {
 	public void setAddress(int a){address = a;}
 	public void setPair(int sz, int a) {size = sz; address = a;}
 	
-	//I implemented Comparable for sorting purposes. Just learned this in OOP Class -R. Cisneros
+	/*//I implemented Comparable for sorting purposes. Just learned this in OOP Class -R. Cisneros
 	//*****TRACE LATER AND MAKE SURE ITS RIGHT!!!!!!!
 	public int compareTo(SizeAddressPair sAP){
 		if(size == sAP.getSize()){
@@ -25,6 +25,6 @@ public class SizeAddressPair implements Comparable<SizeAddressPair> {
 			return address - sAP.getAddress();
 		}
 		return size - sAP.getSize();
-	}
+	}*/
 	
 }
